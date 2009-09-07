@@ -3,7 +3,7 @@
 ########################################################################
 # Extension Manager/Repository config file for ext: "mvc_extjs"
 #
-# Auto generated 07-09-2009 07:18
+# Auto generated 07-09-2009 07:34
 #
 # Manual updates:
 # Only the data in the array - anything else is removed by next write.
