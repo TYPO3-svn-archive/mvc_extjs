@@ -38,9 +38,9 @@
  * @subpackage  tx_mvcextjs
  * @author      Dennis Ahrens <dennis.ahrens@fh-hannover.de>
  * @license     http://www.gnu.org/copyleft/gpl.html
- * @version     SVN: $Id$
+ * @version     SVN: $Id: DefaultExtOnReadyViewportViewHelper.php 29470 2010-01-29 14:25:17Z xperseguers $
  */
-class Tx_MvcExtjs_ViewHelpers_Be_DefaultExtOnReadyViewportViewHelper extends Tx_MvcExtjs_ViewHelpers_JsCode_AbstractJavaScriptCodeViewHelper {
+class Tx_MvcExtjs_ViewHelpers_Fe_DefaultExtOnReadyPanelViewHelper extends Tx_MvcExtjs_ViewHelpers_JsCode_AbstractJavaScriptCodeViewHelper {
 	
 	/**
 	 * 
@@ -52,13 +52,13 @@ class Tx_MvcExtjs_ViewHelpers_Be_DefaultExtOnReadyViewportViewHelper extends Tx_
 	 * 
 	 * @var Tx_MvcExtjs_CodeGeneration_JavaScript_ConstructorCall
 	 */
-	protected $viewport;
+	protected $panel;
 	
 	/**
 	 * 
 	 * @var Tx_MvcExtjs_CodeGeneration_JavaScript_ExtJS_Config
 	 */
-	protected $viewportConfig;
+	protected $panelConfig;
 	
 	/**
 	 * (non-PHPdoc)
@@ -67,10 +67,10 @@ class Tx_MvcExtjs_ViewHelpers_Be_DefaultExtOnReadyViewportViewHelper extends Tx_
 	public function initialize() {
 		parent::initialize();
 		$this->extOnReady = TRUE;
-		$this->startup = new Tx_MvcExtjs_CodeGeneration_JavaScript_Variable('main',NULL,false,$this->extJsNamespace);
-		$this->viewportConfig = new Tx_MvcExtjs_CodeGeneration_JavaScript_ExtJS_Config();
-		$this->viewport = new Tx_MvcExtjs_CodeGeneration_JavaScript_ExtJS_Constructor('viewport','Ext.Viewport',$this->viewportConfig,array(),FALSE);
-		$this->startupCall = new Tx_MvcExtjs_CodeGeneration_JavaScript_FunctionCall($this->extJsNamespace . '.main.init');
+		$this->startup = new Tx_MvcExtjs_CodeGeneration_JavaScript_Variable('plugin',NULL,false,$this->extJsNamespace);
+		$this->panelConfig = new Tx_MvcExtjs_CodeGeneration_JavaScript_ExtJS_Config();
+		$this->panel = new Tx_MvcExtjs_CodeGeneration_JavaScript_ExtJS_Constructor('panel','Ext.Panel',$this->panelConfig,array(),FALSE);
+		$this->startupCall = new Tx_MvcExtjs_CodeGeneration_JavaScript_FunctionCall($this->extJsNamespace . '.plugin.init');
 	}
 	
 	/**
@@ -79,9 +79,10 @@ class Tx_MvcExtjs_ViewHelpers_Be_DefaultExtOnReadyViewportViewHelper extends Tx_
 	 * 
 	 * @param string $layout the layout for the viewport container; default = fit;
 	 * @param array $items
+	 * @param string $renderTo
 	 * @return void
 	 */
-	public function render($layout = 'fit', array $items = array()) {
+	public function render($layout = 'fit', array $items = array(), $renderTo = 'plugin') {
 			// Check if the layout is valid
 		switch ($layout) {
 			case 'fit':
@@ -102,14 +103,17 @@ class Tx_MvcExtjs_ViewHelpers_Be_DefaultExtOnReadyViewportViewHelper extends Tx_
 			default:
 				throw new Tx_MvcExtjs_ExtJS_Exception('The given layout (' . $layout . ') is not supported by extjs',1264270609 );
 		}
-			// prepare itemArray for the Viewport
+			// prepare itemArray for the Panel
 		$itemArray = new Tx_MvcExtjs_CodeGeneration_JavaScript_Array();
 		foreach ($items as $item)
 			$itemArray->addElement($item);
-
-		$this->viewportConfig->set('layout',$layout)
-							 ->setRaw('renderTo','Ext.getBody()')
-							 ->setRaw('items',$itemArray);
+		
+		$this->renderTo = $renderTo;
+		$this->panelConfig->set('layout',$layout)
+						  ->set('renderTo',$renderTo)
+						  ->setRaw('items',$itemArray)
+						  ->setRaw('width','500')
+						  ->setRaw('height','600');
 		
 			// build up the need JS Code Contexts
 		$this->startUp();
@@ -126,10 +130,14 @@ class Tx_MvcExtjs_ViewHelpers_Be_DefaultExtOnReadyViewportViewHelper extends Tx_
 	 * @return void
 	 */
 	protected function startUp() {
-		$this->viewport->setConfig($this->viewportConfig);
+		$this->panel->setConfig($this->panelConfig);
+		//$panelRenderCall = new Tx_MvcExtjs_CodeGeneration_JavaScript_FunctionCall($this->panel->getName() . '.render');
+		//$panelRenderCallParam = new Tx_MvcExtjs_CodeGeneration_JavaScript_QuotedValue($this->renderTo,TRUE);
+		//$panelRenderCall->addParameter($panelRenderCallParam);
+		
 		$returnStatement = new Tx_MvcExtjs_CodeGeneration_JavaScript_Snippet('return ');
 		$objectDefinition = new Tx_MvcExtjs_CodeGeneration_JavaScript_Object();
-		$objectInitFunction = new Tx_MvcExtjs_CodeGeneration_JavaScript_FunctionDeclaration(array(),array($this->viewport),TRUE);
+		$objectInitFunction = new Tx_MvcExtjs_CodeGeneration_JavaScript_FunctionDeclaration(array(),array($this->panel/*,$panelRenderCall*/),TRUE);
 		$objectInitElement = new Tx_MvcExtjs_CodeGeneration_JavaScript_ObjectElement('init',$objectInitFunction);
 		$objectDefinition->addElement($objectInitElement);
 		$value = new Tx_MvcExtjs_CodeGeneration_JavaScript_FunctionDeclaration(array(),array($returnStatement,$objectDefinition),FALSE,TRUE);

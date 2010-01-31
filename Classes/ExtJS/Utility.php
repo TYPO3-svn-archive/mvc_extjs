@@ -150,10 +150,10 @@ class Tx_MvcExtjs_ExtJS_Utility {
 	 * @param mixed $obj an instance of this class
 	 * @param array $columns the columns u like to fetch an empty array will fetch all available properties
 	 * @param array $additionalGetters use this array to fetch informations from methods that will not really work on properties f.e. data that is calculated on the base of two other properties
-	 * @return Tx_MvcExtjs_ExtJS_Array this object will produce your JS Code when calling build() on it.
+	 * @return Tx_MvcExtjs_CodeGeneration_JavaScript_Array this object will produce your JS Code when calling build() on it.
 	 */
 	public static function getFieldsArray($class, $obj = NULL, array $columns = array(), array $additionalGetters = array()) {
-		$fields = Tx_MvcExtjs_ExtJS_Array::create();
+		$fields = new Tx_MvcExtjs_CodeGeneration_JavaScript_Array();
 		$rc = new ReflectionClass($class);
 		if ($obj) {
 			if (!is_a($obj, $class)) {
@@ -172,7 +172,7 @@ class Tx_MvcExtjs_ExtJS_Utility {
 			}
 
 			$propertyGetterName = 'get' . ucfirst($property->name);
-			$field = Tx_MvcExtjs_ExtJS_Object::create();
+			$field = new Tx_MvcExtjs_CodeGeneration_JavaScript_ExtJS_Config;
 
 			if (method_exists($object, $propertyGetterName)) {
 				$type = self::getMethodReturnType($object, $propertyGetterName);
@@ -184,24 +184,24 @@ class Tx_MvcExtjs_ExtJS_Utility {
 					$field->set('name', $property->name)
 					      ->set('type', $type);
 				} else {
-					$field->set('name', $property->name);
+					$field->addConfig('name', $property->name);
 				}
-				$fields->add($field);
+				$fields->addElement($field);
 			}
 		}
 
 		foreach ($additionalGetters as $propertyGetterName) {
-			$field = Tx_MvcExtjs_ExtJS_Object::create();
+			$field = new Tx_MvcExtjs_CodeGeneration_JavaScript_ExtJS_Config;
 
 			if (method_exists($object, $propertyGetterName)) {
 				$type = self::getMethodReturnType($object, $propertyGetterName);
 				if ($type) {
-					$field->set('name', $property->name)
-					      ->set('type', $type);
+					$field->addConfig('name', $property->name)
+					      ->addConfig('type', $type);
 				} else {
-					$field->set('name', $property->name);
+					$field->addConfig('name', $property->name);
 				}
-				$fields->add($field);
+				$fields->addElement($field);
 			}
 		}
 		return $fields;

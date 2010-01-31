@@ -54,14 +54,13 @@
  * @license     http://www.gnu.org/copyleft/gpl.html
  * @version     SVN: $Id$
  */
-class Tx_MvcExtjs_ViewHelpers_Be_ModuleContainerViewHelper extends Tx_MvcExtjs_ViewHelpers_AbstractViewHelper {
+class Tx_MvcExtjs_ViewHelpers_Fe_PluginContainerViewHelper extends Tx_MvcExtjs_ViewHelpers_AbstractViewHelper {
+
 
 	/**
-	 * Renders start page with template.php and pageTitle.
+	 * Renders the module into a given div container
 	 *
-	 * @param string  $pageTitle title tag of the module. Not required by default, as BE modules are shown in a frame
-	 * @param boolean $enableJumpToUrl If TRUE, includes "jumpTpUrl" javascript function required by ActionMenu. Defaults to TRUE
-	 * @param boolean $enableClickMenu If TRUE, loads clickmenu.js required by BE context menus. Defaults to TRUE
+	 * @param string $divContainerId title tag of the module. Not required by default, as BE modules are shown in a frame
 	 * @param boolean $loadPrototype specifies whether to load prototype library. Defaults to TRUE
 	 * @param boolean $loadScriptaculous specifies whether to load scriptaculous libraries. Defaults to FALSE
 	 * @param string  $scriptaculousModule additionales modules for scriptaculous
@@ -69,41 +68,20 @@ class Tx_MvcExtjs_ViewHelpers_Be_ModuleContainerViewHelper extends Tx_MvcExtjs_V
 	 * @param boolean $loadExtJsTheme whether to load ExtJS "grey" theme. Defaults to FALSE
 	 * @param string  $extJsAdapter load alternative adapter (ext-base is default adapter)
 	 * @param boolean $enableExtJsDebug if TRUE, debug version of ExtJS is loaded. Use this for development only
-	 * @return string
-	 * @see template
 	 * @see t3lib_PageRenderer
 	 */
-	public function render($pageTitle = '',
-						   $enableJumpToUrl = TRUE,
-						   $enableClickMenu = TRUE,
-						   $loadPrototype = FALSE,
+	public function render($divContainerId = 'plugin',
+						   $loadPrototype = TRUE,
 						   $loadScriptaculous = FALSE,
 						   $scriptaculousModule = '',
 						   $loadExtJs = TRUE,
 						   $loadExtJsTheme = TRUE,
 						   $extJsAdapter = 'prototype',
 						   $enableExtJsDebug = FALSE) {
-
-		$doc = $this->getDocInstance();
-						   	
 		$extensionName = $this->controllerContext->getRequest()->getControllerExtensionName();
 		$controllerName = $this->controllerContext->getRequest()->getControllerName();
 		$this->extJsNamespace = $extensionName . '.' . $controllerName;
-
-		if ($enableJumpToUrl) {
-			$doc->JScode .= '
-				<script language="javascript" type="text/javascript">
-					script_ended = 0;
-					function jumpToUrl(URL)	{
-						document.location = URL;
-					}
-					' . $doc->redirectUrls() . '
-				</script>
-			';
-		}
-		if ($enableClickMenu) {
-			$doc->loadJavascriptLib('js/clickmenu.js');
-		}
+		
 		if ($loadPrototype) {
 			$this->pageRenderer->loadPrototype();
 		}
@@ -116,17 +94,14 @@ class Tx_MvcExtjs_ViewHelpers_Be_ModuleContainerViewHelper extends Tx_MvcExtjs_V
 				$this->pageRenderer->enableExtJsDebug();
 			}
 		}
-
-		$this->pageRenderer->addCssFile('sysext/t3skin/extjs/xtheme-t3skin.css');
-
+		
 		$jsNS  = "\n" . 'Ext.ns(\'' . $this->extJsNamespace . '\');' . "\n";
 
-		$this->pageRenderer->addJsInlineCode('extjs Namespace for the Module',$jsNS);
+		$this->pageRenderer->addJsInlineCode('extjs Namespace for the Plugin',$jsNS);
 
 		$this->renderChildren();
 
-		$output = $doc->startPage($pageTitle);
-		$output .= $doc->endPage();
+		$output .= '<div id="' . $divContainerId . '"></div>';
 		return $output;
 	}
 }

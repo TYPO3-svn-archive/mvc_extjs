@@ -38,9 +38,9 @@
  * @subpackage  tx_mvcextjs
  * @author      Dennis Ahrens <dennis.ahrens@fh-hannover.de>
  * @license     http://www.gnu.org/copyleft/gpl.html
- * @version     SVN: $Id$
+ * @version     SVN: $Id: IncludeCssFileViewHelper.php 29470 2010-01-29 14:25:17Z xperseguers $
  */
-class Tx_MvcExtjs_ViewHelpers_Be_IncludeCssFileViewHelper extends Tx_Fluid_ViewHelpers_Be_AbstractBackendViewHelper {
+class Tx_MvcExtjs_ViewHelpers_IncludeCssFileViewHelper extends Tx_MvcExtjs_ViewHelpers_AbstractViewHelper {
 
 	/**
 	 * Calls addCssFile on the Instance of t3lib_pagerenderer.
@@ -50,16 +50,19 @@ class Tx_MvcExtjs_ViewHelpers_Be_IncludeCssFileViewHelper extends Tx_Fluid_ViewH
 	 * @param string $pathInsideExt the path to the file relative to the ext-folder
 	 * @return string the link 
 	 */
-	public function render($name = NULL, $extKey = NULL, $pathInsideExt = 'Resources/Public/CSS/') {
-		$doc = $this->getDocInstance();
-		$pagerenderer = $doc->getPageRenderer();
-
+	public function render($name = NULL, $extKey = NULL, $pathInsideExt = 'Resources/Public/Styles/') {
 		if ($extKey == NULL) {
 			$extKey = $this->controllerContext->getRequest()->getControllerExtensionKey();
 		}
-		$extPath = t3lib_extMgm::extRelPath($extKey);
+		
+		if (TYPO3_MODE === 'FE') {
+			$extPath = t3lib_extMgm::extPath($extKey);
+			$extRelPath = substr($extPath, strlen(PATH_site));
+		} else {
+			$extRelPath = t3lib_extMgm::extRelPath($extKey);
+		}
 
-		$pagerenderer->addCssFile($extPath . $pathInsideExt . $name);
+		$this->pageRenderer->addCssFile($extPath . $pathInsideExt . $name);
 	}
 
 }
