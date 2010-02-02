@@ -62,7 +62,7 @@ class Tx_MvcExtjs_ViewHelpers_IncludeCssFileViewHelper extends Tx_MvcExtjs_ViewH
 			$extRelPath = t3lib_extMgm::extRelPath($extKey);
 		}
 
-		$this->pageRenderer->addCssFile($extPath . $pathInsideExt . $name);
+		$this->pageRenderer->addCssFile($extRelPath . $pathInsideExt . $name);
 	}
 
 }

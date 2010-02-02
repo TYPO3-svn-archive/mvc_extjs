@@ -30,12 +30,12 @@
  * @subpackage  tx_mvcextjs
  * @author      Dennis Ahrens <dennis.ahrens@fh-hannover.de>
  * @license     http://www.gnu.org/copyleft/gpl.html
- * @version     SVN: $Id$
+ * @version     SVN: $Id:
  */
 class Tx_MvcExtjs_ViewHelpers_Json_StoreReadResponseViewHelper extends Tx_Fluid_Core_ViewHelper_AbstractViewHelper {
-
+	
 	/**
-	 * Renders a JSON response for an ExtJS CRUD store read request.
+	 * renders a json response for a extjs CRUD store read request
 	 * 
 	 * @param array $data
 	 * @param string $message
@@ -43,36 +43,52 @@ class Tx_MvcExtjs_ViewHelpers_Json_StoreReadResponseViewHelper extends Tx_Fluid_
 	 * @param array columns
 	 * @return string
 	 */
-	public function render(array $data = array(), $message = 'default message', $success = TRUE, array $columns = array()) {
+	public function render(array $data = array(), $message = 'default message', $success = true, array $columns = array()) {
+		$this->columns = $columns;
 		$responseArray = array();
 		$responseArray['message'] = $message;
 		$responseArray['total'] = count($objects);
-	
-		if ($success) {
-			$responseArray['success'] = TRUE;
-		} else {
-			$responseArray['success'] = FALSE;
-		}
-
+		
+		if ($success)
+			$responseArray['success'] = true;
+		else
+			$responseArray['success'] = false;
+		
 		$dataArray = array();
-
+		
 		foreach ($data as $object) {
-			$objectArray = array();
-			$properties = $object->_getProperties();
-			foreach ($properties as $name => $value) {
-				if (count($columns) > 0 && !in_array($name, $columns)) {
-						// Current property should not be returned
-					continue;
-				}
-				$objectArray[$name] = $value;
-			}
-			$dataArray[] = $objectArray;
+			
+			$dataArray[] = $this->buildPropertyArray($object,$columns);
 		}
-
+		
 		$responseArray['data'] = $dataArray;
-
+		
 		return json_encode($responseArray);
 	}
-
+	
+	/**
+	 * builds the property array based on a given object
+	 * overload this function in your EXT ViewHelpers to get
+	 * the answer you want to have
+	 * 
+	 * @param mixed $object
+	 * @param array $columns
+	 * @return array
+	 */
+	public function buildPropertyArray($object = NULL, array $columns = array()) {
+		$objectArray = array();
+		$properties = $object->_getProperties();
+		foreach($properties as $name => $value) {
+			if (count($columns) > 0 && !in_array($name, $columns)) {
+					// Current property should not be returned
+				continue;
+			}
+			if($value instanceof DateTime)
+				$value = $value->format('U');
+			$objectArray[$name] = $value;
+		}
+		return $objectArray;
+	}
+	
 }
 ?>

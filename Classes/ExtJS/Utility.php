@@ -142,8 +142,7 @@ class Tx_MvcExtjs_ExtJS_Utility {
 	}
 
 	/**
-	 * Creates a Tx_MvcExtjs_ExtJS_Array Object filled up with field configurations based
-	 * on the given $class.
+	 * creates a Tx_MvcExtjs_ExtJS_Array Object filled up with field configurations based on the given $class
 	 * EXPERIMENTAL
 	 * 
 	 * @param string $class the class u like to fetch the fieldsArray for
@@ -163,20 +162,19 @@ class Tx_MvcExtjs_ExtJS_Utility {
 		} else {
 			$object = t3lib_div::makeInstance($class);
 		}
-
 		$properties = $rc->getProperties();
 		foreach ($properties as $property) {
 			if (count($columns) > 0 && !in_array($property->name, $columns)) {
 					// Current property should not be returned
 				continue;
 			}
-
+			
 			$propertyGetterName = 'get' . ucfirst($property->name);
 			$field = new Tx_MvcExtjs_CodeGeneration_JavaScript_ExtJS_Config;
-
+			
 			if (method_exists($object, $propertyGetterName)) {
 				$type = self::getMethodReturnType($object, $propertyGetterName);
-				if ($type === 'date') {
+				if ($type == 'date') {
 					$field->set('name', $property->name)
 					      ->set('type', $type)
 					      ->set('dateFormat','timestamp');
@@ -184,29 +182,28 @@ class Tx_MvcExtjs_ExtJS_Utility {
 					$field->set('name', $property->name)
 					      ->set('type', $type);
 				} else {
-					$field->addConfig('name', $property->name);
+					$field->set('name', $property->name);
 				}
 				$fields->addElement($field);
 			}
 		}
-
 		foreach ($additionalGetters as $propertyGetterName) {
 			$field = new Tx_MvcExtjs_CodeGeneration_JavaScript_ExtJS_Config;
-
+			
 			if (method_exists($object, $propertyGetterName)) {
 				$type = self::getMethodReturnType($object, $propertyGetterName);
 				if ($type) {
-					$field->addConfig('name', $property->name)
-					      ->addConfig('type', $type);
+					$field->set('name', $property->name)
+					      ->set('type', $type);
 				} else {
-					$field->addConfig('name', $property->name);
+					$field->set('name', $property->name);
 				}
 				$fields->addElement($field);
 			}
 		}
 		return $fields;
 	}
-
+	
 	/**
 	 * Returns the return type of an object method.
 	 * EXPERIMENTAL

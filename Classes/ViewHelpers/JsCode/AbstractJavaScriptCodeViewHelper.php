@@ -77,7 +77,7 @@ abstract class Tx_MvcExtjs_ViewHelpers_JsCode_AbstractJavaScriptCodeViewHelper e
 		if ($this->extOnReady)
 			$this->pageRenderer->addExtOnReadyCode($this->jsCode->build());
 		else
-			$this->pageRenderer->addJsInlineCode($this->extJsNamespace . ' written with ' . get_class($this), $this->jsCode->build());
+			$this->pageRenderer->addJsInlineCode($this->extJsNamespace . ' written with ' . get_class($this) . ' at ' . microtime(), $this->jsCode->build());
 	}
 
 	

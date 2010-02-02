@@ -41,20 +41,8 @@
  * @license     http://www.gnu.org/copyleft/gpl.html
  * @version     SVN: $Id$
  */
-class Tx_MvcExtjs_ViewHelpers_JsCode_StoreViewHelper extends Tx_MvcExtjs_ViewHelpers_JsCode_AbstractJavaScriptCodeViewHelper {
+class Tx_MvcExtjs_ViewHelpers_JsCode_GroupingStoreViewHelper extends Tx_MvcExtjs_ViewHelpers_JsCode_StoreViewHelper {
 
-	/**
-	 * 
-	 * @var Tx_MvcExtjs_CodeGeneration_JavaScript_ExtJS_ExtendClass
-	 */
-	protected $store;
-	
-	/**
-	 * 
-	 * @var Tx_MvcExtjs_CodeGeneration_JavaScript_ExtJS_Config
-	 */
-	protected $config;
-	
 	/**
 	 * override this method to change the StoreType f.e.
 	 * 
@@ -62,13 +50,7 @@ class Tx_MvcExtjs_ViewHelpers_JsCode_StoreViewHelper extends Tx_MvcExtjs_ViewHel
 	 */
 	public function initialize() {
 		parent::initialize();
-		$this->config = new Tx_MvcExtjs_CodeGeneration_JavaScript_ExtJS_Config();
-		$this->store = new Tx_MvcExtjs_CodeGeneration_JavaScript_ExtJS_ExtendClass('defaultStoreName',
-																				   'Ext.data.Store',
-																					array(),
-																					$this->config,
-																					new Tx_MvcExtjs_CodeGeneration_JavaScript_Object(),
-																					$this->extJsNamespace);
+		$this->store->setClass('Ext.data.GroupingStore');
 	}
 	
 	/**
@@ -82,9 +64,7 @@ class Tx_MvcExtjs_ViewHelpers_JsCode_StoreViewHelper extends Tx_MvcExtjs_ViewHel
 	 * @param string $writer the writer for the store
 	 * @param string $proxy the proxy for the store
 	 * @param string $data the data for the store
-	 * @param boolean $autoSave
-	 * @param boolean $restful 
-	 * @param boolean $batch 
+	 * @param string $groupField
 	 * @return void
 	 */
 	public function render($domainModel = NULL,
@@ -94,47 +74,10 @@ class Tx_MvcExtjs_ViewHelpers_JsCode_StoreViewHelper extends Tx_MvcExtjs_ViewHel
 						   $writer = NULL,
 						   $proxy = NULL,
 						   $data = NULL,
-						   $autoSave = TRUE,
-						   $restful = FALSE,
-						   $batch = FALSE) {
-
-		if ($extensionName == NULL)
-			$extensionName = $this->controllerContext->getRequest()->getControllerExtensionName();
-
-		$domainClassName = 'Tx_' . $extensionName . '_Domain_Model_' . $domainModel;
-			// Check if the given domain model class exists
-		if (!class_exists($domainClassName)) {
-			throw new Tx_Fluid_Exception('The Domain Model Class (' . $domainClassName . ') for the given domainModel (' . $domainModel . ') was not found', 1264069568);
-		}
-			// build up and set the for the JS store variable
-		$varNameStore = $domainModel . 'Store';
-		$this->store->setName($varNameStore);
-			// read the given config parameters into the Extjs Config Object
-		($id === NULL) ? $this->config->set('id',$varNameStore) : $this->config->set('id',$id);
-		if($reader !== NULL) $this->config->setRaw('reader',$reader);
-		if($writer !== NULL) $this->config->setRaw('writer',$writer);
-		if($proxy !== NULL) $this->config->setRaw('proxy',$proxy);
-		if($data !== NULL) $this->config->setRaw('data',$data);
-		($autoSave) ? $this->config->setRaw('autoSave','true') : $this->config->setRaw('autoSave','false');
-		($restful) ? $this->config->setRaw('restful','true') : $this->config->setRaw('restful','false');
-		($batch) ? $this->config->setRaw('batch','true') : $this->config->setRaw('batch','false');
-			// apply the configuration again
-		$this->injectJsCode();
+						   $groupField = NULL) {
+		if ($groupField != NULL) $this->config->set('groupField',$groupField);
+		parent::render($domainModel,$extensionName,$id,$reader,$writer,$proxy,$data);
 	}
-	
-	/**
-	 * (non-PHPdoc)
-	 * @see Classes/ViewHelpers/JsCode/Tx_MvcExtjs_ViewHelpers_JsCode_AbstractJavaScriptCodeViewHelper#injectJsCode()
-	 */
-	protected function injectJsCode() {
-		$this->store->setConfig($this->config);
-			// allow objects to be declared inside this viewhelper; they are rendered above
-		$this->renderChildren();
-			// add the code and write it into the inline section in your HTML head
-		$this->jsCode->addSnippet($this->store);
-		parent::injectJsCode();
-	}
-	
 
 }
 ?>

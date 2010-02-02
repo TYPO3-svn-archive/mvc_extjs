@@ -60,7 +60,11 @@ class Tx_MvcExtjs_ViewHelpers_JsCode_ColumnDefinitionViewHelper extends Tx_MvcEx
 	 * @param array $columns
 	 * @return void
 	 */
-	public function render($domainModel = NULL, $extensionName = NULL, array $columns = array()) {
+	public function render($domainModel = NULL,
+						   $extensionName = NULL,
+						   array $columns = array(),
+						   array $hiddenColumns = array(),
+						   array $specialRenderer = array()) {
 		if ($extensionName == NULL) {
 			$extensionName = $this->controllerContext->getRequest()->getControllerExtensionName();
 		}
@@ -84,6 +88,9 @@ class Tx_MvcExtjs_ViewHelpers_JsCode_ColumnDefinitionViewHelper extends Tx_MvcEx
 			$columnDef->set('header', $rProperty->getName())
 					  ->set('dataIndex', $rProperty->getName())
 					  ->setRaw('sortable', 'true');
+			if(isset($specialRenderer[$rProperty->getName()])) 
+				$columnDef->setRaw('renderer',$specialRenderer[$rProperty->getName()]);
+			(in_array($rProperty->getName(),$hiddenColumns) ? $columnDef->setRaw('hidden','true') : $columnDef->setRaw('hidden','false'));
 			$columnArray->addElement($columnDef);
 		}
 		
