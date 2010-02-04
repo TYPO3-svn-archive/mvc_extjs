@@ -141,6 +141,25 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_ExtJS_ExtendClass extends Tx_MvcExtj
 	}
 	
 	/**
+	 * adding a function to the new class definition
+	 * 
+	 * @param string $name
+	 * @param array $parameter
+	 * @param mixed $content string or Tx_MvcExtjs_CodeGeneration_JavaScript_SnippetInterface
+	 * @return void
+	 */
+	public function addFunction($name, array $parameters = array(), $content) {
+		if(!is_string($content) && !$content instanceof Tx_MvcExtjs_CodeGeneration_JavaScript_SnippetInterface)
+			throw new Tx_MvcExtjs_CodeGeneration_JavaScript_Exception('content has to be string or a object implementing Tx_MvcExtjs_CodeGeneration_JavaScript_SnippetInterface', 1265284984);
+		if(is_string($content))
+			$content = new Tx_MvcExtjs_CodeGeneration_JavaScript_Snippet($content);	
+		$objectElement = new Tx_MvcExtjs_CodeGeneration_JavaScript_ObjectElement($name);
+		$function = new Tx_MvcExtjs_CodeGeneration_JavaScript_FunctionDeclaration($parameters,array($content),true);
+		$objectElement->setValue($function);
+		$this->additionalFunctions->addElement($objectElement);
+	}
+	
+	/**
 	 * gets the config object from the extend constructor
 	 * @return Tx_MvcExtjs_CodeGeneration_JavaScript_ExtJS_Config
 	 */
@@ -165,12 +184,16 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_ExtJS_ExtendClass extends Tx_MvcExtj
 
 		$this->constructorFunction->setContent($this->inlineDeclarations);
 		
-		$configElements = array(
-			new Tx_MvcExtjs_CodeGeneration_JavaScript_ObjectElement('constructor',$this->constructorFunction),
-		);
+		//$this->additionalFunctions->addElement(new Tx_MvcExtjs_CodeGeneration_JavaScript_ObjectElement('constructor',$this->constructorFunction));
+		
+		$extExtendConfig = new Tx_MvcExtjs_CodeGeneration_JavaScript_Object(array(new Tx_MvcExtjs_CodeGeneration_JavaScript_ObjectElement('constructor',$this->constructorFunction)));
+		$additionalFunctionElements = $this->additionalFunctions->getElements();
+		foreach($additionalFunctionElements as $element)
+			$extExtendConfig->addElement($element);
+		
 		$extendParameters = array(
 			new Tx_MvcExtjs_CodeGeneration_JavaScript_Snippet($this->class),
-			new Tx_MvcExtjs_CodeGeneration_JavaScript_Object($configElements),
+			$extExtendConfig,
 		);
 		$this->setValue(new Tx_MvcExtjs_CodeGeneration_JavaScript_FunctionCall('Ext.extend',$extendParameters));
 		return parent::build();

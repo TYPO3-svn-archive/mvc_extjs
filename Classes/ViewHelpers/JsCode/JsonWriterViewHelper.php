@@ -101,13 +101,46 @@ class Tx_MvcExtjs_ViewHelpers_JsCode_JsonWriterViewHelper extends Tx_MvcExtjs_Vi
 		($encode) ? $this->config->setRaw('encode','true') : $this->config->setRaw('encode','false');
 		($writeAllFields) ? $this->config->setRaw('writeAllFields','true') : $this->config->setRaw('writeAllFields','false');
 		
-			// apply the configuration again
+		// add a addional function to the writer
+		// target should be that the param on update f.e. is not named like the root of the store
+		// we want the controller parameter scheme to be matched
+		/*$updateCode = '
+        var params = {};
+        t3ControllerWrap = "tx_fhhforschungsprojekte_txfhhlibmain_fhhforschungsprojektetxfhhforschungsprojekteforschende";
+        idsName = t3ControllerWrap + "[" + this.meta.idProperty + "]";
+        rootName = t3ControllerWrap + "[" + this.meta.root + "]";
+        if (Ext.isArray(rs)) {
+            var data = [],
+                ids = [];
+            Ext.each(rs, function(val){
+                ids.push(val.id);
+                data.push(this.updateRecord(val));
+            }, this);
+            params[idsName] = ids;
+            params[rootName] = data;
+        }
+        else if (rs instanceof Ext.data.Record) {
+            params[idsName] = rs.id;
+            params[rootName] = this.updateRecord(rs);
+        }
+        return params;';
+		$this->writer->addFunction('update',array('rs'),$updateCode);*/
+		
+		$this->injectJsCode();
+	}
+	
+	/**
+	 * (non-PHPdoc)
+	 * @see Classes/ViewHelpers/JsCode/Tx_MvcExtjs_ViewHelpers_JsCode_AbstractJavaScriptCodeViewHelper#injectJsCode()
+	 */
+	public function injectJsCode() {
+		// apply the configuration again
 		$this->writer->setConfig($this->config);
 			// allow objects to be declared inside this viewhelper; they are rendered above
 		$this->renderChildren();
 			// add the code and write it into the inline section in your HTML head
 		$this->jsCode->addSnippet($this->writer);
-		$this->injectJsCode();
+		parent::injectJsCode();
 	}
 
 }

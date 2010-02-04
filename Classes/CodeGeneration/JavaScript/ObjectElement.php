@@ -54,7 +54,7 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_ObjectElement implements Tx_MvcExtjs
 	 * @param string $name
 	 * @param Tx_MvcExtjs_CodeGeneration_JavaScript_SnippetInterface $value
 	 */
-	public function __construct($name = NULL, Tx_MvcExtjs_CodeGeneration_JavaScript_SnippetInterface $value) {
+	public function __construct($name = NULL, Tx_MvcExtjs_CodeGeneration_JavaScript_SnippetInterface $value = NULL) {
 		$this->name = $name;
 		$this->value = $value;
 	}

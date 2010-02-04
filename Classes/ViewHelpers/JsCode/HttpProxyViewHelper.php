@@ -110,64 +110,32 @@ class Tx_MvcExtjs_ViewHelpers_JsCode_HttpProxyViewHelper extends Tx_MvcExtjs_Vie
 				case 'destroy':
 					// TODO: move the "hack" that allow ajax communication in FE to a better location
 					$uri = $uriBuilder->reset()->uriFor($action,array('format' => 'json'), $controller) . '&type=1249117332';
-					$apiObject->set($apiCall, $uri);
+					$apiActionObject = new Tx_MvcExtjs_CodeGeneration_JavaScript_ExtJS_Config();
+					$apiActionObject->set('url',$uri);
+					$apiActionObject->set('method','POST');
+					$apiObject->setRaw($apiCall, $apiActionObject);
 					break;
 				default:
 					throw new Tx_Fluid_Exception('The extjs HttpProxy-API only knows about read, new, update and destroy, your value: ' . $apiCall . ' is not supported',1264095568);
 			}
 		}
 		$this->config->setRaw('api',$apiObject);
-			// apply the configuration again
+		
+		$this->injectJsCode();
+	}
+
+	/**
+	 * (non-PHPdoc)
+	 * @see Classes/ViewHelpers/JsCode/Tx_MvcExtjs_ViewHelpers_JsCode_AbstractJavaScriptCodeViewHelper#injectJsCode()
+	 */
+	protected function injectJsCode() {
+		// apply the configuration again
 		$this->proxy->setConfig($this->config);
 			// allow objects to be declared inside this viewhelper; they are rendered above
 		$this->renderChildren();
 			// add the code and write it into the inline section in your HTML head
 		$this->jsCode->addSnippet($this->proxy);
-		$this->injectJsCode();
-	}
-
-	
-	/**
-	 * Renders the proxy variable for the store.
-	 * 
-	 * $actions has to look like this:
-	 * $actions = array(
-	 * 'extjsApiCall' => 'yourAction',
-	 * );
-	 * 
-	 * Supported extjsApiCalls are:
-	 *  - read
-	 *  - update
-	 *  - new
-	 *  - destroy
-	 * 
-	 * @param string $controller the ajax controller
-	 * @param array $actions the actions for the controller associated with the apiCall from extjs
-	 * @return string JS Code containing a Ext.data.HttpProxy Variable
-	 */
-	private function renderProxyVariable($controller = NULL, array $actions = array()) {
-		$uriBuilder = $this->controllerContext->getUriBuilder();
-		$jsConstructor = Tx_MvcExtjs_ExtJS_Constructor::create();
-		$jsConstructor->setVarName($this->varNameProxy);
-		$jsConstructor->setObjectName('Ext.data.HttpProxy');
-
-		$apiObject = Tx_MvcExtjs_ExtJS_Object::create();
-		foreach ($actions as $apiCall => $action) {
-			switch ($apiCall) {
-				case 'read':
-				case 'new':
-				case 'update':
-				case 'destroy':
-					$uri = $uriBuilder->reset()->uriFor($action,array('format' => 'json'), $controller);
-					$apiObject->set($apiCall, $uri);
-					break;
-				default:
-					throw new Tx_Fluid_Exception('The extjs HttpProxy-API only knows about read, new, update and destroy, your value: ' . $apiCall . ' is not supported',1264095568);
-			}
-		}
-		$jsConstructor->addRawConfig('api',$apiObject);
-		$jsOut = $jsConstructor->build();
-		return $jsOut;
+		parent::injectJsCode();
 	}
 
 }
