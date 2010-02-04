@@ -76,7 +76,6 @@ class Tx_MvcExtjs_ViewHelpers_JsCode_JsonReaderViewHelper extends Tx_MvcExtjs_Vi
 	 * 
 	 * @param string $domainModel is used as variable name AND storeId for the generated store
 	 * @param string $extensionName the EXT where the domainModel is located
-	 * @param string $id choose a id for the created variable; default is $domainmodel . 'JsonReader'
 	 * @param string $totalProperty
 	 * @param string $successProperty
 	 * @param string $idProperty
@@ -86,7 +85,6 @@ class Tx_MvcExtjs_ViewHelpers_JsCode_JsonReaderViewHelper extends Tx_MvcExtjs_Vi
 	 */
 	public function render($domainModel = NULL,
 						   $extensionName = NULL,
-						   $id = NULL,
 						   $totalProperty = 'total',
 						   $successProperty = 'success',
 						   $idProperty = 'uid',
@@ -102,11 +100,8 @@ class Tx_MvcExtjs_ViewHelpers_JsCode_JsonReaderViewHelper extends Tx_MvcExtjs_Vi
 			// build up and set the for the JS store variable
 		$varNameReader = $domainModel . 'JsonReader';
 		$this->reader->setName($varNameReader);
-			// read the given config parameters into the Extjs Config Object
-		($id === NULL) ? $this->config->set('id',$varNameReader) : $this->config->set('id',$id);
-		
 		$fields = Tx_MvcExtjs_ExtJS_Utility::getFieldsArray($domainClassName);
-		
+			// read the given config parameters into the Extjs Config Object
 		$this->config->set('totalProperty',$totalProperty)
 					 ->set('successProperty',$successProperty)
 					 ->set('idProperty',$idProperty)

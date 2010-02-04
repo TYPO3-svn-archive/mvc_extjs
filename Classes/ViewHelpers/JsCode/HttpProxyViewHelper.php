@@ -105,10 +105,10 @@ class Tx_MvcExtjs_ViewHelpers_JsCode_HttpProxyViewHelper extends Tx_MvcExtjs_Vie
 		foreach ($api as $apiCall => $action) {
 			switch ($apiCall) {
 				case 'read':
-				case 'new':
+				case 'create':
 				case 'update':
 				case 'destroy':
-					// TODO: move the "hack" that allow ajax communication in FE to a better place
+					// TODO: move the "hack" that allow ajax communication in FE to a better location
 					$uri = $uriBuilder->reset()->uriFor($action,array('format' => 'json'), $controller) . '&type=1249117332';
 					$apiObject->set($apiCall, $uri);
 					break;
