@@ -32,7 +32,7 @@
  * @license     http://www.gnu.org/copyleft/gpl.html
  * @version     SVN: $Id:
  */
-class Tx_MvcExtjs_ViewHelpers_Json_StoreReadResponseViewHelper extends Tx_Fluid_Core_ViewHelper_AbstractViewHelper {
+class Tx_MvcExtjs_ViewHelpers_Json_StoreCreateResponseViewHelper extends Tx_Fluid_Core_ViewHelper_AbstractViewHelper {
 	
 	/**
 	 * renders a json response for a extjs CRUD store read request
@@ -47,21 +47,18 @@ class Tx_MvcExtjs_ViewHelpers_Json_StoreReadResponseViewHelper extends Tx_Fluid_
 		$this->columns = $columns;
 		$responseArray = array();
 		$responseArray['message'] = $message;
-		$responseArray['total'] = count($data);
+		$responseArray['total'] = 1;
 		
 		if ($success)
 			$responseArray['success'] = true;
 		else
 			$responseArray['success'] = false;
 		
-		$dataArray = array();
+				
+		$record = $this->buildPropertyArray($object,$columns);
 		
-		foreach ($data as $object) {
-			
-			$dataArray[] = $this->buildPropertyArray($object,$columns);
-		}
 		
-		$responseArray['data'] = $dataArray;
+		$responseArray['data'] = $record;
 		
 		return json_encode($responseArray);
 	}
