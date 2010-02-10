@@ -172,7 +172,7 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_ExtJS_ExtendClass extends Tx_MvcExtj
 	 * @see Classes/CodeGeneration/JavaScript/Tx_MvcExtjs_CodeGeneration_JavaScript_Variable#build()
 	 */
 	public function build() {
-		$configConstructor = new Tx_MvcExtjs_CodeGeneration_JavaScript_FunctionCall('Ext.apply',array($this->config));
+		$configConstructor = new Tx_MvcExtjs_CodeGeneration_JavaScript_FunctionCall('Ext.apply',array($this->config,new Tx_MvcExtjs_CodeGeneration_JavaScript_Snippet('config')));
 		$configVariable = new Tx_MvcExtjs_CodeGeneration_JavaScript_Variable('config',$configConstructor);
 				
 		$this->inlineDeclarations[] = $configVariable;

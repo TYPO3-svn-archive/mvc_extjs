@@ -64,6 +64,9 @@ class Tx_MvcExtjs_ViewHelpers_JsCode_GroupingStoreViewHelper extends Tx_MvcExtjs
 	 * @param string $writer the writer for the store
 	 * @param string $proxy the proxy for the store
 	 * @param string $data the data for the store
+	 * @param boolean $autoSave
+	 * @param boolean $restful 
+	 * @param boolean $batch 
 	 * @param string $groupField
 	 * @return void
 	 */
@@ -74,9 +77,12 @@ class Tx_MvcExtjs_ViewHelpers_JsCode_GroupingStoreViewHelper extends Tx_MvcExtjs
 						   $writer = NULL,
 						   $proxy = NULL,
 						   $data = NULL,
+						   $autoSave = TRUE,
+						   $restful = FALSE,
+						   $batch = FALSE,
 						   $groupField = NULL) {
 		if ($groupField != NULL) $this->config->set('groupField',$groupField);
-		parent::render($domainModel,$extensionName,$id,$reader,$writer,$proxy,$data);
+		parent::render($domainModel,$extensionName,$id,$reader,$writer,$proxy,$data,$autoSave,$restful,$batch);
 	}
 
 }
