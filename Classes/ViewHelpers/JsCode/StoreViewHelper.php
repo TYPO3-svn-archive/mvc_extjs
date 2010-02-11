@@ -78,6 +78,7 @@ class Tx_MvcExtjs_ViewHelpers_JsCode_StoreViewHelper extends Tx_MvcExtjs_ViewHel
 	 * @param string $domainModel is used as variable name AND storeId for the generated store
 	 * @param string $extensionName the EXT where the domainModel is located
 	 * @param string $id choose a id for the created variable; default is $domainmodel . 'Store'
+	 * @param string $name the name of the new class the is created
 	 * @param string $reader the reader for the store
 	 * @param string $writer the writer for the store
 	 * @param string $proxy the proxy for the store
@@ -90,6 +91,7 @@ class Tx_MvcExtjs_ViewHelpers_JsCode_StoreViewHelper extends Tx_MvcExtjs_ViewHel
 	public function render($domainModel = NULL,
 						   $extensionName = NULL,
 						   $id = NULL,
+						   $name = NULL,
 						   $reader = NULL,
 						   $writer = NULL,
 						   $proxy = NULL,
@@ -108,9 +110,9 @@ class Tx_MvcExtjs_ViewHelpers_JsCode_StoreViewHelper extends Tx_MvcExtjs_ViewHel
 		}
 			// build up and set the for the JS store variable
 		$varNameStore = $domainModel . 'Store';
-		$this->store->setName($varNameStore);
+		($name === NULL) ? $this->store->setName($varNameStore) : $this->store->setName($name);
 			// read the given config parameters into the Extjs Config Object
-		($id === NULL) ? $this->config->set('storeId',$varNameStore) : $this->config->set('storeId',$id);
+		if($id !== NULL) $this->config->set('storeId',$id);
 		if($reader !== NULL) $this->config->setRaw('reader',$reader);
 		if($writer !== NULL) $this->config->setRaw('writer',$writer);
 		if($proxy !== NULL) $this->config->setRaw('proxy',$proxy);

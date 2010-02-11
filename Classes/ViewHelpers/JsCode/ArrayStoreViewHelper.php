@@ -60,6 +60,7 @@ class Tx_MvcExtjs_ViewHelpers_JsCode_ArrayStoreViewHelper extends Tx_MvcExtjs_Vi
 	 * @param string $domainModel is used as variable name AND storeId for the generated store
 	 * @param string $extensionName the EXT where the domainModel is located
 	 * @param string $id choose a id for the created variable; default is $domainmodel . 'Store'
+	 * @param string $name
 	 * @param string $writer the writer for the store
 	 * @param string $proxy the proxy for the store
 	 * @param string $data the data for the store
@@ -72,6 +73,7 @@ class Tx_MvcExtjs_ViewHelpers_JsCode_ArrayStoreViewHelper extends Tx_MvcExtjs_Vi
 	public function render($domainModel = NULL,
 						   $extensionName = NULL,
 						   $id = NULL,
+						   $name = NULL,
 						   $writer = NULL,
 						   $proxy = NULL,
 						   $data = NULL,
@@ -90,7 +92,7 @@ class Tx_MvcExtjs_ViewHelpers_JsCode_ArrayStoreViewHelper extends Tx_MvcExtjs_Vi
 		$fields = Tx_MvcExtjs_ExtJS_Utility::getFieldsArray($domainClassName);
 		$this->config->setRaw('fields',$fields);
 		
-		parent::render($domainModel,$extensionName,$id,NULL,$writer,$proxy,$data,$autoSave,$restful,$batch);
+		parent::render($domainModel,$extensionName,$id,$name,NULL,$writer,$proxy,$data,$autoSave,$restful,$batch);
 	}
 
 }

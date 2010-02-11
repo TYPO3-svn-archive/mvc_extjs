@@ -60,6 +60,7 @@ class Tx_MvcExtjs_ViewHelpers_JsCode_GroupingStoreViewHelper extends Tx_MvcExtjs
 	 * @param string $domainModel is used as variable name AND storeId for the generated store
 	 * @param string $extensionName the EXT where the domainModel is located
 	 * @param string $id choose a id for the created variable; default is $domainmodel . 'Store'
+	 * @param string $name 
 	 * @param string $reader the reader for the store
 	 * @param string $writer the writer for the store
 	 * @param string $proxy the proxy for the store
@@ -73,6 +74,7 @@ class Tx_MvcExtjs_ViewHelpers_JsCode_GroupingStoreViewHelper extends Tx_MvcExtjs
 	public function render($domainModel = NULL,
 						   $extensionName = NULL,
 						   $id = NULL,
+						   $name = NULL,
 						   $reader = NULL,
 						   $writer = NULL,
 						   $proxy = NULL,
@@ -82,7 +84,7 @@ class Tx_MvcExtjs_ViewHelpers_JsCode_GroupingStoreViewHelper extends Tx_MvcExtjs
 						   $batch = FALSE,
 						   $groupField = NULL) {
 		if ($groupField != NULL) $this->config->set('groupField',$groupField);
-		parent::render($domainModel,$extensionName,$id,$reader,$writer,$proxy,$data,$autoSave,$restful,$batch);
+		parent::render($domainModel,$extensionName,$id,$name,$reader,$writer,$proxy,$data,$autoSave,$restful,$batch);
 	}
 
 }
