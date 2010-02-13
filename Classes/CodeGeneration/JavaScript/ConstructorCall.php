@@ -36,7 +36,6 @@
 class Tx_MvcExtjs_CodeGeneration_JavaScript_ConstructorCall extends Tx_MvcExtjs_CodeGeneration_JavaScript_FunctionCall {
 	
 	/**
-	 * (non-PHPdoc)
 	 * @see Classes/CodeGeneration/JavaScript/Tx_MvcExtjs_CodeGeneration_JavaScript_SnippetInterface#build()
 	 */
 	public function build() {

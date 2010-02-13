@@ -36,19 +36,18 @@
 class Tx_MvcExtjs_CodeGeneration_JavaScript_QuotedValue implements Tx_MvcExtjs_CodeGeneration_JavaScript_SnippetInterface {
 	
 	/**
-	 * the string
-	 * 
 	 * @var string
 	 */
 	protected $value;
 	
 	/**
-	 * 
+	 * Should the output be quoted with " instead of '
 	 * @var boolean
 	 */
 	protected $double;
 	
 	/**
+	 * Default constrcutor
 	 * 
 	 * @param string $value
 	 * @param boolean $double
@@ -59,7 +58,7 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_QuotedValue implements Tx_MvcExtjs_C
 	}
 	
 	/**
-	 * sets the value snippet
+	 * Set the value
 	 * 
 	 * @param string $value
 	 * @return void
@@ -69,7 +68,7 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_QuotedValue implements Tx_MvcExtjs_C
 	}
 	
 	/**
-	 * gets the value snippet
+	 * Get the value
 	 * 
 	 * @return string
 	 */
@@ -78,17 +77,18 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_QuotedValue implements Tx_MvcExtjs_C
 	}
 	
 	/**
-	 * (non-PHPdoc)
 	 * @see Classes/CodeGeneration/JavaScript/Tx_MvcExtjs_CodeGeneration_JavaScript_SnippetInterface#build()
 	 */
 	public function build() {
-		if (!$this->double)
+		if (!$this->double) {
 			return '\'' . $this->value . '\'';
-		else
+		} else {
 			return '"' . $this->value . '"';
+		}
 	}
 	
 	/**
+	 * Wrap build() as __toString()
 	 * 
 	 * @return string
 	 */

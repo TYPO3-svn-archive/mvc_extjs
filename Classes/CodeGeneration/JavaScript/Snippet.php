@@ -37,13 +37,12 @@
 class Tx_MvcExtjs_CodeGeneration_JavaScript_Snippet implements Tx_MvcExtjs_CodeGeneration_JavaScript_SnippetInterface {
 	
 	/**
-	 * the string
-	 * 
 	 * @var string
 	 */
 	protected $code;
 	
 	/**
+	 * Default constructor
 	 * 
 	 * @param string $code
 	 */
@@ -52,7 +51,7 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_Snippet implements Tx_MvcExtjs_CodeG
 	}
 	
 	/**
-	 * sets the code snippet
+	 * Set the code snippet
 	 * 
 	 * @param string $code
 	 * @return void
@@ -62,7 +61,7 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_Snippet implements Tx_MvcExtjs_CodeG
 	}
 	
 	/**
-	 * gets the code snippet
+	 * Get the code snippet
 	 * 
 	 * @return string
 	 */
@@ -71,7 +70,6 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_Snippet implements Tx_MvcExtjs_CodeG
 	}
 	
 	/**
-	 * (non-PHPdoc)
 	 * @see Classes/CodeGeneration/JavaScript/Tx_MvcExtjs_CodeGeneration_JavaScript_SnippetInterface#build()
 	 */
 	public function build() {
@@ -79,7 +77,8 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_Snippet implements Tx_MvcExtjs_CodeG
 	}
 	
 	/**
-	 * 
+	 * Do the same like build()
+	 *  
 	 * @return string
 	 */
 	public function __toString() {

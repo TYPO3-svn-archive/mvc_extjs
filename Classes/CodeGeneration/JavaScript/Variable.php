@@ -36,36 +36,30 @@
 class Tx_MvcExtjs_CodeGeneration_JavaScript_Variable implements Tx_MvcExtjs_CodeGeneration_JavaScript_SnippetInterface {
 	
 	/**
-	 * the name of the variable
-	 * 
 	 * @var string
 	 */
 	protected $name;
 	
 	/**
-	 * the value of the variable
-	 * 
 	 * @var Tx_MvcExtjs_CodeGeneration_JavaScript_SnippetInterface
 	 */
 	protected $value;
 	
 	/**
-	 * the namespace 
-	 * 
 	 * @var mixed string or FALSE
 	 */
 	protected $namespace;
 	
 	/**
-	 * should we use the statement var in front of the name? 
-	 * (i still do not really understand where the difference is; further informations: http://www.w3schools.com/js/js_variables.asp)
+	 * Should we use the statement var in front of the name? 
+	 * Further informations: http://www.w3schools.com/js/js_variables.asp
 	 * 
 	 * @var boolean
 	 */
 	protected $var;
 	
 	/**
-	 * 
+	 * Default Constructor
 	 * @param string $name
 	 * @param Tx_MvcExtjs_CodeGeneration_JavaScript_SnippetInterface $value
 	 * @param boolean $var
@@ -79,8 +73,9 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_Variable implements Tx_MvcExtjs_Code
 	}
 	
 	/**
+	 * Set the name
 	 * 
-	 * @param $name
+	 * @param string $name
 	 * @return void
 	 */
 	public function setName($name) {
@@ -88,6 +83,7 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_Variable implements Tx_MvcExtjs_Code
 	}
 	
 	/**
+	 * Get the name
 	 * 
 	 * @return string
 	 */
@@ -96,6 +92,7 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_Variable implements Tx_MvcExtjs_Code
 	}
 	
 	/**
+	 * Set the value
 	 * 
 	 * @param Tx_MvcExtjs_CodeGeneration_JavaScript_SnippetInterface $value
 	 * @return void
@@ -105,6 +102,7 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_Variable implements Tx_MvcExtjs_Code
 	}
 	
 	/**
+	 * Get the value
 	 * 
 	 * @return Tx_MvcExtjs_CodeGeneration_JavaScript_SnippetInterface
 	 */
@@ -113,6 +111,7 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_Variable implements Tx_MvcExtjs_Code
 	}
 	
 	/**
+	 * Set the namespace
 	 * 
 	 * @param string $value
 	 * @return void
@@ -122,7 +121,7 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_Variable implements Tx_MvcExtjs_Code
 	}
 	
 	/**
-	 * resets the namespace
+	 * Resets the namespace - no namespace will be used
 	 * 
 	 * @return void
 	 */
@@ -131,6 +130,7 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_Variable implements Tx_MvcExtjs_Code
 	}
 	
 	/**
+	 * Get the namespace
 	 * 
 	 * @return string
 	 */
@@ -139,6 +139,7 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_Variable implements Tx_MvcExtjs_Code
 	}
 	
 	/**
+	 * Set if you want the keyword var
 	 * 
 	 * @param boolean $var
 	 * @return void
@@ -148,6 +149,7 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_Variable implements Tx_MvcExtjs_Code
 	}
 	
 	/**
+	 * Get if this variable will be assigned with using the keyword var
 	 * 
 	 * @return boolean
 	 */
@@ -156,20 +158,31 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_Variable implements Tx_MvcExtjs_Code
 	}
 	
 	/**
-	 * (non-PHPdoc)
 	 * @see Classes/CodeGeneration/JavaScript/Tx_MvcExtjs_CodeGeneration_JavaScript_SnippetInterface#build()
 	 */
 	public function build() {
-		if (!is_string($this->name) || $this->name == '')
+		if (!is_string($this->name) || $this->name == '') {
 			throw new Tx_MvcExtjs_CodeGeneration_JavaScript_Exception('building a variable without a name will cause errors in javascript - use another snippet if u just want the stuff on the right side of the "="',1264952776);
+		}
 		$js = '';
 		if ($this->namespace) {
 			$this->var = false;
 			$js .= $this->namespace . '.';
 		}
-		if ($this->var) $js .= 'var ';
+		if ($this->var) {
+			$js .= 'var ';
+		}
 		$js .= $this->name . ' = ' . $this->value->build() . "\n";
 		return $js;
+	}
+	
+	/**
+	 * Wrap build() as __toString()
+	 * 
+	 * @return string
+	 */
+	public function __toString() {
+		return $this->build();
 	}
 	
 }

@@ -24,7 +24,8 @@
 
 /**
  * JavaScript Code Snippet
- * Representing a JavaScript Variable
+ * Representing a ExtExtend call
+ * Use this to provide extjs objects preconfigured for your needs
  *
  * @category    CodeGeneration_JavaScript
  * @package     TYPO3
@@ -36,32 +37,27 @@
 class Tx_MvcExtjs_CodeGeneration_JavaScript_ExtJS_ExtendClass extends Tx_MvcExtjs_CodeGeneration_JavaScript_Variable {
 	
 	/**
-	 * 
 	 * @var string
 	 */
 	protected $class;
 	
 	/**
-	 * 
 	 * @var Tx_MvcExtjs_CodeGeneration_JavaScript_ExtJS_Config
 	 */
 	protected $config;
 	
 	/**
-	 * 
 	 * @var array
 	 */
 	protected $inlineDeclarations;
 	
 	/**
-	 * !!!not implemented yet!!!
-	 * 
 	 * @var Tx_MvcExtjs_CodeGeneration_JavaScript_Object
 	 */
 	protected $additionalFunctions;
 	
 	/**
-	 * the internal used AnonymFunction Object
+	 * The internal used AnonymFunction Object
 	 * 
 	 * @var Tx_MvcExtjs_CodeGeneration_JavaScript_FunctionDeclaration
 	 */
@@ -83,9 +79,11 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_ExtJS_ExtendClass extends Tx_MvcExtj
 								Tx_MvcExtjs_CodeGeneration_JavaScript_Object $additionalFunctions = NULL,
 								$namespace = FALSE) {
 		
-		foreach ($inlineDeclarations as $snippet)
-			if (!$snippet instanceof Tx_MvcExtjs_CodeGeneration_JavaScript_SnippetInterface)
+		foreach ($inlineDeclarations as $snippet) {
+			if (!$snippet instanceof Tx_MvcExtjs_CodeGeneration_JavaScript_SnippetInterface) {
 				throw new Tx_MvcExtjs_CodeGeneration_JavaScript_Exception('a inlinedeclaration for the has to implement Tx_MvcExtjs_CodeGeneration_JavaScript_SnippetInterface',1264859988);
+			}
+		}
 		
 		$this->class = $class;
 		$this->config = $config;
@@ -97,7 +95,7 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_ExtJS_ExtendClass extends Tx_MvcExtj
 	}
 	
 	/**
-	 * sets the class that should be extended
+	 * Set the class that should be extended
 	 * 
 	 * @param string $class
 	 * @return Tx_MvcExtjs_CodeGeneration_JavaScript_ExtJS_ExtendClass
@@ -108,7 +106,7 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_ExtJS_ExtendClass extends Tx_MvcExtj
 	}
 	
 	/**
-	 * adds a config parameter to the constructor of the object that should be extended
+	 * Add a config parameter
 	 * 
 	 * @param string $name
 	 * @param string $value
@@ -120,6 +118,7 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_ExtJS_ExtendClass extends Tx_MvcExtj
 	}
 	
 	/**
+	 * Add a raw config parameter
 	 * 
 	 * @param string $name
 	 * @param mixed $value string or something that implements Tx_MvcExtjs_CodeGeneration_JavaScript_SnippetInterface
@@ -131,7 +130,8 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_ExtJS_ExtendClass extends Tx_MvcExtj
 	}
 	
 	/**
-	 * sets a config object for the extend constructor
+	 * Set a config object for the extend constructor
+	 * 
 	 * @param $config
 	 * @return Tx_MvcExtjs_CodeGeneration_JavaScript_ExtJS_ExtendClass
 	 */
@@ -141,7 +141,7 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_ExtJS_ExtendClass extends Tx_MvcExtj
 	}
 	
 	/**
-	 * adding a function to the new class definition
+	 * Add a function to the new class definition
 	 * 
 	 * @param string $name
 	 * @param array $parameter
@@ -160,7 +160,8 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_ExtJS_ExtendClass extends Tx_MvcExtj
 	}
 	
 	/**
-	 * gets the config object from the extend constructor
+	 * Gets the config object from the extend constructor
+	 * 
 	 * @return Tx_MvcExtjs_CodeGeneration_JavaScript_ExtJS_Config
 	 */
 	public function getConfig() {
@@ -168,7 +169,6 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_ExtJS_ExtendClass extends Tx_MvcExtj
 	}
 	
 	/**
-	 * (non-PHPdoc)
 	 * @see Classes/CodeGeneration/JavaScript/Tx_MvcExtjs_CodeGeneration_JavaScript_Variable#build()
 	 */
 	public function build() {
@@ -177,14 +177,12 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_ExtJS_ExtendClass extends Tx_MvcExtj
 				
 		$this->inlineDeclarations[] = $configVariable;
 		
-		$superclassConstructorName = $this->namespace . '.' . $this->name . '.superclass.constructor.call';
-		$superclassCall = new Tx_MvcExtjs_CodeGeneration_JavaScript_FunctionCall($superclassConstructorName,array(new Tx_MvcExtjs_CodeGeneration_JavaScript_Snippet('this'),new Tx_MvcExtjs_CodeGeneration_JavaScript_Snippet('config')));
+		$superClassConstructorName = $this->namespace . '.' . $this->name . '.superclass.constructor.call';
+		$superClassCall = new Tx_MvcExtjs_CodeGeneration_JavaScript_FunctionCall($superClassConstructorName,array(new Tx_MvcExtjs_CodeGeneration_JavaScript_Snippet('this'),new Tx_MvcExtjs_CodeGeneration_JavaScript_Snippet('config')));
 		
-		$this->inlineDeclarations[] = $superclassCall;
+		$this->inlineDeclarations[] = $superClassCall;
 
 		$this->constructorFunction->setContent($this->inlineDeclarations);
-		
-		//$this->additionalFunctions->addElement(new Tx_MvcExtjs_CodeGeneration_JavaScript_ObjectElement('constructor',$this->constructorFunction));
 		
 		$extExtendConfig = new Tx_MvcExtjs_CodeGeneration_JavaScript_Object(array(new Tx_MvcExtjs_CodeGeneration_JavaScript_ObjectElement('constructor',$this->constructorFunction)));
 		$additionalFunctionElements = $this->additionalFunctions->getElements();
@@ -197,6 +195,15 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_ExtJS_ExtendClass extends Tx_MvcExtj
 		);
 		$this->setValue(new Tx_MvcExtjs_CodeGeneration_JavaScript_FunctionCall('Ext.extend',$extendParameters));
 		return parent::build();
+	}
+	
+	/**
+	 * Wrap build() as __toString()
+	 * 
+	 * @return string
+	 */
+	public function __toString() {
+		return $this->build();
 	}
 	
 }

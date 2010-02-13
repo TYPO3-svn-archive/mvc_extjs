@@ -45,27 +45,29 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_ExtJS_Constructor extends Tx_MvcExtj
 	protected $class;
 	
 	/**
-	 * The extjs config array, given to the constructor of the class
+	 * The extjs config array
 	 * 
 	 * @var Tx_MvcExtjs_CodeGeneration_JavaScript_ExtJS_Config
 	 */
 	protected $config;
 	
 	/**
-	 * parameters for the constructor, additional to the config object
+	 * Parameters for the constructor, additional to the config object.
+	 * The config object will always be the first parameter
 	 * 
 	 * @var array
 	 */
 	protected $parameters;
 	
 	/**
-	 * internal used variable that will be filled up with class, config and parameters when build the js code
+	 * Internal used variable that will be filled up with class, config and parameters when build the js code
 	 * 
 	 * @var Tx_MvcExtjs_CodeGeneration_JavaScript_ConstructorCall
 	 */
 	private $constructorCall;
 	
 	/**
+	 * Default constrcutor
 	 * 
 	 * @param string $name
 	 * @param string $class
@@ -80,9 +82,11 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_ExtJS_Constructor extends Tx_MvcExtj
 								array $parameters,
 								$namespace = FALSE) {
 		
-		foreach ($parameters as $snippet)
-			if (!$snippet instanceof Tx_MvcExtjs_CodeGeneration_JavaScript_SnippetInterface)
+		foreach ($parameters as $snippet) {
+			if (!$snippet instanceof Tx_MvcExtjs_CodeGeneration_JavaScript_SnippetInterface) {
 				throw new Tx_MvcExtjs_CodeGeneration_JavaScript_Exception('a parameter for a constrcutor has to implement Tx_MvcExtjs_CodeGeneration_JavaScript_SnippetInterface',1264859988);
+			}
+		}
 		
 		$this->class = $class;
 		$this->config = $config;
@@ -93,7 +97,7 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_ExtJS_Constructor extends Tx_MvcExtj
 	}
 	
 	/**
-	 * sets the class that should be extended
+	 * Set the class that should be extended
 	 * 
 	 * @param string $class
 	 * @return Tx_MvcExtjs_CodeGeneration_JavaScript_ExtJS_Constructor
@@ -104,7 +108,7 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_ExtJS_Constructor extends Tx_MvcExtj
 	}
 	
 	/**
-	 * adds a config parameter to the constructor of the object that should be extended
+	 * Add a config parameter to the constructor of the object that should be extended
 	 * 
 	 * @param string $name
 	 * @param string $value
@@ -116,8 +120,8 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_ExtJS_Constructor extends Tx_MvcExtj
 	}
 	
 	/**
-	 * adds a config parameter to to configuration of the extjs object
-	 * the given parameter is outputted raw (not quoted)
+	 * Add a config parameter to to configuration of the extjs object
+	 * The given parameter is outputted raw (not quoted)
 	 * 
 	 * @param string $name
 	 * @param mixed $value string or something that implements Tx_MvcExtjs_CodeGeneration_JavaScript_SnippetInterface
@@ -129,7 +133,8 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_ExtJS_Constructor extends Tx_MvcExtj
 	}
 	
 	/**
-	 * sets the config for the Constructor
+	 * Set the config for the Constructor
+	 * 
 	 * @param Tx_MvcExtjs_CodeGeneration_JavaScript_ExtJS_Config $config
 	 * @return Tx_MvcExtjs_CodeGeneration_JavaScript_ExtJS_Constructor
 	 */
@@ -139,7 +144,7 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_ExtJS_Constructor extends Tx_MvcExtj
 	}
 	
 	/**
-	 * add a parameter to the constructor
+	 * Add a parameter to the constructor
 	 * 
 	 * @param Tx_MvcExtjs_CodeGeneration_JavaScript_SnippetInterface $parameter
 	 * @return Tx_MvcExtjs_CodeGeneration_JavaScript_ExtJS_Constructor
@@ -150,16 +155,23 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_ExtJS_Constructor extends Tx_MvcExtj
 	}
 	
 	/**
-	 * (non-PHPdoc)
 	 * @see Classes/CodeGeneration/JavaScript/Tx_MvcExtjs_CodeGeneration_JavaScript_Variable#build()
 	 */
 	public function build() {
 		$this->value = new Tx_MvcExtjs_CodeGeneration_JavaScript_ConstructorCall($this->class,array($this->config));
-		
-		foreach ($this->parameters as $snippet)
+		foreach ($this->parameters as $snippet) {
 			$this->value->addParameter($snippet);
-
+		}
 		return parent::build();
+	}
+	
+	/**
+	 * Wrap build() as __toString()
+	 * 
+	 * @return string
+	 */
+	public function __toString() {
+		return $this->build();
 	}
 	
 }

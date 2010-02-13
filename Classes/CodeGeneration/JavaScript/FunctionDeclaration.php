@@ -40,21 +40,19 @@
 class Tx_MvcExtjs_CodeGeneration_JavaScript_FunctionDeclaration implements Tx_MvcExtjs_CodeGeneration_JavaScript_SnippetInterface {
 	
 	/**
-	 * the parameters for the function
-	 * 
 	 * @var array
 	 */
 	protected $parameters;
 	
 	/**
-	 * the js code inside the function
+	 * The js code inside the function
 	 * 
 	 * @var array
 	 */
 	protected $content;
 	
 	/**
-	 * is the declaration is inline we don't need a ending ;
+	 * If the declaration is inline we don't need a ending ";"
 	 * 
 	 * @var boolean
 	 */
@@ -62,18 +60,20 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_FunctionDeclaration implements Tx_Mv
 	
 	/**
 	 * !discussionable!
-	 * sometimes (don't know why - not as skilled in JS ;-) we need those brackets "()" in the end of the definition
-	 * found this in Ext.onReady() declarations
+	 * Sometimes (don't know why - not as skilled in JS ;-) we need those brackets "()" in the end of the definition.
+	 * Found this in Ext.onReady() declarations.
 	 * 
 	 * @var boolean
 	 */
 	protected $brackets;
 	
 	/**
+	 * Default constructor
 	 * 
 	 * @param array $parameters
 	 * @param array $content
 	 * @param boolean $inline
+	 * @param boolean $brackets
 	 */
 	public function __construct(array $parameters = array(), array $content = array(), $inline = FALSE, $brackets = FALSE) {
 		foreach ($parameters as $parameter)
@@ -89,20 +89,22 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_FunctionDeclaration implements Tx_Mv
 	}
 	
 	/**
-	 * sets all parameters for the constructor
+	 * Set all parameters for the function
 	 * 
-	 * @param string $parameters
+	 * @param array $parameters
 	 * @return void
 	 */
 	public function setParameters($parameters) {
-		foreach ($parameters as $parameter)
-			if (!is_string($parameter))
+		foreach ($parameters as $parameter) {
+			if (!is_string($parameter)) {
 				throw new Tx_MvcExtjs_CodeGeneration_JavaScript_Exception('a parameter has to be of type string',1264859988);
+			}
+		}
 		$this->parameters = $parameters;
 	}
 	
 	/**
-	 * adds a parameter to the constructor
+	 * Add a parameter to the function
 	 * 
 	 * @param string $parameter
 	 * @return void
@@ -112,7 +114,7 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_FunctionDeclaration implements Tx_Mv
 	}
 	
 	/**
-	 * gets an array with all parameters
+	 * Get an array with all parameters
 	 * 
 	 * @return array
 	 */
@@ -121,20 +123,22 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_FunctionDeclaration implements Tx_Mv
 	}
 	
 	/**
-	 * sets all parameters for the constructor
+	 * Set all parameters for the function
 	 * 
 	 * @param string $parameters
 	 * @return void
 	 */
 	public function setContent($content) {
-		foreach ($content as $snippet)
-			if (!$snippet instanceof Tx_MvcExtjs_CodeGeneration_JavaScript_SnippetInterface)
+		foreach ($content as $snippet) {
+			if (!$snippet instanceof Tx_MvcExtjs_CodeGeneration_JavaScript_SnippetInterface) {
 				throw new Tx_MvcExtjs_CodeGeneration_JavaScript_Exception('a content element has to implement Tx_MvcExtjs_CodeGeneration_JavaScript_SnippetInterface',1264859988);
+			}
+		}
 		$this->content = $content;
 	}
 	
 	/**
-	 * adds a parameter to the constructor
+	 * Add a parameter to the function
 	 * 
 	 * @param string $parameter
 	 * @return void
@@ -144,7 +148,7 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_FunctionDeclaration implements Tx_Mv
 	}
 	
 	/**
-	 * gets an array with all parameters
+	 * Get an array with all parameters
 	 * 
 	 * @return array
 	 */
@@ -153,22 +157,33 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_FunctionDeclaration implements Tx_Mv
 	}
 	
 	/**
-	 * (non-PHPdoc)
 	 * @see Classes/CodeGeneration/JavaScript/Tx_MvcExtjs_CodeGeneration_JavaScript_SnippetInterface#build()
 	 */
 	public function build() {
 		$js = 'function(';
-		foreach ($this->parameters as $parameter)
+		foreach ($this->parameters as $parameter) {
 			$js .= $parameter . ',';
-		if(count($this->parameters) > 0)
+		}
+		if (count($this->parameters) > 0) {
 			$js = substr($js,0,-1);
+		}
 		$js .= ') {' . "\n";
-		foreach($this->content as $snippet)
+		foreach ($this->content as $snippet) {
 			$js .= $snippet->build();
+		}
 		$js .= '}';
 		if ($this->brackets) $js .= '()';
 		if (!$this->inline) $js .= ';';
 		return $js;
+	}
+	
+	/**
+	 * Wrap build() as __toString()
+	 * 
+	 * @return string
+	 */
+	public function __toString() {
+		return $this->build();
 	}
 	
 }

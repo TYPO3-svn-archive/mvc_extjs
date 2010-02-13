@@ -38,47 +38,52 @@
 class Tx_MvcExtjs_CodeGeneration_JavaScript_Object implements Tx_MvcExtjs_CodeGeneration_JavaScript_SnippetInterface {
 	
 	/**
-	 * the elements
-	 * 
 	 * @var array
 	 */
 	protected $elements;
 	
 	/**
+	 * Default constructor
 	 * 
 	 * @param array $elements
 	 */
 	public function __construct(array $elements = array()) {
-		foreach ($elements as $element)
-			if (!$element instanceof Tx_MvcExtjs_CodeGeneration_JavaScript_SnippetInterface)
+		foreach ($elements as $element) {
+			if (!$element instanceof Tx_McExtjs_CodeGeneration_JavaScript_SnippetInterface) {
 				throw new Tx_MvcExtjs_CodeGeneration_JavaScript_Exception('a element has to implement Tx_MvcExtjs_CodeGeneration_JavaScript_SnippetInterface',1264859988);
+			}
+		}
 		$this->elements = $elements;
 	}
 	
 	/**
-	 * sets the elements
+	 * Set the elements
 	 * 
 	 * @param array $elements
 	 * @return void
 	 */
 	public function setElements($elements) {
-		foreach ($elements as $element)
-			if (!$element instanceof Tx_MvcExtjs_CodeGeneration_JavaScript_SnippetInterface)
+		foreach ($elements as $element) {
+			if (!$element instanceof Tx_MvcExtjs_CodeGeneration_JavaScript_SnippetInterface) {
 				throw new Tx_MvcExtjs_CodeGeneration_JavaScript_Exception('a element has to implement Tx_MvcExtjs_CodeGeneration_JavaScript_SnippetInterface',1264859988);
+			}
+		}
 		$this->elements = $elements;
 	}
 	
 	/**
-	 * adds an element to the object
+	 * Adds an element to the object
+	 * 
 	 * @param $element
-	 * @return unknown_type
+	 * @return Tx_MvcExtjs_CodeGeneration_JavaScript_Object
 	 */
 	public function addElement(Tx_MvcExtjs_CodeGeneration_JavaScript_SnippetInterface $element) {
 		$this->elements[] = $element;
+		return $this;
 	}
 	
 	/**
-	 * gets the elements
+	 * Get the elements
 	 * 
 	 * @return array
 	 */
@@ -87,20 +92,22 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_Object implements Tx_MvcExtjs_CodeGe
 	}
 	
 	/**
-	 * (non-PHPdoc)
 	 * @see Classes/CodeGeneration/JavaScript/Tx_MvcExtjs_CodeGeneration_JavaScript_SnippetInterface#build()
 	 */
 	public function build() {
 		$js = '{';
-		foreach ($this->elements as $element)
+		foreach ($this->elements as $element) {
 			$js .= $element->build() . ', ';
-		if (count($this->elements) > 0)
+		}
+		if (count($this->elements) > 0) {
 			$js = substr($js,0,-2);
+		}
 		$js .= '}';
 		return $js;
 	}
 	
 	/**
+	 * Wrap build() as __toString()
 	 * 
 	 * @return string
 	 */

@@ -36,34 +36,33 @@
 class Tx_MvcExtjs_CodeGeneration_JavaScript_FunctionCall implements Tx_MvcExtjs_CodeGeneration_JavaScript_SnippetInterface {
 	
 	/**
-	 * it's name
-	 * 
 	 * @var string
 	 */
 	protected $name;
 	
 	/**
-	 * the given parameters
-	 * 
 	 * @var array
 	 */
 	protected $parameters;
 	
 	/**
+	 * Default Constructor
 	 * 
 	 * @param string $name
 	 * @param array $parameters
 	 */
 	public function __construct($name = NULL, array $parameters = array()) {
 		$this->name = $name;
-		foreach ($parameters as $parameter)
-			if (!$parameter instanceof Tx_MvcExtjs_CodeGeneration_JavaScript_SnippetInterface)
+		foreach ($parameters as $parameter) {
+			if (!$parameter instanceof Tx_MvcExtjs_CodeGeneration_JavaScript_SnippetInterface) {
 				throw new Tx_MvcExtjs_CodeGeneration_JavaScript_Exception('a parameter has to implement Tx_MvcExtjs_CodeGeneration_JavaScript_SnippetInterface',1264859988);
+			}
+		}
 		$this->parameters = $parameters;
 	}
 	
 	/**
-	 * sets the functions name
+	 * Set the name of the function
 	 * 
 	 * @param string $name
 	 * @return void
@@ -73,7 +72,7 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_FunctionCall implements Tx_MvcExtjs_
 	}
 	
 	/**
-	 * gets the name of the function
+	 * Get the name of the function
 	 * 
 	 * @return string
 	 */
@@ -82,20 +81,22 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_FunctionCall implements Tx_MvcExtjs_
 	}
 	
 	/**
-	 * sets all parameters for the constructor
+	 * Set all parameters for the function
 	 * 
 	 * @param array $parameters
 	 * @return void
 	 */
 	public function setParameters(array $parameters) {
-		foreach ($parameters as $parameter)
-			if (!$parameter instanceof Tx_MvcExtjs_CodeGeneration_JavaScript_SnippetInterface)
+		foreach ($parameters as $parameter) {
+			if (!$parameter instanceof Tx_MvcExtjs_CodeGeneration_JavaScript_SnippetInterface) {
 				throw new Tx_MvcExtjs_CodeGeneration_JavaScript_Exception('a parameter has to implement Tx_MvcExtjs_CodeGeneration_JavaScript_SnippetInterface',1264859988);
+			}
+		}
 		$this->parameters = $parameters;
 	}
 	
 	/**
-	 * adds a parameter to the constructor
+	 * Add a parameter to the function
 	 * 
 	 * @param Tx_MvcExtjs_CodeGeneration_JavaScript_SnippetInterface $parameter
 	 * @return void
@@ -105,7 +106,7 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_FunctionCall implements Tx_MvcExtjs_
 	}
 	
 	/**
-	 * gets an array with all parameters
+	 * Get the array containing all parameters
 	 * 
 	 * @return array
 	 */
@@ -114,17 +115,27 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_FunctionCall implements Tx_MvcExtjs_
 	}
 	
 	/**
-	 * (non-PHPdoc)
 	 * @see Classes/CodeGeneration/JavaScript/Tx_MvcExtjs_CodeGeneration_JavaScript_SnippetInterface#build()
 	 */
 	public function build() {
 		$js = $this->name . '(';
-		foreach ($this->parameters as $parameter)
+		foreach ($this->parameters as $parameter) {
 			$js .= $parameter->build() . ',';
-		if (count($this->parameters) > 0)
+		}
+		if (count($this->parameters) > 0) {
 			$js = substr($js,0,-1);
+		}
 		$js .= ');' . "\n";
 		return $js;
+	}
+	
+	/**
+	 * Wrap build() as __toString()
+	 * 
+	 * @return string
+	 */
+	public function __toString() {
+		return $this->build();
 	}
 	
 }

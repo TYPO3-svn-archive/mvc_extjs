@@ -36,32 +36,32 @@
 class Tx_MvcExtjs_CodeGeneration_JavaScript_Code implements Tx_MvcExtjs_CodeGeneration_JavaScript_SnippetInterface {
 	
 	/**
-	 * the namespace 
-	 * 
 	 * @var mixed string or FALSE
 	 */
 	protected $namespace;
 	
 	/**
-	 * a set of code snippets that are assigned to the code
+	 * A set of code snippets that are assigned to the code
 	 * 
 	 * @var array
 	 */
 	protected $snippets;
 	
 	/**
+	 * Default constructor
 	 * 
 	 * @param mixed $namespace
 	 */
 	public function __construct($namespace = FALSE) {
 		$this->snippets = array();
-		if($namespace != FALSE && !is_string($namespace))
+		if ($namespace !== FALSE && !is_string($namespace)) {
 			throw new Tx_MvcExtjs_CodeGeneration_JavaScript_Exception('the namespace for a JavaScript Code must be FALSE or of type string',1264865353);
+		}
 		$this->namespace = $namespace;
 	}
 	
 	/**
-	 * adds a code snippet to the code
+	 * Adds a code snippet to the code
 	 * 
 	 * @param Tx_MvcExtjs_CodeGeneration_JavaScript_SnippetInterface $snippet
 	 * @return void
@@ -71,12 +71,12 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_Code implements Tx_MvcExtjs_CodeGene
 	}
 	
 	/**
-	 * build up a string containing the js code
+	 * Build up a string containing the js code
 	 * 
 	 * @return string js code
 	 */
 	public function build() {
-		($this->namespace) ? $js = 'Ext.ns(\'' . $this->namespace . '\');' . "\n" : $js = '';
+		$js = ($this->namespace) ? 'Ext.ns(\'' . $this->namespace . '\');' . "\n" : '';
 		foreach ($this->snippets as $snippet) {
 			$js .= $snippet->build() . "\n";
 		}
@@ -84,7 +84,7 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_Code implements Tx_MvcExtjs_CodeGene
 	}
 	
 	/**
-	 * code concenating to a string
+	 * Wrap build() as __toString()
 	 * 
 	 * @return string
 	 */
