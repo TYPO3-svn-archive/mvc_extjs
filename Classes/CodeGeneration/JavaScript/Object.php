@@ -25,8 +25,8 @@
 /**
  * JavaScript Code Snippet
  * Representing a JavaScript Object
- * something sourrounded with {} and a bunch of elements inside, mostly something like name: value
- * use ObjectElement to get the name: value notation
+ * Something sourrounded with {} and a bunch of elements inside, mostly something like name: value
+ * Use ObjectElement to get the name: value notation
  * 
  * @category    CodeGeneration_JavaScript
  * @package     TYPO3

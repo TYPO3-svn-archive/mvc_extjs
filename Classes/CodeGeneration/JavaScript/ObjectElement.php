@@ -24,8 +24,13 @@
 
 /**
  * JavaScript Code Snippet
- * Representing a JavaScript Variable
- *
+ * Representing a element of a JavaScript object
+ * 
+ * f.e.
+ * name: 'value'
+ * or
+ * name: function(param1,param2) { some.jscode(); }
+ * 
  * @category    CodeGeneration_JavaScript
  * @package     TYPO3
  * @subpackage  tx_mvcextjs

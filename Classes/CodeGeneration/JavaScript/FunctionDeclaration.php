@@ -25,10 +25,12 @@
 /**
  * JavaScript Code Snippet
  * Representing the declaration of a function
- * its just about function($parameters as csv) {
- * $content (some JS code)
+ * 
+ * function($parameters as csv) {
+ * 		$content (some JS code)
  * }
- * use the flag $inline and $brackets to get "()" and/or ";" added in the of the declaration
+ * 
+ * Use the flags $inline and $brackets to get "()" and/or ";" added at the end of the declaration
  *
  * @category    CodeGeneration_JavaScript
  * @package     TYPO3
