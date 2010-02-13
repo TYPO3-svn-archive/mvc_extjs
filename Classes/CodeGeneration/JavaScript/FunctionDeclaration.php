@@ -91,7 +91,7 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_FunctionDeclaration implements Tx_Mv
 	}
 	
 	/**
-	 * Set all parameters for the function
+	 * Sets all parameters for the function
 	 * 
 	 * @param array $parameters
 	 * @return void
@@ -106,7 +106,7 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_FunctionDeclaration implements Tx_Mv
 	}
 	
 	/**
-	 * Add a parameter to the function
+	 * Adds a parameter to the function
 	 * 
 	 * @param string $parameter
 	 * @return void
@@ -116,7 +116,7 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_FunctionDeclaration implements Tx_Mv
 	}
 	
 	/**
-	 * Get an array with all parameters
+	 * Gets an array with all parameters
 	 * 
 	 * @return array
 	 */
@@ -125,7 +125,7 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_FunctionDeclaration implements Tx_Mv
 	}
 	
 	/**
-	 * Set all parameters for the function
+	 * Sets all parameters for the function
 	 * 
 	 * @param string $parameters
 	 * @return void
@@ -140,7 +140,7 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_FunctionDeclaration implements Tx_Mv
 	}
 	
 	/**
-	 * Add a parameter to the function
+	 * Adds a parameter to the function
 	 * 
 	 * @param string $parameter
 	 * @return void
@@ -150,7 +150,7 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_FunctionDeclaration implements Tx_Mv
 	}
 	
 	/**
-	 * Get an array with all parameters
+	 * Gets an array with all parameters
 	 * 
 	 * @return array
 	 */
@@ -180,7 +180,7 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_FunctionDeclaration implements Tx_Mv
 	}
 	
 	/**
-	 * Wrap build() as __toString()
+	 * Wraps build() as __toString()
 	 * 
 	 * @return string
 	 */

@@ -62,7 +62,7 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_ObjectElement implements Tx_MvcExtjs
 	}
 	
 	/**
-	 * Set the name
+	 * Sets the name
 	 * 
 	 * @param $name
 	 * @return void
@@ -72,7 +72,7 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_ObjectElement implements Tx_MvcExtjs
 	}
 	
 	/**
-	 * Get the name
+	 * Gets the name
 	 * 
 	 * @return string
 	 */
@@ -81,7 +81,7 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_ObjectElement implements Tx_MvcExtjs
 	}
 	
 	/**
-	 * Set the value
+	 * Sets the value
 	 * 
 	 * @param Tx_MvcExtjs_CodeGeneration_JavaScript_SnippetInterface $value
 	 * @return void
@@ -91,7 +91,7 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_ObjectElement implements Tx_MvcExtjs
 	}
 	
 	/**
-	 * Get the value
+	 * Gets the value
 	 * 
 	 * @return Tx_MvcExtjs_CodeGeneration_JavaScript_SnippetInterface
 	 */
@@ -112,7 +112,7 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_ObjectElement implements Tx_MvcExtjs
 	}
 	
 	/**
-	 * Wrap build() as __toString()
+	 * Wraps build() as __toString()
 	 * 
 	 * @return string
 	 */

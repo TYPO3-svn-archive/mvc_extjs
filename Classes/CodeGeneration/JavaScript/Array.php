@@ -55,7 +55,7 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_Array implements Tx_MvcExtjs_CodeGen
 	}
 	
 	/**
-	 * Set the elements
+	 * Sets the elements
 	 * 
 	 * @param array $elements
 	 * @return void
@@ -70,7 +70,7 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_Array implements Tx_MvcExtjs_CodeGen
 	}
 	
 	/**
-	 * Add a element at the end of the array
+	 * Adds a element at the end of the array
 	 * 
 	 * @param mixed $element string or Tx_MvcExtjs_CodeGeneration_JavaScript_SnippetInterface
 	 * @return Tx_MvcExtjs_CodeGeneration_JavaScript_Array
@@ -87,7 +87,7 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_Array implements Tx_MvcExtjs_CodeGen
 	}
 	
 	/**
-	 * Get the elements
+	 * Gets the elements
 	 * 
 	 * @return array
 	 */
@@ -111,7 +111,7 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_Array implements Tx_MvcExtjs_CodeGen
 	}
 	
 	/**
-	 * Wrap build() as __toString()
+	 * Wraps build() as __toString()
 	 * 
 	 * @return string
 	 */

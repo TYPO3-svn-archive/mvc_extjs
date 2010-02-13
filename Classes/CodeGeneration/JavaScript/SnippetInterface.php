@@ -36,7 +36,7 @@
 interface Tx_MvcExtjs_CodeGeneration_JavaScript_SnippetInterface {
 	
 	/**
-	 * build JS code represented by the snippet
+	 * Builds JS code represented by the snippet
 	 * 
 	 * @return string
 	 */

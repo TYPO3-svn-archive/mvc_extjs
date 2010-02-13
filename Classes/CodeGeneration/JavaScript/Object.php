@@ -57,7 +57,7 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_Object implements Tx_MvcExtjs_CodeGe
 	}
 	
 	/**
-	 * Set the elements
+	 * Sets the elements
 	 * 
 	 * @param array $elements
 	 * @return void
@@ -83,7 +83,7 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_Object implements Tx_MvcExtjs_CodeGe
 	}
 	
 	/**
-	 * Get the elements
+	 * Gets the elements
 	 * 
 	 * @return array
 	 */
@@ -107,7 +107,7 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_Object implements Tx_MvcExtjs_CodeGe
 	}
 	
 	/**
-	 * Wrap build() as __toString()
+	 * Wraps build() as __toString()
 	 * 
 	 * @return string
 	 */

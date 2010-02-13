@@ -58,7 +58,7 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_QuotedValue implements Tx_MvcExtjs_C
 	}
 	
 	/**
-	 * Set the value
+	 * Sets the value
 	 * 
 	 * @param string $value
 	 * @return void
@@ -68,7 +68,7 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_QuotedValue implements Tx_MvcExtjs_C
 	}
 	
 	/**
-	 * Get the value
+	 * Gets the value
 	 * 
 	 * @return string
 	 */
@@ -88,7 +88,7 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_QuotedValue implements Tx_MvcExtjs_C
 	}
 	
 	/**
-	 * Wrap build() as __toString()
+	 * Wraps build() as __toString()
 	 * 
 	 * @return string
 	 */

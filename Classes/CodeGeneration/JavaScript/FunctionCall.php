@@ -62,7 +62,7 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_FunctionCall implements Tx_MvcExtjs_
 	}
 	
 	/**
-	 * Set the name of the function
+	 * Sets the name of the function
 	 * 
 	 * @param string $name
 	 * @return void
@@ -72,7 +72,7 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_FunctionCall implements Tx_MvcExtjs_
 	}
 	
 	/**
-	 * Get the name of the function
+	 * Gets the name of the function
 	 * 
 	 * @return string
 	 */
@@ -81,7 +81,7 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_FunctionCall implements Tx_MvcExtjs_
 	}
 	
 	/**
-	 * Set all parameters for the function
+	 * Sets all parameters for the function
 	 * 
 	 * @param array $parameters
 	 * @return void
@@ -96,7 +96,7 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_FunctionCall implements Tx_MvcExtjs_
 	}
 	
 	/**
-	 * Add a parameter to the function
+	 * Adds a parameter to the function
 	 * 
 	 * @param Tx_MvcExtjs_CodeGeneration_JavaScript_SnippetInterface $parameter
 	 * @return void
@@ -106,7 +106,7 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_FunctionCall implements Tx_MvcExtjs_
 	}
 	
 	/**
-	 * Get the array containing all parameters
+	 * Gets the array containing all parameters
 	 * 
 	 * @return array
 	 */
@@ -130,7 +130,7 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_FunctionCall implements Tx_MvcExtjs_
 	}
 	
 	/**
-	 * Wrap build() as __toString()
+	 * Wraps build() as __toString()
 	 * 
 	 * @return string
 	 */

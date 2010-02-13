@@ -71,7 +71,7 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_Code implements Tx_MvcExtjs_CodeGene
 	}
 	
 	/**
-	 * Build up a string containing the js code
+	 * Builds up a string containing the js code
 	 * 
 	 * @return string js code
 	 */
@@ -84,7 +84,7 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_Code implements Tx_MvcExtjs_CodeGene
 	}
 	
 	/**
-	 * Wrap build() as __toString()
+	 * Wraps build() as __toString()
 	 * 
 	 * @return string
 	 */

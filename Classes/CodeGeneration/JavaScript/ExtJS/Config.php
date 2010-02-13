@@ -37,7 +37,7 @@
 class Tx_MvcExtjs_CodeGeneration_JavaScript_ExtJS_Config extends Tx_MvcExtjs_CodeGeneration_JavaScript_Object {
 	
 	/**
-	 * Add a config parameter
+	 * Adds a config parameter
 	 * The given value will be single quoted
 	 * Returns itself to allow method-chaining
 	 * 

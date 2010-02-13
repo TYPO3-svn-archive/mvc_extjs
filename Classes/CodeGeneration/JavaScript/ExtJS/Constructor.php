@@ -67,7 +67,7 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_ExtJS_Constructor extends Tx_MvcExtj
 	private $constructorCall;
 	
 	/**
-	 * Default constrcutor
+	 * Default constructor
 	 * 
 	 * @param string $name
 	 * @param string $class
@@ -97,7 +97,7 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_ExtJS_Constructor extends Tx_MvcExtj
 	}
 	
 	/**
-	 * Set the class that should be extended
+	 * Sets the class that should be extended
 	 * 
 	 * @param string $class
 	 * @return Tx_MvcExtjs_CodeGeneration_JavaScript_ExtJS_Constructor
@@ -108,7 +108,7 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_ExtJS_Constructor extends Tx_MvcExtj
 	}
 	
 	/**
-	 * Add a config parameter to the constructor of the object that should be extended
+	 * Adds a config parameter to the constructor of the object that should be extended
 	 * 
 	 * @param string $name
 	 * @param string $value
@@ -120,7 +120,7 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_ExtJS_Constructor extends Tx_MvcExtj
 	}
 	
 	/**
-	 * Add a config parameter to to configuration of the extjs object
+	 * Adds a config parameter to to configuration of the extjs object
 	 * The given parameter is outputted raw (not quoted)
 	 * 
 	 * @param string $name
@@ -133,7 +133,7 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_ExtJS_Constructor extends Tx_MvcExtj
 	}
 	
 	/**
-	 * Set the config for the Constructor
+	 * Sets the config for the Constructor
 	 * 
 	 * @param Tx_MvcExtjs_CodeGeneration_JavaScript_ExtJS_Config $config
 	 * @return Tx_MvcExtjs_CodeGeneration_JavaScript_ExtJS_Constructor
@@ -144,7 +144,7 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_ExtJS_Constructor extends Tx_MvcExtj
 	}
 	
 	/**
-	 * Add a parameter to the constructor
+	 * Adds a parameter to the constructor
 	 * 
 	 * @param Tx_MvcExtjs_CodeGeneration_JavaScript_SnippetInterface $parameter
 	 * @return Tx_MvcExtjs_CodeGeneration_JavaScript_ExtJS_Constructor
@@ -166,7 +166,7 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_ExtJS_Constructor extends Tx_MvcExtj
 	}
 	
 	/**
-	 * Wrap build() as __toString()
+	 * Wraps build() as __toString()
 	 * 
 	 * @return string
 	 */

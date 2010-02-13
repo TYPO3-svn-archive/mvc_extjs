@@ -35,14 +35,11 @@
 abstract class Tx_MvcExtjs_ViewHelpers_AbstractViewHelper extends Tx_Fluid_Core_ViewHelper_AbstractViewHelper {
 
 	/**
-	 * the pagerenderer Instance
-	 * 
 	 * @var t3lib_PageRenderer
 	 */
 	protected $pageRenderer;
 	
 	/**
-	 * (non-PHPdoc)
 	 * @see typo3/sysext/fluid/Classes/Core/ViewHelper/Tx_Fluid_Core_ViewHelper_AbstractViewHelper#initialize()
 	 */
 	public function initialize() {
@@ -53,7 +50,7 @@ abstract class Tx_MvcExtjs_ViewHelpers_AbstractViewHelper extends Tx_Fluid_Core_
 	}
 	
 	/**
-	 * fetches the pageRenderer from the BE Context
+	 * Fetches the pageRenderer from the BE Context
 	 * 
 	 * @return void
 	 */
@@ -62,7 +59,7 @@ abstract class Tx_MvcExtjs_ViewHelpers_AbstractViewHelper extends Tx_Fluid_Core_
 	}
 	
 	/**
-	 * fetches the pageRenderer from the FE Context
+	 * Fetches the pageRenderer from the FE Context
 	 * (not tested)
 	 * 
 	 * @return void

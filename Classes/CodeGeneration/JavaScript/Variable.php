@@ -60,10 +60,10 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_Variable implements Tx_MvcExtjs_Code
 	
 	/**
 	 * Default Constructor
+	 * 
 	 * @param string $name
 	 * @param Tx_MvcExtjs_CodeGeneration_JavaScript_SnippetInterface $value
 	 * @param boolean $var
-	 * @return unknown_type
 	 */
 	public function __construct($name = NULL, $value = NULL,$var = FALSE, $namespace = FALSE) {
 		$this->name = $name;
@@ -73,7 +73,7 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_Variable implements Tx_MvcExtjs_Code
 	}
 	
 	/**
-	 * Set the name
+	 * Sets the name
 	 * 
 	 * @param string $name
 	 * @return void
@@ -83,7 +83,7 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_Variable implements Tx_MvcExtjs_Code
 	}
 	
 	/**
-	 * Get the name
+	 * Gets the name
 	 * 
 	 * @return string
 	 */
@@ -92,7 +92,7 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_Variable implements Tx_MvcExtjs_Code
 	}
 	
 	/**
-	 * Set the value
+	 * Sets the value
 	 * 
 	 * @param Tx_MvcExtjs_CodeGeneration_JavaScript_SnippetInterface $value
 	 * @return void
@@ -102,7 +102,7 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_Variable implements Tx_MvcExtjs_Code
 	}
 	
 	/**
-	 * Get the value
+	 * Gets the value
 	 * 
 	 * @return Tx_MvcExtjs_CodeGeneration_JavaScript_SnippetInterface
 	 */
@@ -111,7 +111,7 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_Variable implements Tx_MvcExtjs_Code
 	}
 	
 	/**
-	 * Set the namespace
+	 * Sets the namespace
 	 * 
 	 * @param string $value
 	 * @return void
@@ -130,7 +130,7 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_Variable implements Tx_MvcExtjs_Code
 	}
 	
 	/**
-	 * Get the namespace
+	 * Gets the namespace
 	 * 
 	 * @return string
 	 */
@@ -139,7 +139,7 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_Variable implements Tx_MvcExtjs_Code
 	}
 	
 	/**
-	 * Set if you want the keyword var
+	 * Sets if you want the keyword var
 	 * 
 	 * @param boolean $var
 	 * @return void
@@ -149,7 +149,7 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_Variable implements Tx_MvcExtjs_Code
 	}
 	
 	/**
-	 * Get if this variable will be assigned with using the keyword var
+	 * Gets if this variable will be assigned with using the keyword var
 	 * 
 	 * @return boolean
 	 */

@@ -51,7 +51,7 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_Snippet implements Tx_MvcExtjs_CodeG
 	}
 	
 	/**
-	 * Set the code snippet
+	 * Sets the code snippet
 	 * 
 	 * @param string $code
 	 * @return void
@@ -61,7 +61,7 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_Snippet implements Tx_MvcExtjs_CodeG
 	}
 	
 	/**
-	 * Get the code snippet
+	 * Gets the code snippet
 	 * 
 	 * @return string
 	 */
@@ -77,7 +77,7 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_Snippet implements Tx_MvcExtjs_CodeG
 	}
 	
 	/**
-	 * Do the same like build()
+	 * Does the same like build()
 	 *  
 	 * @return string
 	 */

@@ -64,6 +64,7 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_ExtJS_ExtendClass extends Tx_MvcExtj
 	protected $constructorFunction;
 	
 	/**
+	 * Default constructor
 	 * 
 	 * @param string $name
 	 * @param string $class
@@ -95,7 +96,7 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_ExtJS_ExtendClass extends Tx_MvcExtj
 	}
 	
 	/**
-	 * Set the class that should be extended
+	 * Sets the class that should be extended
 	 * 
 	 * @param string $class
 	 * @return Tx_MvcExtjs_CodeGeneration_JavaScript_ExtJS_ExtendClass
@@ -106,7 +107,7 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_ExtJS_ExtendClass extends Tx_MvcExtj
 	}
 	
 	/**
-	 * Add a config parameter
+	 * Adds a config parameter
 	 * 
 	 * @param string $name
 	 * @param string $value
@@ -118,7 +119,7 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_ExtJS_ExtendClass extends Tx_MvcExtj
 	}
 	
 	/**
-	 * Add a raw config parameter
+	 * Adds a raw config parameter
 	 * 
 	 * @param string $name
 	 * @param mixed $value string or something that implements Tx_MvcExtjs_CodeGeneration_JavaScript_SnippetInterface
@@ -130,7 +131,7 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_ExtJS_ExtendClass extends Tx_MvcExtj
 	}
 	
 	/**
-	 * Set a config object for the extend constructor
+	 * Sets a config object for the extend constructor
 	 * 
 	 * @param $config
 	 * @return Tx_MvcExtjs_CodeGeneration_JavaScript_ExtJS_ExtendClass
@@ -141,7 +142,7 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_ExtJS_ExtendClass extends Tx_MvcExtj
 	}
 	
 	/**
-	 * Add a function to the new class definition
+	 * Adds a function to the new class definition
 	 * 
 	 * @param string $name
 	 * @param array $parameter
