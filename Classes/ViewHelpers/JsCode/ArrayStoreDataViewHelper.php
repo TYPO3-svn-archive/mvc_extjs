@@ -31,7 +31,7 @@
  * = Examples =
  *
  * <mvcextjs:be.moduleContainer pageTitle="foo" enableJumpToUrl="false" enableClickMenu="false" loadPrototype="true" loadScriptaculous="false" loadExtJs="true" loadExtJsTheme="false" extJsAdapter="prototype" enableExtJsDebug="true">
- * 	<mvcextjs:Be.IncludeStore domainModel="yourModelName" actions="{read:'yourActionForFetchingTheRecords',update:'yourActionForUpdatingRecords'}" controller="yourController" extensionName="yourExtensionName" />
+ * 	<mvcextjs:jsCode.ArrayStoreDataViewHelper domainModel="yourModelName" actions="{read:'yourActionForFetchingTheRecords',update:'yourActionForUpdatingRecords'}" controller="yourController" extensionName="yourExtensionName" />
  * </mvcextjs:be.moduleContainer>
  *
  * @category    ViewHelpers
@@ -44,7 +44,6 @@
 class Tx_MvcExtjs_ViewHelpers_JsCode_ArrayStoreDataViewHelper extends Tx_MvcExtjs_ViewHelpers_JsCode_AbstractJavaScriptCodeViewHelper {
 
 	/**
-	 * 
 	 * @var Tx_MvcExtjs_CodeGeneration_JavaScript_Array
 	 */
 	protected $array;
@@ -55,7 +54,7 @@ class Tx_MvcExtjs_ViewHelpers_JsCode_ArrayStoreDataViewHelper extends Tx_MvcExtj
 	protected $arrayVariable;
 	
 	/**
-	 * override this method to change the StoreType f.e.
+	 * Initializes ViewHelper
 	 * 
 	 * @see Classes/ViewHelpers/Be/Tx_MvcExtjs_ViewHelpers_Be_AbstractJavaScriptCodeViewHelper#initialize()
 	 */
@@ -100,6 +99,10 @@ class Tx_MvcExtjs_ViewHelpers_JsCode_ArrayStoreDataViewHelper extends Tx_MvcExtj
 	}
 	
 	/**
+	 * Converts the given object into an array that can be read by an Ext.data.ArrayStore that was created with 
+	 * the Tx_MvcExtjs_ViewHelpers_JsCode_ArrayStoreViewHelper.
+	 * If you have written the ArrayStore by yourself in pure JS code, have a look at the ArrayStoreViewHelper
+	 * and how it is configured by default.
 	 * 
 	 * @param mixed $object
 	 * @return array

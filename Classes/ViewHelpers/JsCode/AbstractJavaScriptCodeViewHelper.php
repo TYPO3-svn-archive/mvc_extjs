@@ -35,13 +35,12 @@
 abstract class Tx_MvcExtjs_ViewHelpers_JsCode_AbstractJavaScriptCodeViewHelper extends Tx_MvcExtjs_ViewHelpers_AbstractViewHelper {
 
 	/**
-	 * 
 	 * @var Tx_MvcExtjs_CodeGeneration_JavaScript_Code
 	 */
 	protected $jsCode;
 	
 	/**
-	 * should the code be rendered as extjs.onReady code
+	 * Should the code be rendered as extjs.onReady code
 	 * or should it be added as "normal" inline code
 	 * 
 	 * @var boolean
@@ -55,7 +54,6 @@ abstract class Tx_MvcExtjs_ViewHelpers_JsCode_AbstractJavaScriptCodeViewHelper e
 	protected $extJsNamespace;
 	
 	/**
-	 * (non-PHPdoc)
 	 * @see typo3/sysext/fluid/Classes/Core/ViewHelper/Tx_Fluid_Core_ViewHelper_AbstractViewHelper#initialize()
 	 */
 	public function initialize() {
@@ -68,16 +66,17 @@ abstract class Tx_MvcExtjs_ViewHelpers_JsCode_AbstractJavaScriptCodeViewHelper e
 	}
 	
 	/**
-	 * use this function to build your JavaScript code
-	 * it is directly added to your output by this method
+	 * Writes all JS code related to the ViewHelper into the pagerenderer
+	 * Use this function to build your JavaScript code
 	 * 
 	 * @return void
 	 */
 	protected function injectJsCode() {
-		if ($this->extOnReady)
+		if ($this->extOnReady) {
 			$this->pageRenderer->addExtOnReadyCode($this->jsCode->build());
-		else
+		} else {
 			$this->pageRenderer->addJsInlineCode($this->extJsNamespace . ' written with ' . get_class($this) . ' at ' . microtime(), $this->jsCode->build());
+		}
 	}
 
 	

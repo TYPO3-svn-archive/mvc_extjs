@@ -32,7 +32,7 @@
  * = Examples =
  *
  * <mvcextjs:be.moduleContainer pageTitle="foo" enableJumpToUrl="false" enableClickMenu="false" loadPrototype="false" loadScriptaculous="false" scriptaculousModule="someModule,someOtherModule" loadExtJs="true" loadExtJsTheme="false" extJsAdapter="jQuery" enableExtJsDebug="true" addCssFile="{f:uri.resource(path:'styles/backend.css')}" addJsFile="{f:uri.resource('scripts/main.js')}">
- * 	<mvcextjs:Be.IncludeColumnDefinition />
+ * 	<mvcextjs:includeColumnDefinition />
  * </mvcextjs:be.moduleContainer>
  *
  * @category    ViewHelpers
@@ -45,7 +45,7 @@
 class Tx_MvcExtjs_ViewHelpers_JsCode_ColumnDefinitionViewHelper extends Tx_MvcExtjs_ViewHelpers_JsCode_AbstractJavaScriptCodeViewHelper {
 	
 	/**
-	 * the variable as js object that represents the returned column definition in php
+	 * The variable as js object that represents the returned column definition
 	 * 
 	 * @var Tx_MvcExtjs_CodeGeneration_JavaScript_Variable
 	 */
@@ -53,7 +53,6 @@ class Tx_MvcExtjs_ViewHelpers_JsCode_ColumnDefinitionViewHelper extends Tx_MvcEx
 	
 	/**
 	 * Renders the JS code for a store, based on a domain model into the inline JS of your module
-	 * the store automatically loads its data via AJAX.
 	 * 
 	 * @param string $name is used as variable name AND storeId for the generated store
 	 * @param string $extensionName
@@ -88,9 +87,14 @@ class Tx_MvcExtjs_ViewHelpers_JsCode_ColumnDefinitionViewHelper extends Tx_MvcEx
 			$columnDef->set('header', $rProperty->getName())
 					  ->set('dataIndex', $rProperty->getName())
 					  ->setRaw('sortable', 'true');
-			if(isset($specialRenderer[$rProperty->getName()])) 
+			if (isset($specialRenderer[$rProperty->getName()])) { 
 				$columnDef->setRaw('renderer',$specialRenderer[$rProperty->getName()]);
-			(in_array($rProperty->getName(),$hiddenColumns) ? $columnDef->setRaw('hidden','true') : $columnDef->setRaw('hidden','false'));
+			}
+			if (in_array($rProperty->getName(),$hiddenColumns)) {
+				$columnDef->setRaw('hidden','true');
+			} else {
+				$columnDef->setRaw('hidden','false');
+			}
 			$columnArray->addElement($columnDef);
 		}
 		

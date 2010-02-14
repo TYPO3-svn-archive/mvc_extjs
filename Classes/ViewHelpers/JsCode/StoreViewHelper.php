@@ -44,7 +44,6 @@
 class Tx_MvcExtjs_ViewHelpers_JsCode_StoreViewHelper extends Tx_MvcExtjs_ViewHelpers_JsCode_AbstractJavaScriptCodeViewHelper {
 
 	/**
-	 * 
 	 * @var Tx_MvcExtjs_CodeGeneration_JavaScript_ExtJS_ExtendClass
 	 */
 	protected $store;
@@ -56,7 +55,7 @@ class Tx_MvcExtjs_ViewHelpers_JsCode_StoreViewHelper extends Tx_MvcExtjs_ViewHel
 	protected $config;
 	
 	/**
-	 * override this method to change the StoreType f.e.
+	 * Initializes the ViewHelper
 	 * 
 	 * @see Classes/ViewHelpers/Be/Tx_MvcExtjs_ViewHelpers_Be_AbstractJavaScriptCodeViewHelper#initialize()
 	 */
@@ -100,32 +99,48 @@ class Tx_MvcExtjs_ViewHelpers_JsCode_StoreViewHelper extends Tx_MvcExtjs_ViewHel
 						   $restful = FALSE,
 						   $batch = FALSE) {
 
-		if ($extensionName == NULL)
+		if ($extensionName == NULL) {
 			$extensionName = $this->controllerContext->getRequest()->getControllerExtensionName();
+		}
 
 		$domainClassName = 'Tx_' . $extensionName . '_Domain_Model_' . $domainModel;
 			// Check if the given domain model class exists
 		if (!class_exists($domainClassName)) {
 			throw new Tx_Fluid_Exception('The Domain Model Class (' . $domainClassName . ') for the given domainModel (' . $domainModel . ') was not found', 1264069568);
 		}
-			// build up and set the for the JS store variable
+			// build up and set the name for the JS store variable
 		$varNameStore = $domainModel . 'Store';
-		($name === NULL) ? $this->store->setName($varNameStore) : $this->store->setName($name);
+		if ($name === NULL) {
+			$this->store->setName($varNameStore);
+		} else {
+			$this->store->setName($name);
+		}
 			// read the given config parameters into the Extjs Config Object
 		if($id !== NULL) $this->config->set('storeId',$id);
 		if($reader !== NULL) $this->config->setRaw('reader',$reader);
 		if($writer !== NULL) $this->config->setRaw('writer',$writer);
 		if($proxy !== NULL) $this->config->setRaw('proxy',$proxy);
 		if($data !== NULL) $this->config->setRaw('data',$data);
-		($autoSave) ? $this->config->setRaw('autoSave','true') : $this->config->setRaw('autoSave','false');
-		($restful) ? $this->config->setRaw('restful','true') : $this->config->setRaw('restful','false');
-		($batch) ? $this->config->setRaw('batch','true') : $this->config->setRaw('batch','false');
+		if ($autoSave) {
+			$this->config->setRaw('autoSave','true');
+		} else {
+			$this->config->setRaw('autoSave','false');
+		}
+		if ($restful) {
+			$this->config->setRaw('restful','true');
+		} else {
+			$this->config->setRaw('restful','false');
+		}
+		if ($batch) {
+			$this->config->setRaw('batch','true');
+		} else {
+			$this->config->setRaw('batch','false');
+		}
 			// apply the configuration again
 		$this->injectJsCode();
 	}
 	
 	/**
-	 * (non-PHPdoc)
 	 * @see Classes/ViewHelpers/JsCode/Tx_MvcExtjs_ViewHelpers_JsCode_AbstractJavaScriptCodeViewHelper#injectJsCode()
 	 */
 	protected function injectJsCode() {

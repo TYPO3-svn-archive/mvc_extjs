@@ -35,7 +35,7 @@
 class Tx_MvcExtjs_ViewHelpers_Json_StoreUpdateResponseViewHelper extends Tx_Fluid_Core_ViewHelper_AbstractViewHelper {
 	
 	/**
-	 * renders a json response for a extjs CRUD store read request
+	 * Renders a json response for a extjs CRUD store read request
 	 * 
 	 * @param array $data
 	 * @param string $message
@@ -49,10 +49,11 @@ class Tx_MvcExtjs_ViewHelpers_Json_StoreUpdateResponseViewHelper extends Tx_Flui
 		$responseArray['message'] = $message;
 		$responseArray['total'] = count($objects);
 		
-		if ($success)
+		if ($success) {
 			$responseArray['success'] = true;
-		else
+		} else {
 			$responseArray['success'] = false;
+		}
 		
 		$responseArray['data'] = $data;
 		

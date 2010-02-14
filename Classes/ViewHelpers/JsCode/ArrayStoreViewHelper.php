@@ -31,7 +31,7 @@
  * = Examples =
  *
  * <mvcextjs:be.moduleContainer pageTitle="foo" enableJumpToUrl="false" enableClickMenu="false" loadPrototype="true" loadScriptaculous="false" loadExtJs="true" loadExtJsTheme="false" extJsAdapter="prototype" enableExtJsDebug="true">
- * 	<mvcextjs:Be.IncludeStore domainModel="yourModelName" actions="{read:'yourActionForFetchingTheRecords',update:'yourActionForUpdatingRecords'}" controller="yourController" extensionName="yourExtensionName" />
+ * 	<mvcextjs:jsCode.ArrayStore domainModel="yourModelName" controller="yourController" extensionName="yourExtensionName" />
  * </mvcextjs:be.moduleContainer>
  *
  * @category    ViewHelpers
@@ -44,7 +44,8 @@
 class Tx_MvcExtjs_ViewHelpers_JsCode_ArrayStoreViewHelper extends Tx_MvcExtjs_ViewHelpers_JsCode_StoreViewHelper {
 
 	/**
-	 * override this method to change the StoreType f.e.
+	 * Initializes the ViewHelper
+	 * Sets the class of the store to Ext.data.ArrayStore
 	 * 
 	 * @see Classes/ViewHelpers/Be/Tx_MvcExtjs_ViewHelpers_Be_AbstractJavaScriptCodeViewHelper#initialize()
 	 */
@@ -54,13 +55,15 @@ class Tx_MvcExtjs_ViewHelpers_JsCode_ArrayStoreViewHelper extends Tx_MvcExtjs_Vi
 	}
 	
 	/**
-	 * Renders the js code for a store, based on a domain model into the inline JS of your module.
-	 * The store automatically loads its data via AJAX.
+	 * Renders the js code for a array store, based on a domain model into the inline JS of your module.
+	 * This Store wants it's data as parameter - the parameter is a JS variable which must exist, when this code is added to the
+	 * pagerenderer. Create the variable by using the Tx_MvcExtjs_ViewHelpers_JsCode_ArrayStoreDataViewHelper or provide it as pure
+	 * JS file included to your module or plugin.
 	 * 
 	 * @param string $domainModel is used as variable name AND storeId for the generated store
 	 * @param string $extensionName the EXT where the domainModel is located
 	 * @param string $id choose a id for the created variable; default is $domainmodel . 'Store'
-	 * @param string $name
+	 * @param string $name the name of the created JS constructor. Notice the additional namespace, which is used by default.
 	 * @param string $writer the writer for the store
 	 * @param string $proxy the proxy for the store
 	 * @param string $data the data for the store

@@ -25,12 +25,12 @@
 /**
  * View helper which allows you to include a JS File.
  * Note: This feature is experimental!
- * Note: You MUST wrap this Helper with <mvcextjs:be.moduleContainer>-Tags
+ * Note: You MUST wrap this Helper with <mvcextjs:Be.moduleContainer>-Tags or <mvcextjs:Fe.pluginContainer>-Tags
  *
  * = Examples =
  *
  * <mvcextjs:be.moduleContainer pageTitle="foo" enableJumpToUrl="false" enableClickMenu="false" loadPrototype="false" loadScriptaculous="false" scriptaculousModule="someModule,someOtherModule" loadExtJs="true" loadExtJsTheme="false" extJsAdapter="jQuery" enableExtJsDebug="true" addCssFile="{f:uri.resource(path:'styles/backend.css')}" addJsFile="{f:uri.resource('scripts/main.js')}">
- * 	<mvcextjs:Be.IncludeJsFile file="foo.js" extKey="blog_example" pathInsideExt="Resources/Public/JavaScript" />
+ * 	<mvcextjs:includeJsFile file="foo.js" extKey="blog_example" pathInsideExt="Resources/Public/JavaScript" />
  * </mvcextjs:be.moduleContainer>
  *
  * @category    ViewHelpers

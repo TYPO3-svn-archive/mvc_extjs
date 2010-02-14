@@ -29,9 +29,9 @@
  *
  * = Examples =
  *
- * <mvcextjs:be.moduleContainer pageTitle="foo" enableJumpToUrl="false" enableClickMenu="false" loadPrototype="false" loadScriptaculous="false" scriptaculousModule="someModule,someOtherModule" loadExtJs="true" loadExtJsTheme="false" extJsAdapter="jQuery" enableExtJsDebug="true" addCssFile="{f:uri.resource(path:'styles/backend.css')}" addJsFile="{f:uri.resource('scripts/main.js')}">
- * 	<mvcextjs:Be.defaultExtOnReadyViewport layout="border"  />
- * </mvcextjs:be.moduleContainer>
+ * <mvcextjs:fe.pluginContainer pageTitle="foo" enableJumpToUrl="false" enableClickMenu="false" loadPrototype="false" loadScriptaculous="false" scriptaculousModule="someModule,someOtherModule" loadExtJs="true" loadExtJsTheme="false" extJsAdapter="jQuery" enableExtJsDebug="true" addCssFile="{f:uri.resource(path:'styles/backend.css')}" addJsFile="{f:uri.resource('scripts/main.js')}">
+ * 	<mvcextjs:fe.defaultExtOnReadyPanel layout="border"  />
+ * </mvcextjs:fe.pluginContainer>
  *
  * @category    ViewHelpers
  * @package     TYPO3
@@ -124,17 +124,13 @@ class Tx_MvcExtjs_ViewHelpers_Fe_DefaultExtOnReadyPanelViewHelper extends Tx_Mvc
 	}
 	
 	/**
-	 * set up the startup variable
+	 * Sets up the startup variable
 	 * 
 	 * @param $snippet
 	 * @return void
 	 */
 	protected function startUp() {
 		$this->panel->setConfig($this->panelConfig);
-		//$panelRenderCall = new Tx_MvcExtjs_CodeGeneration_JavaScript_FunctionCall($this->panel->getName() . '.render');
-		//$panelRenderCallParam = new Tx_MvcExtjs_CodeGeneration_JavaScript_QuotedValue($this->renderTo,TRUE);
-		//$panelRenderCall->addParameter($panelRenderCallParam);
-		
 		$returnStatement = new Tx_MvcExtjs_CodeGeneration_JavaScript_Snippet('return ');
 		$objectDefinition = new Tx_MvcExtjs_CodeGeneration_JavaScript_Object();
 		$objectInitFunction = new Tx_MvcExtjs_CodeGeneration_JavaScript_FunctionDeclaration(array(),array($this->panel/*,$panelRenderCall*/),TRUE);

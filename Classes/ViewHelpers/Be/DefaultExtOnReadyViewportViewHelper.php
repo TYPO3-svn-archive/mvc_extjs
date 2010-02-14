@@ -25,7 +25,7 @@
 /**
  * View helper which allows you to include inline JS code into a module Container.
  * Note: This feature is experimental!
- * Note: You MUST wrap this Helper with <mvcextjs:be.moduleContainer>-Tags
+ * Note: You MUST wrap this Helper with <mvcextjs:Be.moduleContainer>-Tags or <mvcextjs:Fe.pluginContainer>-Tags
  *
  * = Examples =
  *
@@ -43,25 +43,21 @@
 class Tx_MvcExtjs_ViewHelpers_Be_DefaultExtOnReadyViewportViewHelper extends Tx_MvcExtjs_ViewHelpers_JsCode_AbstractJavaScriptCodeViewHelper {
 	
 	/**
-	 * 
 	 * @var Tx_MvcExtjs_CodeGeneration_JavaScript_Variable
 	 */
 	protected $startup;
 	
 	/**
-	 * 
 	 * @var Tx_MvcExtjs_CodeGeneration_JavaScript_ConstructorCall
 	 */
 	protected $viewport;
 	
 	/**
-	 * 
 	 * @var Tx_MvcExtjs_CodeGeneration_JavaScript_ExtJS_Config
 	 */
 	protected $viewportConfig;
 	
 	/**
-	 * (non-PHPdoc)
 	 * @see Classes/ViewHelpers/Be/Tx_MvcExtjs_ViewHelpers_Be_AbstractJavaScriptCodeViewHelper#initialize()
 	 */
 	public function initialize() {
@@ -120,7 +116,7 @@ class Tx_MvcExtjs_ViewHelpers_Be_DefaultExtOnReadyViewportViewHelper extends Tx_
 	}
 	
 	/**
-	 * set up the startup variable
+	 * Sets up the startup variable
 	 * 
 	 * @param $snippet
 	 * @return void

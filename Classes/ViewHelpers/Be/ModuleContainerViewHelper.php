@@ -42,10 +42,6 @@
  * <mvcextjs:be.moduleContainer pageTitle="foo" enableJumpToUrl="false" enableClickMenu="false" loadPrototype="false" loadScriptaculous="false" scriptaculousModule="someModule,someOtherModule" loadExtJs="true" loadExtJsTheme="false" extJsAdapter="jQuery" enableExtJsDebug="true">your module content</f:be.container>
  * </code>
  *
- * Output:
- * "your module content" wrapped with propper head & body tags.
- * Custom CSS file EXT:your_extension/Resources/Public/styles/backend.css and JavaScript file EXT:your_extension/Resources/Public/scripts/main.js will be loaded
- *
  * @category    ViewHelpers
  * @package     MvcExtjs
  * @subpackage  ViewHelpers_Be

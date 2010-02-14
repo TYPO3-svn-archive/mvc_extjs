@@ -44,19 +44,17 @@
 class Tx_MvcExtjs_ViewHelpers_JsCode_StoreDataViewHelper extends Tx_MvcExtjs_ViewHelpers_JsCode_AbstractJavaScriptCodeViewHelper {
 
 	/**
-	 * 
 	 * @var Tx_MvcExtjs_CodeGeneration_JavaScript_Snippet
 	 */
 	protected $answer;
 	
 	/**
-	 * 
 	 * @var Tx_MvcExtjs_CodeGeneration_JavaScript_Variable
 	 */
 	protected $arrayVariable;
 	
 	/**
-	 * override this method to change the StoreType f.e.
+	 * Initializes the ViewHelper
 	 * 
 	 * @see Classes/ViewHelpers/Be/Tx_MvcExtjs_ViewHelpers_Be_AbstractJavaScriptCodeViewHelper#initialize()
 	 */
@@ -68,7 +66,7 @@ class Tx_MvcExtjs_ViewHelpers_JsCode_StoreDataViewHelper extends Tx_MvcExtjs_Vie
 	
 	/**
 	 * Renders the js code for a store, based on a domain model into the inline JS of your module.
-	 * The store automatically loads its data via AJAX.
+	 * TODO: internal use of the json store read response view helper?
 	 * 
 	 * @param string $domainModel is used as variable name AND storeId for the generated store
 	 * @param string $extensionName the EXT where the domainModel is located
@@ -77,7 +75,8 @@ class Tx_MvcExtjs_ViewHelpers_JsCode_StoreDataViewHelper extends Tx_MvcExtjs_Vie
 	 */
 	public function render($domainModel = NULL,
 						   $extensionName = NULL,
-						   array $data = array()) {
+						   array $data = array(),
+						   array $columns = array()) {
 
 		if ($extensionName == NULL)
 			$extensionName = $this->controllerContext->getRequest()->getControllerExtensionName();
@@ -109,6 +108,7 @@ class Tx_MvcExtjs_ViewHelpers_JsCode_StoreDataViewHelper extends Tx_MvcExtjs_Vie
 	}
 	
 	/**
+	 * Converts from object to property array
 	 * 
 	 * @param $object
 	 * @return array

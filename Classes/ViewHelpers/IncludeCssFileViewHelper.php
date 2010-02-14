@@ -25,12 +25,12 @@
 /**
  * View helper which allows you to include a CSS File.
  * Note: This feature is experimental!
- * Note: You MUST wrap this Helper with <mvcextjs:Be.moduleContainer>-Tags
+ * Note: You MUST wrap this Helper with <mvcextjs:Be.moduleContainer>-Tags or <mvcextjs:Fe.pluginContainer>-Tags
  *
  * = Examples =
  *
  * <mvcextjs:be.moduleContainer pageTitle="foo" enableJumpToUrl="false" enableClickMenu="false" loadPrototype="true" loadScriptaculous="false" loadExtJs="true" loadExtJsTheme="false" extJsAdapter="prototype" enableExtJsDebug="true" addCssFile="{f:uri.resource(path:'styles/backend.css')}" addJsFile="{f:uri.resource('scripts/main.js')}">
- * 	<mvcextjs:Be.IncludeCssFile name="foo.js" extKey="blog_example" pathInsideExt="Resources/Public/JavaScript" />
+ * 	<mvcextjs:includeCssFile name="foo.js" extKey="blog_example" pathInsideExt="Resources/Public/JavaScript" />
  * </mvcextjs:be.moduleContainer>
  *
  * @category    ViewHelpers

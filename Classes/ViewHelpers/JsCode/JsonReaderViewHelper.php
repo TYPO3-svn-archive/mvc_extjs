@@ -56,7 +56,7 @@ class Tx_MvcExtjs_ViewHelpers_JsCode_JsonReaderViewHelper extends Tx_MvcExtjs_Vi
 	protected $config;
 	
 	/**
-	 * override this method to change the StoreType f.e.
+	 * Initializes the ViewHelper - prepares JS code objects
 	 * 
 	 * @see Classes/ViewHelpers/Be/Tx_MvcExtjs_ViewHelpers_Be_AbstractJavaScriptCodeViewHelper#initialize()
 	 */

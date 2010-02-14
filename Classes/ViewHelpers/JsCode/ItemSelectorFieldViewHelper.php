@@ -67,6 +67,9 @@ class Tx_MvcExtjs_ViewHelpers_JsCode_ItemSelectorFieldViewHelper extends Tx_MvcE
 	 */
 	protected $xTypeRegistration;
 	
+	/**
+	 * @see Classes/ViewHelpers/JsCode/Tx_MvcExtjs_ViewHelpers_JsCode_AbstractJavaScriptCodeViewHelper#initialize()
+	 */
 	public function initialize() {
 		parent::initialize();
 		$this->config = new Tx_MvcExtjs_CodeGeneration_JavaScript_ExtJS_Config();
@@ -112,6 +115,7 @@ class Tx_MvcExtjs_ViewHelpers_JsCode_ItemSelectorFieldViewHelper extends Tx_MvcE
 		
 		$this->xTypeRegistration->addParameter(new Tx_MvcExtjs_CodeGeneration_JavaScript_QuotedValue($xTypeName));
 		$this->xTypeRegistration->addParameter(new Tx_MvcExtjs_CodeGeneration_JavaScript_Snippet($this->extJsNamespace . '.' . $varName));
+		
 		$this->extend->setName($varName);
 		
 		$this->multiSelects->addElement(new Tx_MvcExtjs_CodeGeneration_JavaScript_Snippet($fromMultiSelect));
@@ -120,6 +124,9 @@ class Tx_MvcExtjs_ViewHelpers_JsCode_ItemSelectorFieldViewHelper extends Tx_MvcE
 		$this->injectJsCode();
 	}
 	
+	/**
+	 * @see Classes/ViewHelpers/JsCode/Tx_MvcExtjs_ViewHelpers_JsCode_AbstractJavaScriptCodeViewHelper#injectJsCode()
+	 */
 	protected function injectJsCode() {
 		$this->renderChildren();
 		

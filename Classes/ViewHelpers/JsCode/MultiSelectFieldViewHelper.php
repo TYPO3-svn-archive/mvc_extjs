@@ -45,7 +45,7 @@
 class Tx_MvcExtjs_ViewHelpers_JsCode_MultiSelectFieldViewHelper extends Tx_MvcExtjs_ViewHelpers_JsCode_AbstractJavaScriptCodeViewHelper {
 	
 	/**
-	 * the variable as js object that represents the returned field class definition
+	 * The variable as js object that represents the returned field class definition
 	 * 
 	 * @var Tx_MvcExtjs_CodeGeneration_JavaScript_ExtJS_ExtendClass
 	 */
@@ -108,10 +108,18 @@ class Tx_MvcExtjs_ViewHelpers_JsCode_MultiSelectFieldViewHelper extends Tx_MvcEx
 			throw new Tx_Fluid_Exception('The Domain Model Class (' . $domainClassName . ') for the given domainModel (' . $domainModel . ') was not found', 1264069568);
 		}
 		
-		($name !== NULL) ? $this->extend->setName($name) :  $this->extend->setName($varName);
-		if ($store == NULL) 
+		if ($name !== NULL) {
+			$this->extend->setName($name);
+		} else {
+			$this->extend->setName($varName);
+		}
+		
+		if ($store == NULL) {
 			throw new Tx_MvcExtjs_CodeGeneration_JavaScript_Exception('a multiselect field needs a store',1265886143);
-		$this->config->setRaw('store',$store); 
+		} else {
+			$this->config->setRaw('store',$store);
+		}
+		
 		if ($width !== NULL) $this->config->setRaw('width',$width);
 		if ($height !== NULL) $this->config->setRaw('height',$height);
 		if ($displayField !== NULL) $this->config->set('displayField',$displayField);
@@ -121,6 +129,9 @@ class Tx_MvcExtjs_ViewHelpers_JsCode_MultiSelectFieldViewHelper extends Tx_MvcEx
 		$this->injectJsCode();
 	}
 	
+	/**
+	 * @see Classes/ViewHelpers/JsCode/Tx_MvcExtjs_ViewHelpers_JsCode_AbstractJavaScriptCodeViewHelper#injectJsCode()
+	 */
 	protected function injectJsCode() {
 		$this->renderChildren();
 		$this->extend->setConfig($this->config);

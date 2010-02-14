@@ -44,7 +44,7 @@
 class Tx_MvcExtjs_ViewHelpers_JsCode_GroupingStoreViewHelper extends Tx_MvcExtjs_ViewHelpers_JsCode_StoreViewHelper {
 
 	/**
-	 * override this method to change the StoreType f.e.
+	 * Initializes the ViewHelper
 	 * 
 	 * @see Classes/ViewHelpers/Be/Tx_MvcExtjs_ViewHelpers_Be_AbstractJavaScriptCodeViewHelper#initialize()
 	 */
@@ -83,7 +83,9 @@ class Tx_MvcExtjs_ViewHelpers_JsCode_GroupingStoreViewHelper extends Tx_MvcExtjs
 						   $restful = FALSE,
 						   $batch = FALSE,
 						   $groupField = NULL) {
-		if ($groupField != NULL) $this->config->set('groupField',$groupField);
+		if ($groupField != NULL) {
+			$this->config->set('groupField',$groupField);
+		}
 		parent::render($domainModel,$extensionName,$id,$name,$reader,$writer,$proxy,$data,$autoSave,$restful,$batch);
 	}
 

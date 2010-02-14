@@ -129,7 +129,7 @@ class Tx_MvcExtjs_ViewHelpers_JsCode_HttpProxyViewHelper extends Tx_MvcExtjs_Vie
 	 * @see Classes/ViewHelpers/JsCode/Tx_MvcExtjs_ViewHelpers_JsCode_AbstractJavaScriptCodeViewHelper#injectJsCode()
 	 */
 	protected function injectJsCode() {
-		// apply the configuration again
+			// apply the configuration again
 		$this->proxy->setConfig($this->config);
 			// allow objects to be declared inside this viewhelper; they are rendered above
 		$this->renderChildren();
