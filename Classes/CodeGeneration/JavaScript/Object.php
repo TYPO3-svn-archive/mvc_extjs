@@ -49,8 +49,8 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_Object implements Tx_MvcExtjs_CodeGe
 	 */
 	public function __construct(array $elements = array()) {
 		foreach ($elements as $element) {
-			if (!$element instanceof Tx_McExtjs_CodeGeneration_JavaScript_SnippetInterface) {
-				throw new Tx_MvcExtjs_CodeGeneration_JavaScript_Exception('a element has to implement Tx_MvcExtjs_CodeGeneration_JavaScript_SnippetInterface',1264859988);
+			if (!$element instanceof Tx_MvcExtjs_CodeGeneration_JavaScript_SnippetInterface) {
+				throw new Tx_MvcExtjs_CodeGeneration_JavaScript_Exception('a element has to implement Tx_MvcExtjs_CodeGeneration_JavaScript_SnippetInterface; given element is of type: ' . get_class($element),1264859989);
 			}
 		}
 		$this->elements = $elements;

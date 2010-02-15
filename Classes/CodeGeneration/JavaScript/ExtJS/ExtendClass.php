@@ -185,10 +185,14 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_ExtJS_ExtendClass extends Tx_MvcExtj
 
 		$this->constructorFunction->setContent($this->inlineDeclarations);
 		
-		$extExtendConfig = new Tx_MvcExtjs_CodeGeneration_JavaScript_Object(array(new Tx_MvcExtjs_CodeGeneration_JavaScript_ObjectElement('constructor',$this->constructorFunction)));
+		$extExtendConfigObjectArray = array(new Tx_MvcExtjs_CodeGeneration_JavaScript_ObjectElement('constructor',$this->constructorFunction));
+		$extExtendConfig = new Tx_MvcExtjs_CodeGeneration_JavaScript_Object($extExtendConfigObjectArray);
+		
 		$additionalFunctionElements = $this->additionalFunctions->getElements();
-		foreach($additionalFunctionElements as $element)
+		
+		foreach($additionalFunctionElements as $element) {
 			$extExtendConfig->addElement($element);
+		}
 		
 		$extendParameters = array(
 			new Tx_MvcExtjs_CodeGeneration_JavaScript_Snippet($this->class),
@@ -199,7 +203,7 @@ class Tx_MvcExtjs_CodeGeneration_JavaScript_ExtJS_ExtendClass extends Tx_MvcExtj
 	}
 	
 	/**
-	 * Wrap build() as __toString()
+	 * Wraps build() as __toString()
 	 * 
 	 * @return string
 	 */

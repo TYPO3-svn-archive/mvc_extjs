@@ -86,7 +86,7 @@ class Tx_MvcExtjs_ViewHelpers_Json_StoreReadResponseViewHelper extends Tx_Fluid_
 				continue;
 			}
 			if($value instanceof DateTime)
-				$value = $value->format('U');
+				$value = $value->format('c');
 			$objectArray[$name] = $value;
 		}
 		return $objectArray;

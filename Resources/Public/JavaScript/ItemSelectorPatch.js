@@ -13,13 +13,14 @@ Ext.override( Ext.ux.ItemSelector, {
         var rec, i, id;
         for (i = 0; i < val.length; i++) {
             var vf = this.fromMultiselect.valueField;
-            id = val[i];
+            var object = val[i];
+            var objectId = this.getValueFieldFromObject(vf,object);
             idx = this.toMultiselect.view.store.findBy(function(record){
-                return record.data[vf] == id;
+                return record.data[vf] == objectId;
             });
             if (idx != -1) continue;            
             idx = this.fromMultiselect.view.store.findBy(function(record){
-                return record.data[vf] == id;
+                return record.data[vf] == objectId;
             });
             rec = this.fromMultiselect.view.store.getAt(idx);
             if (rec) {
@@ -27,5 +28,25 @@ Ext.override( Ext.ux.ItemSelector, {
                 this.fromMultiselect.view.store.remove(rec);
             }
         }
+    },
+    
+    valueChanged: function(store) {
+        var record = null;
+        var values = [];
+        for (var i=0; i<store.getCount(); i++) {
+            record = store.getAt(i);
+            values[i] = record.data;
+        }
+        this.hiddenField.value = values;
+        this.fireEvent('change', this, this.getValue(), this.hiddenField.value);
+    },
+    
+    getValue : function() {
+        return this.hiddenField.value;
+    },
+    
+    getValueFieldFromObject: function(valueField,object) {
+    	var call = 'object.' + valueField;
+    	return eval(call);
     }
 });

@@ -177,7 +177,7 @@ class Tx_MvcExtjs_ExtJS_Utility {
 				if ($type == 'date') {
 					$field->set('name', $property->name)
 					      ->set('type', $type)
-					      ->set('dateFormat','timestamp');
+					      ->set('dateFormat','c');
 				} else if($type) {
 					$field->set('name', $property->name)
 					      ->set('type', $type);
