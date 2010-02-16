@@ -54,11 +54,14 @@ class Tx_MvcExtjs_ViewHelpers_Json_StoreCreateResponseViewHelper extends Tx_Flui
 		else
 			$responseArray['success'] = false;
 		
-				
-		$record = $this->buildPropertyArray($object,$columns);
+
+		$dataArray = array();
 		
+		foreach ($data as $object) {
+			$dataArray[] = $this->buildPropertyArray($object,$columns);
+		}	
 		
-		$responseArray['data'] = $record;
+		$responseArray['data'] = $dataArray;
 		
 		return json_encode($responseArray);
 	}
@@ -81,7 +84,7 @@ class Tx_MvcExtjs_ViewHelpers_Json_StoreCreateResponseViewHelper extends Tx_Flui
 				continue;
 			}
 			if($value instanceof DateTime)
-				$value = $value->format('U');
+				$value = $value->format('c');
 			$objectArray[$name] = $value;
 		}
 		return $objectArray;
