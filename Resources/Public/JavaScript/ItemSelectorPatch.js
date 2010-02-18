@@ -6,7 +6,7 @@
  * http://www.extjs.com/forum/showthread.php?t=73302
  * big thanks to sormy ;)
  */
-Ext.override( Ext.ux.ItemSelector, {
+Ext.override( Ext.ux.form.ItemSelector, {
     setValue: function(val) {
         this.reset();
         if (val == null) return;

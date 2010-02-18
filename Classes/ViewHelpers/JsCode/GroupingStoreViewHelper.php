@@ -68,6 +68,7 @@ class Tx_MvcExtjs_ViewHelpers_JsCode_GroupingStoreViewHelper extends Tx_MvcExtjs
 	 * @param boolean $autoSave
 	 * @param boolean $restful 
 	 * @param boolean $batch 
+	 * @param boolean $autoLoad
 	 * @param string $groupField
 	 * @return void
 	 */
@@ -82,11 +83,12 @@ class Tx_MvcExtjs_ViewHelpers_JsCode_GroupingStoreViewHelper extends Tx_MvcExtjs
 						   $autoSave = TRUE,
 						   $restful = FALSE,
 						   $batch = FALSE,
+						   $autoLoad = FALSE,
 						   $groupField = NULL) {
 		if ($groupField != NULL) {
 			$this->config->set('groupField',$groupField);
 		}
-		parent::render($domainModel,$extensionName,$id,$name,$reader,$writer,$proxy,$data,$autoSave,$restful,$batch);
+		parent::render($domainModel,$extensionName,$id,$name,$reader,$writer,$proxy,$data,$autoSave,$restful,$batch,$autoLoad);
 	}
 
 }

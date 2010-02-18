@@ -70,6 +70,7 @@ class Tx_MvcExtjs_ViewHelpers_JsCode_ArrayStoreViewHelper extends Tx_MvcExtjs_Vi
 	 * @param boolean $autoSave
 	 * @param boolean $restful 
 	 * @param boolean $batch
+	 * @param boolean $autoLoad
 	 * @param string $idProperty
 	 * @return void
 	 */
@@ -83,6 +84,7 @@ class Tx_MvcExtjs_ViewHelpers_JsCode_ArrayStoreViewHelper extends Tx_MvcExtjs_Vi
 						   $autoSave = TRUE,
 						   $restful = FALSE,
 						   $batch = FALSE,
+						   $autoLoad = FALSE,
 						   $idProperty = 'uid') {
 		if ($extensionName === NULL)
 			$extensionName = $this->controllerContext->getRequest()->getControllerExtensionName();
@@ -95,7 +97,7 @@ class Tx_MvcExtjs_ViewHelpers_JsCode_ArrayStoreViewHelper extends Tx_MvcExtjs_Vi
 		$fields = Tx_MvcExtjs_ExtJS_Utility::getFieldsArray($domainClassName);
 		$this->config->setRaw('fields',$fields);
 		
-		parent::render($domainModel,$extensionName,$id,$name,NULL,$writer,$proxy,$data,$autoSave,$restful,$batch);
+		parent::render($domainModel,$extensionName,$id,$name,NULL,$writer,$proxy,$data,$autoSave,$restful,$batch,$autoLoad);
 	}
 
 }

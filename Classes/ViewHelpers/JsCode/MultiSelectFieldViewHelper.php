@@ -56,11 +56,6 @@ class Tx_MvcExtjs_ViewHelpers_JsCode_MultiSelectFieldViewHelper extends Tx_MvcEx
 	 */
 	protected $config;
 	
-	/**
-	 * @var Tx_MvcExtjs_CodeGeneration_JavaScript_FunctionCall
-	 */
-	protected $xTypeRegistration;
-	
 	public function initialize() {
 		parent::initialize();
 		$this->config = new Tx_MvcExtjs_CodeGeneration_JavaScript_ExtJS_Config();
@@ -85,6 +80,10 @@ class Tx_MvcExtjs_ViewHelpers_JsCode_MultiSelectFieldViewHelper extends Tx_MvcEx
 	 * @param string $displayField
 	 * @param string $valueField
 	 * @param string $legend
+	 * @param int $minSelections
+	 * @param int $maxSelections
+	 * @param string $minSelectionsText
+	 * @param string $maxSelectionsText
 	 * @return unknown_type
 	 */
 	public function render($domainModel = NULL,
@@ -95,7 +94,11 @@ class Tx_MvcExtjs_ViewHelpers_JsCode_MultiSelectFieldViewHelper extends Tx_MvcEx
 						   $height = '120',
 						   $displayField = 'name',
 						   $valueField = 'uid',
-						   $legend = 'Select multiple Values') {
+						   $legend = 'Select multiple Values',
+						   $minSelections = NULL,
+						   $maxSelections = NULL,
+						   $minSelectionsText = NULL,
+						   $maxSelectionsText = NULL) {
 						  
 		if ($extensionName == NULL) {
 			$extensionName = $this->controllerContext->getRequest()->getControllerExtensionName();
@@ -125,6 +128,10 @@ class Tx_MvcExtjs_ViewHelpers_JsCode_MultiSelectFieldViewHelper extends Tx_MvcEx
 		if ($displayField !== NULL) $this->config->set('displayField',$displayField);
 		if ($valueField !== NULL) $this->config->set('valueField',$valueField);
 		if ($legend !== NULL) $this->config->set('legend',$legend);
+		if ($minSelections !== NULL) $this->config->setRaw('minSelections',$minSelections);
+		if ($maxSelections !== NULL) $this->config->setRaw('maxSelections',$maxSelections);
+		if ($minSelectionsText !== NULL) $this->config->set('minSelectionsText',$minSelectionsText);
+		if ($maxSelectionsText !== NULL) $this->config->set('maxSelectionsText',$maxSelectionsText);
 		
 		$this->injectJsCode();
 	}

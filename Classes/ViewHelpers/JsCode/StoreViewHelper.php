@@ -85,6 +85,7 @@ class Tx_MvcExtjs_ViewHelpers_JsCode_StoreViewHelper extends Tx_MvcExtjs_ViewHel
 	 * @param boolean $autoSave
 	 * @param boolean $restful 
 	 * @param boolean $batch 
+	 * @param boolean $autoLoad
 	 * @return void
 	 */
 	public function render($domainModel = NULL,
@@ -97,7 +98,8 @@ class Tx_MvcExtjs_ViewHelpers_JsCode_StoreViewHelper extends Tx_MvcExtjs_ViewHel
 						   $data = NULL,
 						   $autoSave = TRUE,
 						   $restful = FALSE,
-						   $batch = FALSE) {
+						   $batch = FALSE,
+						   $autoLoad=FALSE) {
 
 		if ($extensionName == NULL) {
 			$extensionName = $this->controllerContext->getRequest()->getControllerExtensionName();
@@ -135,6 +137,11 @@ class Tx_MvcExtjs_ViewHelpers_JsCode_StoreViewHelper extends Tx_MvcExtjs_ViewHel
 			$this->config->setRaw('batch','true');
 		} else {
 			$this->config->setRaw('batch','false');
+		}
+		if ($autoLoad) {
+			$this->config->setRaw('autoLoad','true');
+		} else {
+			$this->config->setRaw('autoLoad','false');
 		}
 			// apply the configuration again
 		$this->injectJsCode();

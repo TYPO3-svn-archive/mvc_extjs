@@ -65,6 +65,7 @@ class Tx_MvcExtjs_ViewHelpers_Be_ModuleContainerViewHelper extends Tx_MvcExtjs_V
 	 * @param boolean $loadExtJsTheme whether to load ExtJS "grey" theme. Defaults to FALSE
 	 * @param string  $extJsAdapter load alternative adapter (ext-base is default adapter)
 	 * @param boolean $enableExtJsDebug if TRUE, debug version of ExtJS is loaded. Use this for development only
+	 * @param boolean $enableExtJSQuickTips
 	 * @return string
 	 * @see template
 	 * @see t3lib_PageRenderer
@@ -78,7 +79,8 @@ class Tx_MvcExtjs_ViewHelpers_Be_ModuleContainerViewHelper extends Tx_MvcExtjs_V
 						   $loadExtJs = TRUE,
 						   $loadExtJsTheme = TRUE,
 						   $extJsAdapter = 'prototype',
-						   $enableExtJsDebug = FALSE) {
+						   $enableExtJsDebug = FALSE,
+						   $enableExtJSQuickTips = TRUE) {
 
 		$doc = $this->getDocInstance();
 						   	
@@ -111,6 +113,9 @@ class Tx_MvcExtjs_ViewHelpers_Be_ModuleContainerViewHelper extends Tx_MvcExtjs_V
 			if ($enableExtJsDebug) {
 				$this->pageRenderer->enableExtJsDebug();
 			}
+		}
+		if ($enableExtJSQuickTips) {
+			$this->pageRenderer->enableExtJSQuickTips();
 		}
 
 		$this->pageRenderer->addCssFile('sysext/t3skin/extjs/xtheme-t3skin.css');

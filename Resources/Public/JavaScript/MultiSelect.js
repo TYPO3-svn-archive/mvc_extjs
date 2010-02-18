@@ -156,8 +156,7 @@ Ext.ux.form.MultiSelect = Ext.extend(Ext.form.Field,  {
             height: this.height,
             width: this.width,
             style: "padding:0;",
-            tbar: this.tbar,
-            fbar: this.fbar
+            tbar: this.tbar
         });
         fs.body.addClass('ux-mselect');
 
