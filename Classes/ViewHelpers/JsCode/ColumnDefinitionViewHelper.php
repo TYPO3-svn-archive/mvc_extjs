@@ -57,13 +57,18 @@ class Tx_MvcExtjs_ViewHelpers_JsCode_ColumnDefinitionViewHelper extends Tx_MvcEx
 	 * @param string $name is used as variable name AND storeId for the generated store
 	 * @param string $extensionName
 	 * @param array $columns
+	 * @param array $specialRenderer
+	 * @param array $specialWidth
+	 * @param array $specialHeader
 	 * @return void
 	 */
 	public function render($domainModel = NULL,
 						   $extensionName = NULL,
 						   array $columns = array(),
 						   array $hiddenColumns = array(),
-						   array $specialRenderer = array()) {
+						   array $specialRenderer = array(),
+						   array $specialWidth = array(),
+						   array $specialHeader = array()) {
 
 		if ($extensionName == NULL) {
 			$extensionName = $this->controllerContext->getRequest()->getControllerExtensionName();
@@ -84,12 +89,21 @@ class Tx_MvcExtjs_ViewHelpers_JsCode_ColumnDefinitionViewHelper extends Tx_MvcEx
 
 		foreach ($rProperties as $rProperty) {
 			$columnDef = new Tx_MvcExtjs_CodeGeneration_JavaScript_ExtJS_Config();
-			// TODO: fetch label from TCA?
-			$columnDef->set('header', $rProperty->getName())
-					  ->set('dataIndex', $rProperty->getName())
+
+			$columnDef->set('dataIndex', $rProperty->getName())
 					  ->setRaw('sortable', 'true');
+					  	  
+			if (isset($specialHeader[$rProperty->getName()])) { 
+				$columnDef->set('header', $specialHeader[$rProperty->getName()]);
+			} else {
+				// TODO: fetch label from TCA?
+				$columnDef->set('header', $rProperty->getName());
+			} 
 			if (isset($specialRenderer[$rProperty->getName()])) { 
 				$columnDef->setRaw('renderer', $specialRenderer[$rProperty->getName()]);
+			}
+			if (isset($specialWidth[$rProperty->getName()])) { 
+				$columnDef->setRaw('width', $specialWidth[$rProperty->getName()]);
 			}
 			if (in_array($rProperty->getName(), $hiddenColumns)) {
 				$columnDef->setRaw('hidden', 'true');
