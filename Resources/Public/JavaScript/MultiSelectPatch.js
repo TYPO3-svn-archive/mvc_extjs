@@ -33,4 +33,25 @@ Ext.override( Ext.ux.form.MultiSelect, {
     	this.hiddenField.dom.disabled = this.hiddenName != this.name;
     	fs.doLayout();
 	},
+	
+	afterRender: function() {
+        Ext.ux.form.MultiSelect.superclass.afterRender.call(this);
+
+        if (this.ddReorder && !this.dragGroup && !this.dropGroup){
+            this.dragGroup = this.dropGroup = 'MultiselectDD-' + Ext.id();
+        }
+
+        if (this.draggable || this.dragGroup){
+            this.dragZone = new Ext.ux.form.MultiSelect.DragZone(this, {
+                ddGroup: this.dragGroup
+            });
+        }
+        if (this.droppable || this.dropGroup){
+            this.dropZone = new Ext.ux.form.MultiSelect.DropZone(this, {
+                ddGroup: this.dropGroup
+            });
+        }
+        
+        this.loadMask = new Ext.LoadMask(this.getEl(), Ext.apply({store:this.store}, this.loadMask));
+    }
 });
