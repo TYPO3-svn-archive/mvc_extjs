@@ -279,7 +279,7 @@ Ext.ux.form.MultiSelect = Ext.extend(Ext.form.Field,  {
     },
 
     // inherit docs
-    validateValue : function(value){
+    validateValue : function(value) {
         if (value.length < 1) { // if it has no value
              if (this.allowBlank) {
                  this.clearInvalid();

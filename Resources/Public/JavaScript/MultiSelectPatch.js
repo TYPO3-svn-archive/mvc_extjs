@@ -53,5 +53,9 @@ Ext.override( Ext.ux.form.MultiSelect, {
         }
         
         this.loadMask = new Ext.LoadMask(this.getEl(), Ext.apply({store:this.store}, this.loadMask));
+    },
+    
+    validateValue: function() {
+    	
     }
 });
