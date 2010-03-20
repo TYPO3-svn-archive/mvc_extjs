@@ -41,11 +41,12 @@ class Tx_MvcExtjs_ViewHelpers_NullViewHelper extends Tx_Fluid_Core_ViewHelper_Ab
 	/**
 	 * Render without processing
 	 *
-	 *
+	 * @param string $content the output
 	 * @return string 
 	 */
-	public function render() {
-		return $this->renderChildren(); 
+	public function render($content = '') {
+		$this->renderChildren();
+		return $content; 
 	}
 }
 ?>
