@@ -53,12 +53,6 @@ Ext.ux.form.ItemSelector = Ext.extend(Ext.form.Field,  {
             'rowdblclick' : true,
             'change' : true
         });
-        Ext.util.Observable.capture(
-        		this,
-        		function(e){
-        		console.log(e);
-        		}
-       );
     },
 
     onRender: function(ct, position){
