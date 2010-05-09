@@ -60,6 +60,7 @@ class Tx_MvcExtjs_ViewHelpers_JsCode_ColumnDefinitionViewHelper extends Tx_MvcEx
 	 * @param array $specialRenderer
 	 * @param array $specialWidth
 	 * @param array $specialHeader
+	 * @param array $editors
 	 * @return void
 	 */
 	public function render($domainModel = NULL,
@@ -68,7 +69,8 @@ class Tx_MvcExtjs_ViewHelpers_JsCode_ColumnDefinitionViewHelper extends Tx_MvcEx
 						   array $hiddenColumns = array(),
 						   array $specialRenderer = array(),
 						   array $specialWidth = array(),
-						   array $specialHeader = array()) {
+						   array $specialHeader = array(),
+						   array $editors = array()) {
 
 		if ($extensionName == NULL) {
 			$extensionName = $this->controllerContext->getRequest()->getControllerExtensionName();
@@ -105,6 +107,9 @@ class Tx_MvcExtjs_ViewHelpers_JsCode_ColumnDefinitionViewHelper extends Tx_MvcEx
 			if (isset($specialWidth[$rProperty->getName()])) { 
 				$columnDef->setRaw('width', $specialWidth[$rProperty->getName()]);
 			}
+			if (isset($editors[$rProperty->getName()])) { 
+				$columnDef->setRaw('editor', $editors[$rProperty->getName()]);
+			}
 			if (in_array($rProperty->getName(), $hiddenColumns)) {
 				$columnDef->setRaw('hidden', 'true');
 			} else {
@@ -115,8 +120,18 @@ class Tx_MvcExtjs_ViewHelpers_JsCode_ColumnDefinitionViewHelper extends Tx_MvcEx
 
 		$this->columnVariable = t3lib_div::makeInstance('Tx_MvcExtjs_CodeGeneration_JavaScript_Variable', $this->extJsNamespace . '.' . $varName, $columnArray);
 
-		$this->jsCode->addSnippet($this->columnVariable); 
 		$this->injectJsCode();
+	}
+	
+	/**
+	 * @see Classes/ViewHelpers/JsCode/Tx_MvcExtjs_ViewHelpers_JsCode_AbstractJavaScriptCodeViewHelper#injectJsCode()
+	 */
+	protected function injectJsCode() {
+			// Allow objects to be declared inside this viewhelper; they are rendered above
+		$this->renderChildren();
+			// Add the code and write it into the inline section in your HTML head
+		$this->jsCode->addSnippet($this->columnVariable); 
+		parent::injectJsCode();
 	}
 
 }

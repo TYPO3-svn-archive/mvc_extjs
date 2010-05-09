@@ -76,9 +76,9 @@ class Tx_MvcExtjs_ViewHelpers_JsCode_DataWriterViewHelper extends Tx_MvcExtjs_Vi
 	 * 
 	 * @param string $domainModel is used as variable name AND storeId for the generated store
 	 * @param string $extensionName the EXT where the domainModel is located
-	 * @param string $id choose a id for the created variable; default is $domainmodel . 'JsonReader'
-	 * @param boolean $encode
-	 * @param boolean $writeAllFields
+	 * @param string $name choose a id for the created variable; default is $domainmodel . 'JsonReader'
+	 * @param string $objectName
+	 * @param string $moduleName
 	 * @return void
 	 */
 	public function render($domainModel = NULL,
@@ -86,7 +86,7 @@ class Tx_MvcExtjs_ViewHelpers_JsCode_DataWriterViewHelper extends Tx_MvcExtjs_Vi
 						   $name = NULL,
 						   $objectName = NULL,
 						   $moduleName = NULL) {
-
+				   	
 		if ($extensionName === NULL) {
 			$extensionName = $this->controllerContext->getRequest()->getControllerExtensionName();
 		}
@@ -105,7 +105,7 @@ class Tx_MvcExtjs_ViewHelpers_JsCode_DataWriterViewHelper extends Tx_MvcExtjs_Vi
 			$objectName{0} = strtolower($objectName{0});
 		}
 		if ($moduleName === NULL) {
-			throw new Tx_MvcExtjs_ExtJs_Exception('If no module name is given the object cannot be mapped by extbase!',1269335971);
+			throw new Tx_MvcExtjs_ExtJS_Exception('If no module name is given the object cannot be mapped by extbase!',1269335971);
 		}
 		$extKey = 'tx_' . strtolower($extensionName);
 		

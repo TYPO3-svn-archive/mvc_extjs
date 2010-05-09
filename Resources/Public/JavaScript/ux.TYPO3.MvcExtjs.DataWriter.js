@@ -18,9 +18,17 @@ Ext.ux.TYPO3.MvcExtjs.DataWriter = Ext.extend(Ext.data.DataWriter, {
 	 */
 	extKey: 'tx_mvcextjssamples',
 	
-	constructor : function(config){
-		Ext.ux.TYPO3.MvcExtjs.DataWriter.superclass.constructor.call(this, config);    
+	/**
+     * Builds up the object
+     * @param {object} config
+     */
+	initComponent: function(config) {
+			// apply configuration for the object itself
+		Ext.apply(this, config);
+			// call superclass constructor
+		Ext.ux.TYPO3.MvcExtjs.DataWriter.superclass.initComponent.call(this);
 	},
+
 	
 	/**
 	 * Final action of a write event.  Apply the written data-object to params.
@@ -71,7 +79,7 @@ Ext.ux.TYPO3.MvcExtjs.DataWriter = Ext.extend(Ext.data.DataWriter, {
 	 * @return {Object}
 	 */
 	destroyRecord : function(rec){
-		return rec.id;
+		return this.toHash(rec);
 	},
 	
 	createParameterPrefix : function() {
