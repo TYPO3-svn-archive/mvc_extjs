@@ -70,6 +70,8 @@ class Tx_MvcExtjs_ViewHelpers_JsCode_GroupingStoreViewHelper extends Tx_MvcExtjs
 	 * @param boolean $batch 
 	 * @param boolean $autoLoad
 	 * @param string $groupField
+	 * @param string $sortInfo has to be a config object
+	 * @param boolean $groupOnSort
 	 * @return void
 	 */
 	public function render($domainModel = NULL,
@@ -84,10 +86,18 @@ class Tx_MvcExtjs_ViewHelpers_JsCode_GroupingStoreViewHelper extends Tx_MvcExtjs
 						   $restful = FALSE,
 						   $batch = FALSE,
 						   $autoLoad = FALSE,
-						   $groupField = NULL) {
+						   $groupField = NULL,
+						   $sortInfo = NULL,
+						   $groupOnSort = NULL) {
 
-		if ($groupField != NULL) {
+		if ($groupField !== NULL) {
 			$this->config->set('groupField', $groupField);
+		}
+		if ($sortInfo !== NULL) {
+			$this->config->setRaw('sortInfo', $sortInfo);
+		}
+		if ($groupOnSort !== NULL) {
+			$this->config->setRaw('groupOnSort', $groupOnSort ? 'true' : 'false');
 		}
 		parent::render($domainModel, $extensionName, $id, $name, $reader, $writer, $proxy, $data, $autoSave, $restful, $batch, $autoLoad);
 	}
