@@ -115,7 +115,9 @@ class Tx_MvcExtjs_ViewHelpers_JsCode_ColumnDefinitionViewHelper extends Tx_MvcEx
 			} else {
 				$columnDef->setRaw('hidden', 'false');
 			}
-			$columnArray->addElement($columnDef);
+			if (($columns == array())||(in_array($rProperty->getName(), $columns))) {
+				$columnArray->addElement($columnDef);
+			}
 		}
 
 		$this->columnVariable = t3lib_div::makeInstance('Tx_MvcExtjs_CodeGeneration_JavaScript_Variable', $this->extJsNamespace . '.' . $varName, $columnArray);

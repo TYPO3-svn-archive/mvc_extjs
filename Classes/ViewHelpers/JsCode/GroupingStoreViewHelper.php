@@ -68,7 +68,7 @@ class Tx_MvcExtjs_ViewHelpers_JsCode_GroupingStoreViewHelper extends Tx_MvcExtjs
 	 * @param boolean $autoSave
 	 * @param boolean $restful 
 	 * @param boolean $batch 
-	 * @param boolean $autoLoad
+	 * @param string $autoLoad
 	 * @param string $groupField
 	 * @param string $sortInfo has to be a config object
 	 * @param boolean $groupOnSort
@@ -85,7 +85,7 @@ class Tx_MvcExtjs_ViewHelpers_JsCode_GroupingStoreViewHelper extends Tx_MvcExtjs
 						   $autoSave = TRUE,
 						   $restful = FALSE,
 						   $batch = FALSE,
-						   $autoLoad = FALSE,
+						   $autoLoad = NULL,
 						   $groupField = NULL,
 						   $sortInfo = NULL,
 						   $groupOnSort = NULL) {
