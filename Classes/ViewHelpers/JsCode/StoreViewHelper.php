@@ -131,17 +131,10 @@ class Tx_MvcExtjs_ViewHelpers_JsCode_StoreViewHelper extends Tx_MvcExtjs_ViewHel
 		if ($data !== NULL) $this->config->setRaw('data', $data);
 		if ($paramNames !== NULL) $this->config->setRaw('paramNames', $paramNames);
 		if ($autoLoad !== (NULL)) {
-			if ($autoLoad === 'TRUE' || $autoLoad === 'true') {
-				$this->config->setRaw('autoLoad', 'true');
-			} else if ($autoLoad === 'FALSE' || $autoLoad === 'false') {
-				$this->config->setRaw('autoLoad', 'false');
-			} else {
-				$this->config->setRaw('autoLoad', $autoLoad);
-			}
+			$this->config->setRaw('autoLoad', $autoLoad);
 		}
 		$this->config->setRaw('restful', $restful ? 'true' : 'false');
 		$this->config->setRaw('batch', $batch ? 'true' : 'false');
-		$this->config->setRaw('autoLoad', $autoLoad ? 'true' : 'false');
 		$this->config->setRaw('remoteSort', $remoteSort ? 'true' : 'false');
 
 			// Apply the configuration again
