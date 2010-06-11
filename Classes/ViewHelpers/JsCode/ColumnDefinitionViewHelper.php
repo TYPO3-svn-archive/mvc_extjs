@@ -92,8 +92,7 @@ class Tx_MvcExtjs_ViewHelpers_JsCode_ColumnDefinitionViewHelper extends Tx_MvcEx
 		foreach ($rProperties as $rProperty) {
 			$columnDef = new Tx_MvcExtjs_CodeGeneration_JavaScript_ExtJS_Config();
 
-			$columnDef->set('dataIndex', $rProperty->getName())
-					  ->setRaw('sortable', 'true');
+			$columnDef->set('dataIndex', $rProperty->getName());
 					  	  
 			if (isset($specialHeader[$rProperty->getName()])) { 
 				$columnDef->set('header', $specialHeader[$rProperty->getName()]);
