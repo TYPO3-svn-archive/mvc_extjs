@@ -71,20 +71,22 @@ class Tx_MvcExtjs_ViewHelpers_Json_StoreCreateResponseViewHelper extends Tx_Flui
 	 * @return array
 	 */
 	public function buildPropertyArray($object = NULL, array $columns = array()) {
-		$objectArray = array();
-		$properties = $object->_getProperties();
-		foreach($properties as $name => $value) {
-			if (count($columns) > 0 && !in_array($name, $columns)) {
-					// Current property should not be returned
-				continue;
-			}
-			if ($value instanceof DateTime) {
-				$value = $value->format('c');
-			}
+		if (!($object instanceof Tx_Extbase_DomainObject_AbstractEntity)) {
+            return $object;
+        }
 
-			$objectArray[$name] = $value;
-		}
-		return $objectArray;
+        $arr = array();
+
+        $properties = Tx_Extbase_Reflection_ObjectAccess::getAccessibleProperties($object);
+
+        foreach ($properties as $name => $value) {
+            if (count($columns) > 0 && !in_array($property->name, $columns)) {
+                // Current property should not be returned
+                continue;
+            }
+            $arr[$name] = $value;
+        }
+        return $arr;
 	}
 
 }
