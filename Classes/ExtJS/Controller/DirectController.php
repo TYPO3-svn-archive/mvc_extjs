@@ -65,7 +65,7 @@ class Tx_MvcExtjs_ExtJS_Controller_DirectController extends Tx_Extbase_MVC_Contr
 		$extensionName = $this->request->getControllerExtensionName();
 		$arguments = $this->getForwardArguments($rpcData,$apiState,$action,$controller,$extensionName);
 			// set the response' content-type
-		$this->response->setHeader('Content-Type','application/json');
+		$this->response->setHeader('Content-Type','text/javascript');
 			// forward to the correct controller/action
 		$this->forward($action,$controller,$extensionName,$arguments);
 	}

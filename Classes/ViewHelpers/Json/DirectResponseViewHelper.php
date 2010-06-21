@@ -78,13 +78,16 @@ class Tx_MvcExtjs_ViewHelpers_Json_DirectResponseViewHelper extends Tx_Fluid_Cor
 	 * @param int $tid The Ext.Direct transaction Id.
 	 * @param string $action The Controller that answers. (ExtJS calls the controller: action)
 	 * @param string $method The Action that answers. (ExtJS calls the action: method)
+	 * @param boolean $flashMessages wether the viewhelper should check for flashmessages and include them into the Ext.Direct response. 
+	 * 
 	 * @return string
 	 * @author Dennis Ahrens <dennis.ahrens@fh-hannover.de>
 	 */
 	public function render($type = 'rpc',
 						   $tid = NULL,
 						   $action = NULL,
-						   $method = NULL) {
+						   $method = NULL,
+						   $flashMessages = TRUE) {
 						   	
 		if ($tid === NULL) {
 			$tid = $this->controllerContext->getRequest()->getArgument('tid');
@@ -112,6 +115,20 @@ class Tx_MvcExtjs_ViewHelpers_Json_DirectResponseViewHelper extends Tx_Fluid_Cor
 		$responseArray['method'] = $method;
 		$responseArray['result'] = $result;
 		
+		if ($flashMessages === TRUE) {
+			$flashMessages = $this->controllerContext->getFlashMessageContainer()->getAllAndFlush();
+			if (is_array($flashMessages) && count($flashMessages) > 0) {
+				$responseArray['flashMessages'] = array();
+				foreach ($flashMessages as $flashMessage) {
+					$flashMessageArray = array(
+						'message' => $flashMessage->getMessage(),
+						'type' => $flashMessage->getType(),
+						'tstamp' => $flashMessage->getTime()->format('U')
+					);
+					$responseArray['flashMessages'][] = $flashMessageArray;
+				}
+			}
+		}
 		return json_encode($responseArray);
 	}
 
