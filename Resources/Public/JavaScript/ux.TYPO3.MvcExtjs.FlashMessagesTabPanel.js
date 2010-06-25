@@ -77,6 +77,9 @@ Ext.ux.TYPO3.MvcExtjs.FlashMessagesTabPanel = function(){
 	
     return Ext.apply(new Ext.util.Observable, {
     	getTabPanel: getTabPanel,
+    	addMessage: function(msg) {
+    		addMessages([msg]);
+    	},
     	initialize: initialize
     })
 }();

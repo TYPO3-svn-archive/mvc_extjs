@@ -35,16 +35,6 @@
 class Tx_MvcExtjs_ExtJS_Controller_DirectController extends Tx_Extbase_MVC_Controller_ActionController {
 
 	/**
-	 * @var Tx_MvcExtJs_ExtJS_Direct_Router
-	 */
-	protected $router;
-	
-	/**
-	 * @var Tx_MvcExtjs_ExtJS_Direct_API
-	 */
-	protected $api;
-	
-	/**
 	 * Acts as a dispatcher for Ext.Direct requests.
 	 * 
 	 * @return void
@@ -52,13 +42,9 @@ class Tx_MvcExtjs_ExtJS_Controller_DirectController extends Tx_Extbase_MVC_Contr
 	 * @dontverifyrequesthash
 	 */
 	public function routeAction() {
-			// make instances of the ExtDirect PHP classes
 		session_start();
 		$apiState = $_SESSION['ext-direct-state'];
-		$this->api = t3lib_div::makeInstance('Tx_MvcExtjs_ExtJS_Direct_API');
-		$this->api->setState($apiState);
-		$this->router = t3lib_div::makeInstance('Tx_MvcExtjs_ExtJS_Direct_Router',$this->api);
-		$rpcData = $this->router->data;
+		$rpcData = $this->parseRequest();
 			// process the rpcData to forward to the correct action
 		$action = $this->getForwardActionName($rpcData,$apiState);
 		$controller = $this->getForwardControllerName($rpcData,$apiState);
@@ -71,20 +57,49 @@ class Tx_MvcExtjs_ExtJS_Controller_DirectController extends Tx_Extbase_MVC_Contr
 	}
 	
 	/**
+	 * Parses the request like it is done in the Router.php
+	 * contained in the PHP implementation of Tommy Maintz.
+	 * 
+	 * @return array
+	 */
+	protected function parseRequest() {
+		$rpcData = array();
+		if (isset($GLOBALS['HTTP_RAW_POST_DATA'])){
+			$rpcData = json_decode($GLOBALS['HTTP_RAW_POST_DATA'],TRUE);
+		} else if (isset($_POST['extAction'])){ // form post
+		$rpcData['action'] = $_POST['extAction'];
+		$rpcData['method'] = $_POST['extMethod'];
+		$rpcData['tid'] = $_POST['extTID'];
+		$rpcData['data'] = array($_POST, $_FILES);
+		} else {
+			throw new Tx_MvcExtjs_ExtJS_Exception('Invalid RPC format',1277309575);
+		}
+		return $rpcData;
+	}
+	
+	/**
+	 * 
+	 * @return unknown_type
+	 */
+	protected function detectMultipleRequests() {
+		
+	}
+	
+	/**
 	 * Evaluates the action name to forward to.
 	 * Removes the ending 'Action'.
 	 * 
-	 * @param stdClass $rpcData
+	 * @param array $rpcData
 	 * @param array $apiState
 	 * @return string
 	 */
-	private function getForwardActionName(stdClass $rpcData, array $apiState) {
-		$jsActionName = $rpcData->method;
-		$jsControllerName = $rpcData->action;
-		if (!is_array($apiState['parsedAPI']['actions'][$rpcData->action])) {
+	private function getForwardActionName(array $rpcData, array $apiState) {
+		$jsActionName = $rpcData['method'];
+		$jsControllerName = $rpcData['action'];
+		if (!is_array($apiState['parsedAPI']['actions'][$rpcData['action']])) {
 			throw new Tx_MvcExtjs_ExtJS_Exception('The Controller ' . $jsControllerName . ' is not defined in the remoteDescriptor',1276002610);
 		}
-		foreach ($apiState['parsedAPI']['actions'][$rpcData->action] as $actionConfiguration) {
+		foreach ($apiState['parsedAPI']['actions'][$rpcData['action']] as $actionConfiguration) {
 			if ($actionConfiguration['name'] === $jsActionName) {
 				if (isset($actionConfiguration['serverMethod'])) {
 					return str_replace('Action','',$actionConfiguration['serverMethod']);
@@ -100,13 +115,13 @@ class Tx_MvcExtjs_ExtJS_Controller_DirectController extends Tx_Extbase_MVC_Contr
 	 * Evaluates the controller name to forward to.
 	 * Removes the ending 'Controller'.
 	 * 
-	 * @param stdClass $rpcData
+	 * @param array $rpcData
 	 * @param array $apiState
 	 * @return string
 	 */
-	private function getForwardControllerName(stdClass $rpcData, array $apiState) {
-		$jsControllerName = $rpcData->action;
-		if (!is_array($apiState['parsedAPI']['actions'][$rpcData->action])) {
+	private function getForwardControllerName(array $rpcData, array $apiState) {
+		$jsControllerName = $rpcData['action'];
+		if (!is_array($apiState['parsedAPI']['actions'][$rpcData['action']])) {
 			throw new Tx_MvcExtjs_ExtJS_Exception('The Controller ' . $jsControllerName . ' is not defined in the remoteDescriptor',1276002611);
 		}
 		return str_replace('Controller','',$jsControllerName);
@@ -120,7 +135,7 @@ class Tx_MvcExtjs_ExtJS_Controller_DirectController extends Tx_Extbase_MVC_Contr
 	 * 
 	 * TODO: modified objects are not handled by now.
 	 * 
-	 * @param stdClass $rpcData The data received from the Ext.Direct request.
+	 * @param array $rpcData The data received from the Ext.Direct request.
 	 * @param array $apiState The Ext.Direct API definition as hold by the class Tx_MvcExtjs_ExtJS_Direct_API.
 	 * @param string $actionName The action name to forward to. We need this to fetch the action method parameters.
 	 * @param string $controllerName The controller name to forward to. We need this to fetch the action method parameters.
@@ -128,13 +143,13 @@ class Tx_MvcExtjs_ExtJS_Controller_DirectController extends Tx_Extbase_MVC_Contr
 	 * 
 	 * @return array
 	 */
-	private function getForwardArguments(stdClass $rpcData, array $apiState,  $actionName, $controllerName, $extensionName) {
+	private function getForwardArguments(array $rpcData, array $apiState,  $actionName, $controllerName, $extensionName) {
 		$arguments = array();
-		$arguments['tid'] = $rpcData->tid;
+		$arguments['tid'] = $rpcData['tid'];
 		
 		$actionParameters = $this->reflectionService->getMethodParameters('Tx_' . $extensionName . '_Controller_' . $controllerName . 'Controller',$actionName. 'Action');
 		
-		foreach ($rpcData->data as $position => $parameterValue) {
+		foreach ($rpcData['data'] as $position => $parameterValue) {
 			foreach ($actionParameters as $parameterName => $parameterConfiguration) {
 				if ($parameterConfiguration['position'] === $position) {
 					switch ($parameterConfiguration['type']) {
@@ -146,7 +161,7 @@ class Tx_MvcExtjs_ExtJS_Controller_DirectController extends Tx_Extbase_MVC_Contr
 							break;
 						default:
 							if ($parameterConfiguration['class'] !== '') {
-								$arguments[$parameterName]['__identity'] = $parameterValue->uid;
+								$arguments[$parameterName]['__identity'] = $parameterValue['uid'];
 								break;
 							}
 							throw new Tx_MvcExtjs_ExtJS_Exception('parameter type not supported yet!',1276273198);

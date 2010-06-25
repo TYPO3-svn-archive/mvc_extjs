@@ -48,6 +48,7 @@ class Tx_MvcExtjs_ViewHelpers_Json_FormReadResponseViewHelper extends Tx_Fluid_C
 		foreach ($excludeProperties as $propertyName) {
 			unset($properties[$propertyName]);
 		}
+		$properties['className'] = get_class($object);
 		$returnArray = array(
 			'success' => $success,
 			'data' => $properties
