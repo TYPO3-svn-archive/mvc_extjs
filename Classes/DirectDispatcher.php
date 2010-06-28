@@ -62,6 +62,35 @@ class Tx_MvcExtjs_DirectDispatcher extends Tx_Extbase_Dispatcher {
 	}
 	
 	/**
+	 * Returns the ReflectionService
+	 * 
+	 * @return Tx_Extbase_Reflection_Service
+	 */
+	public static function getReflectionService() {
+		return self::$reflectionService;
+	}
+	
+	/**
+	 * Misemployed method to get the DirectDispatcher working for the Backend.
+	 * This behaviour has to be changed - GET parameter M should be the calling module.
+	 * 
+	 * TODO: make this available for FE calls.
+	 *
+	 * @param string $module The name of the module
+	 * @return void
+	 */
+	public function callModule($module) {
+		if ($module === 'MvcExtjsDirectDispatcher') {
+			$this->timeTrackPush('MvcExtjs DirectDispatcher is called.','');
+			$this->timeTrackPush('Extbase gets initialized.','');
+			echo $this->parseRequest();
+			return TRUE;
+		} else {
+			return FALSE;
+		}
+	}
+	
+	/**
 	 * Creates a request an dispatches it to a controller.
 	 *
 	 * @param string $content The content
@@ -69,35 +98,38 @@ class Tx_MvcExtjs_DirectDispatcher extends Tx_Extbase_Dispatcher {
 	 * @return string $content The processed content
 	 */
 	public function dispatch($content, $configuration) {
-		$this->timeTrackPush('MvcExtjs DirectDispatcher is called.','');
-		$this->timeTrackPush('Extbase gets initialized.','');
-
 		if (!is_array($configuration)) {
 			t3lib_div::sysLog('Extbase was not able to dispatch the request. No configuration.', 'extbase', t3lib_div::SYSLOG_SEVERITY_ERROR);
 			return $content;
 		}
 		
 		$this->initializeConfigurationManagerAndFrameworkConfiguration($configuration);
+		
+			// framework configuration is normally fetched from the Dispatcher object.
+			// let's make it available when this dispatcher acts.
+		$normalDispatcher = t3lib_div::makeInstance('Tx_Extbase_Dispatcher');
+		$normalDispatcher->initializeConfigurationManagerAndFrameworkConfiguration($configuration);
 
-		$requestBuilder = t3lib_div::makeInstance('Tx_MvcExtjs_MVC_Web_RequestBuilder');
-		$requestBuilder->initialize($configuration);
+		$requestBuilder = t3lib_div::makeInstance('Tx_MvcExtjs_MVC_Web_DirectRequestBuilder');
+		$requestBuilder->initialize(self::$extbaseFrameworkConfiguration,self::$reflectionService);
+		
 		$request = $requestBuilder->build($configuration['directRequestData']);
+		
 		if (isset($this->cObj->data) && is_array($this->cObj->data)) {
-			// we need to check the above conditions as cObj is not available in Backend.
+				// we need to check the above conditions as cObj is not available in Backend.
 			$request->setContentObjectData($this->cObj->data);
 			$request->setIsCached($this->cObj->getUserObjectType() == tslib_cObj::OBJECTTYPE_USER);
 		}
-		$response = t3lib_div::makeInstance('Tx_Extbase_MVC_Web_Response');
-
-		$persistenceManager = self::getPersistenceManager();
+		
+		$response = t3lib_div::makeInstance('Tx_MvcExtjs_MVC_Web_DirectResponse',$request);
 
 		$this->timeTrackPull();
-
 		$this->timeTrackPush('Extbase dispatches request.','');
+		
 		$dispatchLoopCount = 0;
 		while (!$request->isDispatched()) {
 			if ($dispatchLoopCount++ > 99) throw new Tx_Extbase_MVC_Exception_InfiniteLoop('Could not ultimately dispatch the request after '  . $dispatchLoopCount . ' iterations.', 1217839467);
-			$controller = $this->getPreparedController($request);
+				$controller = $this->getPreparedController($request);
 			try {
 				$controller->processRequest($request, $response);
 			} catch (Tx_Extbase_MVC_Exception_StopAction $ignoredException) {
@@ -107,24 +139,10 @@ class Tx_MvcExtjs_DirectDispatcher extends Tx_Extbase_Dispatcher {
 	}
 	
 	/**
-	 * Misemployed method to get the DirectDispatcher working for the Backend.
-	 * This behaviour has to be changed GET parameter M should be the calling module.
-	 *
-	 * @param string $module The name of the module
-	 * @return void
-	 */
-	public function callModule($module) {
-		if ($module === 'MvcExtjsDirectDispatcher') {
-			echo $this->parseRequest();
-			return TRUE;
-		} else {
-			return FALSE;
-		}
-	}
-	
-	/**
 	 * Parses the request like it is done in the Router.php
 	 * contained in the PHP implementation of Tommy Maintz.
+	 * 
+	 * TODO: FE compatibility (BACKPATH)
 	 * 
 	 * @return array
 	 */
@@ -149,18 +167,40 @@ class Tx_MvcExtjs_DirectDispatcher extends Tx_Extbase_Dispatcher {
 			// directory containing the controller file. We are using mod.php dispatcher
 			// and thus we are already within typo3/ because we call typo3/mod.php
 		$GLOBALS['BACK_PATH'] = '';
-		return $this->processRequests($requests);
+		return $this->processRequests($requests,$configuration);
 	}
 	
+	/**
+	 * Processes the requests that came in.
+	 * Ext.Direct is able to combine several Ext.Direct requests in one HTTP request.
+	 * This method provides the feature to dispatch each incoming Ext.Direct request
+	 * to it's corresponding action - collect the results and gives them back.
+	 * 
+	 * @param array $requests
+	 * @param array $configuration
+	 * @return string
+	 */
 	protected function processRequests($requests,$configuration) {
-		$response = '';
-		foreach ($requests as $requestData) {
+		$response = t3lib_div::makeInstance('Tx_Extbase_MVC_Web_Response');
+		$response->setHeader('Content-Type','text/javascript');
+		
+		$persistenceManager = self::getPersistenceManager();
+		
+		$responses = array(); 
+		foreach ($requests as $requestNumber => $requestData) {
 			$configuration['directRequestData'] = $requestData;
-			$response = $this->dispatch($response,$configuration);
+			$responses[] = $this->dispatch('',$configuration);
 		}
-		$this->timeTrackPull();
+		
+		if (count($responses) !== 1) {
+			$response->setContent('[' . implode(',',$responses) . ']');
+		} else {
+			$response->setContent($responses[0]);
+		}
 
+		$this->timeTrackPull();
 		$this->timeTrackPush('Extbase persists all changes.','');
+		
 		$flashMessages = t3lib_div::makeInstance('Tx_Extbase_MVC_Controller_FlashMessages'); // singleton
 		$flashMessages->persist();
 		$persistenceManager->persistAll();
@@ -177,7 +217,7 @@ class Tx_MvcExtjs_DirectDispatcher extends Tx_Extbase_Dispatcher {
 			$GLOBALS['TSFE']->additionalHeaderData[$request->getControllerExtensionName()] = implode("\n", $response->getAdditionalHeaderData());
 		}
 		$this->timeTrackPull();
-		return $response;
+		return $response->getContent();
 	}
 	
 	/**

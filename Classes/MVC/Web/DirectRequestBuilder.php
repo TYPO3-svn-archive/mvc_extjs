@@ -1,0 +1,226 @@
+<?php
+/***************************************************************
+*  Copyright notice
+*
+*  (c) 2009 Jochen Rau <jochen.rau@typoplanet.de>
+*  All rights reserved
+*
+*  This class is a backport of the corresponding class of FLOW3.
+*  All credits go to the v5 team.
+*
+*  This script is part of the TYPO3 project. The TYPO3 project is
+*  free software; you can redistribute it and/or modify
+*  it under the terms of the GNU General Public License as published by
+*  the Free Software Foundation; either version 2 of the License, or
+*  (at your option) any later version.
+*
+*  The GNU General Public License can be found at
+*  http://www.gnu.org/copyleft/gpl.html.
+*
+*  This script is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*  GNU General Public License for more details.
+*
+*  This copyright notice MUST APPEAR in all copies of the script!
+***************************************************************/
+
+/**
+ * Builds a Ext.Direct web request.
+ *
+ * @package Extbase
+ * @subpackage MVC\Web
+ * @version $ID:$
+ *
+ * @scope prototype
+ */
+class Tx_MvcExtjs_MVC_Web_DirectRequestBuilder {
+
+	/**
+	 * This is a unique key for a plugin (not the extension key!)
+	 *
+	 * @var string
+	 */
+	protected $pluginName = 'plugin';
+
+	/**
+	 * The name of the extension (in UpperCamelCase)
+	 *
+	 * @var string
+	 */
+	protected $extensionName = 'MvcExtjs';
+
+	/**
+	 * The default controller name
+	 *
+	 * @var string
+	 */
+	protected $defaultControllerName = 'Default';
+
+	/**
+	 * The default action of the default controller
+	 *
+	 * @var string
+	 */
+	protected $defaultActionName = 'index';
+
+	/**
+	 * The allowed actions of the controller. This actions can be called via $_GET and $_POST.
+	 *
+	 * @var array
+	 */
+	protected $allowedControllerActions;
+	
+	/**
+	 * @var Tx_Extbase_Reflection_Service
+	 */
+	protected $reflectionService;
+	
+	/**
+	 * Initializes the DirectRequestBuilder.
+	 * 
+	 * @param array $configuration
+	 * @param Tx_Extbase_Reflection_Service $reflectionService
+	 * @return void
+	 */
+	public function initialize($configuration, Tx_Extbase_Reflection_Service $reflectionService) {
+		if (!empty($configuration['pluginName'])) {
+			$this->pluginName = $configuration['pluginName'];
+		}
+		if (!empty($configuration['extensionName'])) {
+			$this->extensionName = $configuration['extensionName'];
+		}
+		if (!empty($configuration['controller'])) {
+			$this->defaultControllerName = $configuration['controller'];
+		} elseif (is_array($configuration['switchableControllerActions'])) {
+			$firstControllerActions = current($configuration['switchableControllerActions']);
+			$this->defaultControllerName = $firstControllerActions['controller'];
+		}
+		if (!empty($configuration['action'])) {
+			$this->defaultActionName = $configuration['action'];
+		} elseif (is_array($configuration['switchableControllerActions'])) {
+			$firstControllerActions = current($configuration['switchableControllerActions']);
+			$this->defaultActionName = array_shift(t3lib_div::trimExplode(',', $firstControllerActions['actions'], TRUE));
+		}
+		$allowedControllerActions = array();
+		if (is_array($configuration['switchableControllerActions'])) {
+			foreach ($configuration['switchableControllerActions'] as $controllerConfiguration) {
+				$controllerActions = t3lib_div::trimExplode(',', $controllerConfiguration['actions']);
+				foreach ($controllerActions as $actionName) {
+					$allowedControllerActions[$controllerConfiguration['controller']][] = $actionName;
+				}
+			}
+		}
+		$this->allowedControllerActions = $allowedControllerActions;
+		$this->reflectionService = $reflectionService;
+	}
+
+	/**
+	 * Builds a web request object from the raw HTTP information the configuration and the given
+	 * Ext.Direct request informations.
+	 * Ext.Direct calls it action->method.
+	 * Extbase calls it controller->action.
+	 * 
+	 * @param array $requestData
+	 * @return Tx_Extbase_MVC_Web_Request The web request as an object
+	 */
+	public function build($requestData) {	
+		$controllerName = str_replace('Controller','',$requestData['action']);
+		$actionName = str_replace('Action','',$requestData['method']);
+		t3lib_div::sysLog('controllerName: ' . $controllerName,'MvcExtjs',0);
+		t3lib_div::sysLog('actionName: ' . $actionName,'MvcExtjs',0);
+		t3lib_div::sysLog('allowedControllerActions: ' . print_r($this->allowedControllerActions,true),'MvcExtjs',0);
+		$parameters = $requestData['data'];
+		$tid = $requestData['tid'];
+		
+		if (is_string($controllerName) && array_key_exists($controllerName, $this->allowedControllerActions)) {
+			$controllerName = filter_var($controllerName, FILTER_SANITIZE_STRING);
+			$allowedActions = $this->allowedControllerActions[$controllerName];
+			if (is_string($actionName) && is_array($allowedActions) && in_array($actionName, $allowedActions)) {
+				$actionName = filter_var($actionName, FILTER_SANITIZE_STRING);
+			} else {
+				$actionName = $this->defaultActionName;
+			}
+		} else {
+			t3lib_div::sysLog('soes not exist','MvcExtjs',0);
+			$controllerName = $this->defaultControllerName;
+			$actionName = $this->defaultActionName;
+		}				
+		
+		$request = t3lib_div::makeInstance('Tx_MvcExtjs_MVC_Web_DirectRequest');
+		$request->setPluginName($this->pluginName);
+		$request->setControllerExtensionName($this->extensionName);
+		$request->setControllerName($controllerName);
+		$request->setControllerActionName($actionName);
+		$request->setRequestURI(t3lib_div::getIndpEnv('TYPO3_REQUEST_URL'));
+		$request->setBaseURI(t3lib_div::getIndpEnv('TYPO3_SITE_URL'));
+		$request->setTransactionId($tid);
+		$request->setType($requestData['type']);
+		$request->setMethod((isset($_SERVER['REQUEST_METHOD'])) ? $_SERVER['REQUEST_METHOD'] : NULL);
+
+		if (is_string($parameters['format']) && (strlen($parameters['format']))) {
+			$request->setFormat(filter_var($parameters['format'], FILTER_SANITIZE_STRING));
+		}
+				
+		$actionParameter = $this->reflectionService->getMethodParameters($request->getControllerObjectName(),$request->getControllerActionName() . 'Action');
+		
+		t3lib_div::sysLog('actionParams: ' . print_r($actionParameter,true),'MvcExtjs',0);
+		t3lib_div::sysLog('given Params: ' . print_r($parameters,true),'MvcExtjs',0);
+			// many Ext.Direct requests do not always specify a name for the arguments
+		foreach ($parameters as $argumentPosition => $incomingArgumentValue) {
+			$argumentName = $this->resolveArgumentName($argumentPosition,$actionParameter);
+			$argumentValue = $this->transformArgumentValue($incomingArgumentValue,$actionParameter[$argumentName]);
+			$request->setArgument($argumentName, $argumentValue);
+		}
+		return $request;
+	}
+	
+	/**
+	 * Transforms the incoming arguments from the Ext.Direct request into
+	 * the argument syntax that is used by fluid.
+	 * 
+	 * TODO: reconstruction of modified objects
+	 * 
+	 * @param mixed $incomingArgumentValueDescription
+	 * @param array $actionParameterDescription
+	 * @return mixed
+	 */
+	protected function transformArgumentValue($incomingArgumentValueDescription, $actionParameterDescription) {
+		if (is_array($incomingArgumentValueDescription)) {
+			if ($actionParameterDescription['type'] === 'array') {
+				return $incomingArgumentValueDescription;
+			}
+			if ($actionParameterDescription['type'] === 'object' || $actionParameterDescription['class'] !== '') {
+				if (isset($incomingArgumentValueDescription['uid'])) {
+					$uid = (int) $incomingArgumentValueDescription['uid'];
+					unset($incomingArgumentValueDescription['data']['uid']);
+				} else {
+					$uid = $incomingArgumentValueDescription['data']['uid'];
+					unset($incomingArgumentValueDescription['data']['uid']);
+				}
+				//$argumentValueDescription = $incomingArgumentValueDescription['data'];
+				$argumentValueDescription['__identity'] = $uid;
+				return $argumentValueDescription;
+			}
+		} else {
+			return $incomingArgumentValueDescription;
+		}
+	}
+	
+	/**
+	 * Resolved the name of the argument.
+	 * 
+	 * @return string
+	 */
+	protected function resolveArgumentName($argumentPosition, $actionParameter) {
+		foreach ($actionParameter as $argumentName => $argumentConfiguration) {
+			if ($argumentPosition === $argumentConfiguration['position']) {
+				return $argumentName;
+			}
+		}
+		throw new Tx_Extbase_MVC_Exception_NoSuchArgument('Could not map a Ext.Direct argument to action. There is no argument expected for position ' . $argumentPosition,1277724391);
+	}
+
+
+}
+?>

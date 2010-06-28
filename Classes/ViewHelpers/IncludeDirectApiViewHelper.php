@@ -41,16 +41,23 @@
 class Tx_MvcExtjs_ViewHelpers_IncludeDirectApiViewHelper extends Tx_MvcExtjs_ViewHelpers_AbstractViewHelper {
 	
 	/**
-	 * @var Tx_MvcExtjs_ExtJS_Direct_API
+	 * @var array
 	 */
-	protected $api;
+	protected $directApiCache;
 	
 	/**
-	 * @see Classes/ViewHelpers/Tx_MvcExtjs_ViewHelpers_AbstractViewHelper#initialize()
+	 * @var array
 	 */
-	public function initialize() {
-		parent::initialize();
-		$this->api = t3lib_div::makeInstance('Tx_MvcExtjs_ExtJS_Direct_API');
+	protected $frameworkConfiguration;
+	
+	/**
+	 * @see Classes/Core/ViewHelper/Tx_Fluid_Core_ViewHelper_AbstractViewHelper#initializeArguments()
+	 */
+	public function initializeArguments() {
+		$this->frameworkConfiguration = Tx_Extbase_Dispatcher::getExtbaseFrameworkConfiguration();
+			// TODO: StorageKey is used for t3lib_pageSelect hash functions
+			// the indent there is limitted to 32 chars in DB
+		$this->directApiStorageKey = 'API_' . $this->frameworkConfiguration['pluginName'];
 	}
 	
 	/**
@@ -58,107 +65,90 @@ class Tx_MvcExtjs_ViewHelpers_IncludeDirectApiViewHelper extends Tx_MvcExtjs_Vie
 	 * Also calls Ext.Direct.addProvider() on itself (at js side).
 	 * The remote API is directly useable.
 	 * 
+	 * TODO: handle calls from FE (routeUrl)
+	 * 
 	 * @param string $name The name for the javascript variable.
 	 * @param string $namespace The namespace the variable is placed.
-	 * @param array $controllers The controllers that should be parsed.
-	 * @param string $controllerExtensionName The extension name where the controllers are located.
-	 * @param string $routeAction The name of the action that does the routing for Ext.Direct requests. Defaults: route.
-	 * @param string $routeController The name of the controller that does the routing for Ext.Direct requests. Defaults: the controller that renders the Ext.Direct API (uses this ViewHelper).
-	 * @param string $routeExtensionName The name of the extension that does the routing for Ext.Direct requests. Defaults: the extension that renders the Ext.Direct API (uses this ViewHelper).
-	 * @param string $routeUrl You can specify a URL instead of using $routeAction, $routeController and $routeExtensionName.
-	 * @param string $remoteAnnotation The annotation above the actions that should be accessable via this API.
-	 * @param string $remoteNameAnnotation The annotation used to give actions other names on js side.
-	 * @param string $actionFormat The format that is set for the route action when doing requests. Defaults: json.
+	 * @param string $routeUrl You can specify a URL that acts a router. Default is mvc_extjs's DirectDispatcher
+	 * @param boolean $cache
 	 * 
 	 * @return void
 	 */
 	public function render($name = 'remoteDescriptor',
 						   $namespace = 'Ext.ux.TYPO3.app',
-						   array $controllers = NULL,
-						   $controllerExtensionName = NULL,
-						   $routeAction = 'route',
-						   $routeController = NULL,
-						   $routeExtensionName = NULL,
 						   $routeUrl = NULL,
-						   $remoteAnnotation = '@extdirect',
-						   $remoteNameAnnotation = '@remoteName',
-						   $actionFormat = 'json'
+						   $cache = TRUE
 						   ) {
-		session_start();
-			// prepare output variable
-		$jsCode = '';
-			// prepare configuration parameters
-		if ($routeController === NULL) {
-			$routeController = $this->controllerContext->getRequest()->getControllerName();	
-		}
-		if ($routeExtensionName === NULL) {
-			$routeExtensionName = $this->controllerContext->getRequest()->getControllerExtensionName();
-		}
+		
 		if ($routeUrl === NULL) {
-			$routeUrl = $this->controllerContext->getUriBuilder()->reset()->uriFor($routeAction,array('format' => $actionFormat),$routeController,$routeExtensionName);
-		}
-		if ($controllerExtensionName === NULL) {
-			$controllerExtensionName = $this->controllerContext->getRequest()->getControllerExtensionName();
-			$controllerExtensionKey = $this->controllerContext->getRequest()->getControllerExtensionKey();
-		}
-		$descriptor = $namespace . '.' . $name;
-		$controllerBasePath = t3lib_extMgm::extPath($controllerExtensionKey) . '/Classes/Controller/';
-	
-		if ($controllers === NULL) {
-			$controllers = array();
-			$controllerDirectory = dir($controllerBasePath);
-			while (FALSE !== ($controllerFileName = $controllerDirectory->read())) {
-				if (substr($controllerFileName,0,1) !== '.') {
-					$controllerName = str_replace('.php','',$controllerFileName);
-					$controllers[] = $controllerName;
-				}
-			}
+			$pluginName = $this->controllerContext->getRequest()->getPluginName();
+			$uriBuilder = $this->controllerContext->getUriBuilder();
+			$arguments = array(
+				'M' => 'MvcExtjsDirectDispatcher',
+				'tx_mvcextjs_dispatcher[module]' => $pluginName
+			);
+			$routeUrl = $uriBuilder->reset()->setAddQueryString(TRUE)->setArguments($arguments)->build();
 		}
 		
-		$controllerPrefix = 'Tx_' . $controllerExtensionName . '_Controller_';
-			// fetch api descriptor array
-		$apiArray = $this->getApi($controllers,$routeUrl,$namespace,$descriptor,$remoteAnnotation,$remoteNameAnnotation,$controllerBasePath,$controllerPrefix);
+		$cacheHash = md5($this->directApiStorageKey . $namespace . serialize($this->frameworkConfiguration['switchableControllerActions']));
+		$cachedApi = ($cache) ? t3lib_pageSelect::getHash($cacheHash) : FALSE;
+		
+		if ($cachedApi) {
+			$api = unserialize(t3lib_pageSelect::getHash($cacheHash));
+		} else {
+			$api = $this->createApi($routeUrl,$namespace);
+			t3lib_pageSelect::storeHash($cacheHash,serialize($api),$this->directApiStorageKey);
+		}
+			// prepare output variable
+		$jsCode = '';
+		$descriptor = $namespace . '.' . $name;
 			// build up the output
 		$jsCode .= 'Ext.ns(\'' . $namespace . '\'); ' . "\n";
 		$jsCode .= $descriptor . ' = ';
-        $jsCode .= json_encode($apiArray);
+        $jsCode .= json_encode($api);
         $jsCode .= ";\n";
         $jsCode .= 'Ext.Direct.addProvider(' . $descriptor . ');' . "\n";
         	// add the output to the pageRenderer
         $this->pageRenderer->addExtOnReadyCode($jsCode,TRUE);
-        //$this->pageRenderer->addJsInlineCode($descriptor . ' written with ' . get_class($this) . ' at ' . microtime(),$jsCode);
-        $_SESSION['ext-direct-state'] = $this->api->getState();
 	}
 	
 	/**
-	 * Sets neccessary informations for the Ext.Direct API class and gives back
-	 * an array with the remoteDescriptor information.
+	 * Creates the remote api based on the module/plugin configuration.
 	 * 
-	 * @param array $controllers
 	 * @param string $routeUrl
 	 * @param string $namespace
-	 * @param string $descriptor
-	 * @param string $remoteAnnotation
-	 * @param string $controllerBasePath
-	 * @param string $classPrefix
 	 * @return array
 	 */
-	private function getApi($controllers,$routeUrl,$namespace,$descriptor,$remoteAnnotation,$remoteNameAnnotation,$controllerBasePath,$classPrefix) {
-		$this->api->setRouterUrl($routeUrl);
-		$this->api->setNamespace($namespace);
-		$this->api->setDescriptor($descriptor);
-		$this->api->setRemoteAttribute($remoteAnnotation);
-		$this->api->setNameAttribute($remoteNameAnnotation);
-		$this->api->setDefaults(array(
-		    'basePath' => $controllerBasePath
-		));
-		$this->api->add(
-		    $controllers,
-		    array(
-		    	'prefix' => $classPrefix
-		    )
-		);
-		return $this->api->output(FALSE);
+	protected function createApi($routeUrl,$namespace) {
+		$api = array();
+		$api['url'] = $routeUrl;
+		$api['type'] = 'remoting';
+		$api['namespace'] = $namespace;
+		$api['actions'] = array();
+		$reflectionService = Tx_MvcExtjs_DirectDispatcher::getReflectionService();
+		foreach ($this->frameworkConfiguration['switchableControllerActions'] as $allowedControllerActions) {
+			$controllerName = $allowedControllerActions['controller'];
+			$unstrippedControllerName = $controllerName . 'Controller';
+			$controllerObjectName = 'Tx_' . $this->controllerContext->getRequest()->getControllerExtensionName() . '_Controller_' . $unstrippedControllerName;
+			$actions = explode(',',$allowedControllerActions['actions']);
+			$controllerActions = array();
+			foreach ($actions as $actionName) {
+				$unstrippedActionName = $actionName . 'Action';
+				try  {
+					$actionParameters = $reflectionService->getMethodParameters($controllerObjectName,$unstrippedActionName);
+					$controllerActions[] = array(
+						'len' => count($actionParameters),
+						'name' => $unstrippedActionName
+					);
+				} catch (ReflectionException $re) {
+					if ($unstrippedActionName !== 'extObjAction') {
+						t3lib_div::sysLog('You have a not existing action (' . $controllerObjectName . '::' . $unstrippedActionName . ') in your module/plugin configuration. It will not be available for Ext.Direct remote execution.','MvcExtjs',1);
+					}
+				}
+			}
+			$api['actions'][$unstrippedControllerName] = $controllerActions;
+		}
+		return $api;
 	}
 
 }

@@ -22,9 +22,9 @@ Ext.ux.TYPO3.MvcExtjs.DirectFlashMessageDispatcher = function(){
 	};
 	
 	var fetchMessagesAndFire = function(event, provider) {
-		if (event.flashMessages) {
-			flashMessages = event.flashMessages;
-			delete event.flashMessages;
+		if (event.result.flashMessages) {
+			flashMessages = event.result.flashMessages;
+			delete event.result.flashMessages;
 			directFlashMessages.fireEvent('new',flashMessages);
 		}
 	};
