@@ -46,12 +46,21 @@ class Tx_MvcExtjs_ViewHelpers_Json_FlashMessagesViewHelper extends Tx_Fluid_Core
 		if (is_array($flashMessages) && count($flashMessages) > 0) {
 			$responseArray['flashMessages'] = array();
 			foreach ($flashMessages as $flashMessage) {
-				$flashMessageArray = array(
-					'message' => $flashMessage->getMessage(),
-					'type' => $flashMessage->getType(),
-					'tstamp' => $flashMessage->getTime()->format('U')
-				);
-				$responseArray['flashMessages'][] = $flashMessageArray;
+				if ($flashMessage instanceof Tx_Extbase_MVC_Controller_FlashMessage) {
+					$flashMessageArray = array(
+						'message' => $flashMessage->getMessage(),
+						'type' => $flashMessage->getType(),
+						'tstamp' => $flashMessage->getTime()->format('U')
+					);
+					$responseArray['flashMessages'][] = $flashMessageArray;
+				} else {
+					$flashMessageArray = array(
+						'message' => $flashMessage,
+						'type' => 'notice',
+						'tstamp' => time()
+					);
+					$responseArray['flashMessages'][] = $flashMessageArray;
+				}
 			}
 		}
 		return json_encode($responseArray);

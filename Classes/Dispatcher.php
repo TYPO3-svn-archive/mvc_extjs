@@ -130,7 +130,7 @@ class Tx_MvcExtjs_Dispatcher extends Tx_Extbase_Dispatcher {
 		
 		$responseData = array(); 
 		foreach ($requests as $requestNumber => $requestData) {
-			$this->compareDirectRequestWithDirectApi($request); // throws Exception if something went wrong!
+			$this->compareDirectRequestWithDirectApi($requestData); // throws Exception if something went wrong!
 			$request = $this->requestBuilder->build($requestData);
 			if (isset($this->cObj->data) && is_array($this->cObj->data)) {
 					// we need to check the above conditions as cObj is not available in Backend.
@@ -170,20 +170,20 @@ class Tx_MvcExtjs_Dispatcher extends Tx_Extbase_Dispatcher {
 	
 	/**
 	 * Makes sure, that the called action is included in the Ext.Direct API
-	 * descriptor.
+	 * descriptor that was generated for the called module/plugin.
 	 * 
-	 * @param array $request
+	 * @param array $requestData
 	 * @throws Tx_MvcExtjs_ExtJS_Exception
 	 * @return void
 	 */
-	private function compareDirectRequestWithDirectApi($request) {
+	private function compareDirectRequestWithDirectApi(array $requestData) {
 		$actionApi = $this->directApi['actions'][$requestData['action']];
 		if (!isset($actionApi)) {
 			throw new Tx_MvcExtjs_ExtJS_Exception('Ext.Direct has called a controller (' . $requestData['action'] . ') that is not included in the generated API. That should never happen.',1277804445);
 		} else {
 			$methodIsDescribed = FALSE;
 			foreach ($actionApi as $methodApi) {
-				if (isset($methodApi[$requestData['method']])) {
+				if ($methodApi["name"] === $requestData['method']) {
 					$methodIsDescribed = TRUE;
 					break;
 				}
