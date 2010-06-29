@@ -5,7 +5,8 @@ if (!defined ('TYPO3_MODE')) {
 
 if (TYPO3_MODE == 'BE') {
 
-	$TBE_MODULES['_dispatcher'][] = 'Tx_MvcExtjs_DirectDispatcher';
+	$TBE_MODULES['_dispatcher'][] = $TBE_MODULES['_dispatcher'][0];
+	$TBE_MODULES['_dispatcher'][0] = 'Tx_MvcExtjs_Dispatcher';
 
 }
 

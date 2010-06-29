@@ -29,7 +29,7 @@
  * This class is the main entry point for Ext.Direct RPC's that should be handled
  * by extbase.
  *
- * @package mvcExtjs
+ * @package MvcExtjs
  * @version $ID:$
  */
 class Tx_MvcExtjs_Dispatcher extends Tx_Extbase_Dispatcher {
@@ -38,6 +38,11 @@ class Tx_MvcExtjs_Dispatcher extends Tx_Extbase_Dispatcher {
 	 * @var Tx_MvcExtjs_MVC_Web_DirectRequestBuilder
 	 */
 	protected $requestBuilder;
+	
+	/**
+	 * @var array
+	 */
+	protected $directApi;
 	/**
 	 * Parses the request an dispatches it to the controllers.
 	 *
@@ -80,6 +85,8 @@ class Tx_MvcExtjs_Dispatcher extends Tx_Extbase_Dispatcher {
 		//$normalDispatcher = t3lib_div::makeInstance('Tx_Extbase_Dispatcher');
 		//$normalDispatcher->initializeConfigurationManagerAndFrameworkConfiguration($configuration);
 		
+		t3lib_div::sysLog('dipatch Direct Request: ' . print_r($request,true),'MvcExtjs',0);
+		
 		$response = t3lib_div::makeInstance('Tx_MvcExtjs_MVC_Web_DirectResponse',$request);
 
 		$this->timeTrackPull();
@@ -107,20 +114,24 @@ class Tx_MvcExtjs_Dispatcher extends Tx_Extbase_Dispatcher {
 	 * @param array $configuration
 	 * @return string
 	 */
-	private function processDirectRequests($requests,$configuration) {
+	private function processDirectRequests($requests,$configuration) {	
 		$response = t3lib_div::makeInstance('Tx_Extbase_MVC_Web_Response');
 		$response->setHeader('Content-Type','text/javascript');
 		
 		$this->initializeConfigurationManagerAndFrameworkConfiguration($configuration);
 		
 		$this->requestBuilder = t3lib_div::makeInstance('Tx_MvcExtjs_MVC_Web_DirectRequestBuilder');
-		$this->requestBuilder->initialize(self::$extbaseFrameworkConfiguration,self::$reflectionService);
+		$this->requestBuilder->initialize(self::$extbaseFrameworkConfiguration);
+		
+		$directService = t3lib_div::makeInstance('Tx_MvcExtjs_ExtJS_DirectApi');
+		$this->directApi = $directService->getApi('','',TRUE,FALSE);
 		
 		$persistenceManager = self::getPersistenceManager();
 		
 		$responseData = array(); 
 		foreach ($requests as $requestNumber => $requestData) {
-			$request = $this->requestBuilder->build($requestData['directRequestData']);
+			$this->compareDirectRequestWithDirectApi($request); // throws Exception if something went wrong!
+			$request = $this->requestBuilder->build($requestData);
 			if (isset($this->cObj->data) && is_array($this->cObj->data)) {
 					// we need to check the above conditions as cObj is not available in Backend.
 				$request->setContentObjectData($this->cObj->data);
@@ -155,6 +166,32 @@ class Tx_MvcExtjs_Dispatcher extends Tx_Extbase_Dispatcher {
 		}
 		$this->timeTrackPull();
 		return $response->getContent();
+	}
+	
+	/**
+	 * Makes sure, that the called action is included in the Ext.Direct API
+	 * descriptor.
+	 * 
+	 * @param array $request
+	 * @throws Tx_MvcExtjs_ExtJS_Exception
+	 * @return void
+	 */
+	private function compareDirectRequestWithDirectApi($request) {
+		$actionApi = $this->directApi['actions'][$requestData['action']];
+		if (!isset($actionApi)) {
+			throw new Tx_MvcExtjs_ExtJS_Exception('Ext.Direct has called a controller (' . $requestData['action'] . ') that is not included in the generated API. That should never happen.',1277804445);
+		} else {
+			$methodIsDescribed = FALSE;
+			foreach ($actionApi as $methodApi) {
+				if (isset($methodApi[$requestData['method']])) {
+					$methodIsDescribed = TRUE;
+					break;
+				}
+			}
+			if (!$methodIsDescribed) {
+				throw new Tx_MvcExtjs_ExtJS_Exception('Ext.Direct has called a the action (' . $requestData['method'] . ') on controller (' . $requestData['action'] . ') that is not included in the generated API. That should never happen.',1277804445);
+			}
+		}
 	}
 	
 	/**

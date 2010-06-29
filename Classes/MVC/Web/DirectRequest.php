@@ -71,7 +71,7 @@ class Tx_MvcExtjs_MVC_Web_DirectRequest extends Tx_Extbase_MVC_Web_Request {
 	 * @var boolean TRUE if the current request is cached, false otherwise.
 	 */
 	protected $isCached = FALSE;
-
+	
 	/**
 	 * Sets the Transaction Id (tid).
 	 * 

@@ -83,7 +83,7 @@ class Tx_MvcExtjs_MVC_Web_DirectRequestBuilder {
 	 * @param Tx_Extbase_Reflection_Service $reflectionService
 	 * @return void
 	 */
-	public function initialize($configuration, Tx_Extbase_Reflection_Service $reflectionService) {
+	public function initialize($configuration) {
 		if (!empty($configuration['pluginName'])) {
 			$this->pluginName = $configuration['pluginName'];
 		}
@@ -112,18 +112,16 @@ class Tx_MvcExtjs_MVC_Web_DirectRequestBuilder {
 			}
 		}
 		$this->allowedControllerActions = $allowedControllerActions;
-		$this->reflectionService = $reflectionService;
+		$this->reflectionService = t3lib_div::makeInstance('Tx_Extbase_Reflection_Service');
 	}
 
 	/**
 	 * Builds a Ext.Direct web request object from the raw HTTP information the configuration and the given
 	 * Ext.Direct request informations.
-	 * Note:
-	 * Ext.Direct tells about action->method.
-	 * Extbase knows about controller->action.
+	 * Note: Ext.Direct tells about action->method. Extbase knows about controller->action.
 	 * 
 	 * @param array $requestData
-	 * @return Tx_Extbase_MVC_Web_Request The web request as an object
+	 * @return Tx_MvcExtjs_MVC_Web_DirectRequest The web request as an object
 	 */
 	public function build($requestData) {	
 		$controllerName = str_replace('Controller','',$requestData['action']);
