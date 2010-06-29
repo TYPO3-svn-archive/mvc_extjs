@@ -138,37 +138,7 @@ class Tx_MvcExtjs_DirectDispatcher extends Tx_Extbase_Dispatcher {
 		return $response->getContent();
 	}
 	
-	/**
-	 * Parses the request like it is done in the Router.php
-	 * contained in the PHP implementation of Tommy Maintz.
-	 * 
-	 * TODO: FE compatibility (BACKPATH)
-	 * 
-	 * @return array
-	 */
-	protected function parseRequest() {	
-		$configuration = $this->resolveModuleConfiguration();
-		$requests = array();
-		if (isset($GLOBALS['HTTP_RAW_POST_DATA'])){
-			$requests = json_decode($GLOBALS['HTTP_RAW_POST_DATA'],TRUE);
-			if (isset($requests['action']) && isset($requests['method']) && isset($requests['tid']) ) {
-				$requests = array($requests);
-			}
-		} else if (isset($_POST['extAction'])){ // form post
-			$requests[0]['action'] = $_POST['extAction'];
-			$requests[0]['method'] = $_POST['extMethod'];
-			$requests[0]['tid'] = $_POST['extTID'];
-			$requests[0]['data'] = array($_POST, $_FILES);
-		} else {
-				// other kinds of rpc's may be handled here
-			throw new Tx_MvcExtjs_ExtJS_Exception('Invalid RPC format',1277309575);
-		}
-			// BACK_PATH is the path from the typo3/ directory from within the
-			// directory containing the controller file. We are using mod.php dispatcher
-			// and thus we are already within typo3/ because we call typo3/mod.php
-		$GLOBALS['BACK_PATH'] = '';
-		return $this->processRequests($requests,$configuration);
-	}
+	
 	
 	/**
 	 * Processes the requests that came in.

@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2009 Jochen Rau <jochen.rau@typoplanet.de>
+*  (c) 2010 Dennis Ahrens <dennis.ahrens@googlemail.com>
 *  All rights reserved
 *
 *  This class is a backport of the corresponding class of FLOW3.
@@ -28,7 +28,7 @@
 /**
  * Represents a Ext.Direct request.
  *
- * @package Extbase
+ * @package MvcExtjs
  * @subpackage MVC\Web
  * @version $ID:$
  *

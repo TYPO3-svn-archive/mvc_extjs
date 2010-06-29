@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2009 Jochen Rau <jochen.rau@typoplanet.de>
+*  (c) 2010 Dennis Ahrens <dennis.ahrens@googlemail.com>
 *  All rights reserved
 *
 *  This class is a backport of the corresponding class of FLOW3.
@@ -28,7 +28,7 @@
 /**
  * Builds a Ext.Direct web request.
  *
- * @package Extbase
+ * @package MvcExtjs
  * @subpackage MVC\Web
  * @version $ID:$
  *
@@ -65,7 +65,7 @@ class Tx_MvcExtjs_MVC_Web_DirectRequestBuilder {
 	protected $defaultActionName = 'index';
 
 	/**
-	 * The allowed actions of the controller. This actions can be called via $_GET and $_POST.
+	 * The allowed actions of the controller. This actions can be called via Ext.Direct
 	 *
 	 * @var array
 	 */
@@ -116,10 +116,11 @@ class Tx_MvcExtjs_MVC_Web_DirectRequestBuilder {
 	}
 
 	/**
-	 * Builds a web request object from the raw HTTP information the configuration and the given
+	 * Builds a Ext.Direct web request object from the raw HTTP information the configuration and the given
 	 * Ext.Direct request informations.
-	 * Ext.Direct calls it action->method.
-	 * Extbase calls it controller->action.
+	 * Note:
+	 * Ext.Direct tells about action->method.
+	 * Extbase knows about controller->action.
 	 * 
 	 * @param array $requestData
 	 * @return Tx_Extbase_MVC_Web_Request The web request as an object
@@ -127,9 +128,6 @@ class Tx_MvcExtjs_MVC_Web_DirectRequestBuilder {
 	public function build($requestData) {	
 		$controllerName = str_replace('Controller','',$requestData['action']);
 		$actionName = str_replace('Action','',$requestData['method']);
-		t3lib_div::sysLog('controllerName: ' . $controllerName,'MvcExtjs',0);
-		t3lib_div::sysLog('actionName: ' . $actionName,'MvcExtjs',0);
-		t3lib_div::sysLog('allowedControllerActions: ' . print_r($this->allowedControllerActions,true),'MvcExtjs',0);
 		$parameters = $requestData['data'];
 		$tid = $requestData['tid'];
 		
@@ -142,7 +140,6 @@ class Tx_MvcExtjs_MVC_Web_DirectRequestBuilder {
 				$actionName = $this->defaultActionName;
 			}
 		} else {
-			t3lib_div::sysLog('soes not exist','MvcExtjs',0);
 			$controllerName = $this->defaultControllerName;
 			$actionName = $this->defaultActionName;
 		}				
@@ -166,7 +163,8 @@ class Tx_MvcExtjs_MVC_Web_DirectRequestBuilder {
 		
 		t3lib_div::sysLog('actionParams: ' . print_r($actionParameter,true),'MvcExtjs',0);
 		t3lib_div::sysLog('given Params: ' . print_r($parameters,true),'MvcExtjs',0);
-			// many Ext.Direct requests do not always specify a name for the arguments
+			// many Ext.Direct requests don't specify a name for the arguments
+			// TODO: evaluate if they sometimes specify
 		foreach ($parameters as $argumentPosition => $incomingArgumentValue) {
 			$argumentName = $this->resolveArgumentName($argumentPosition,$actionParameter);
 			$argumentValue = $this->transformArgumentValue($incomingArgumentValue,$actionParameter[$argumentName]);
@@ -177,7 +175,7 @@ class Tx_MvcExtjs_MVC_Web_DirectRequestBuilder {
 	
 	/**
 	 * Transforms the incoming arguments from the Ext.Direct request into
-	 * the argument syntax that is used by fluid.
+	 * the argument syntax that is used by fluid and extbase.
 	 * 
 	 * TODO: reconstruction of modified objects
 	 * 
@@ -208,17 +206,19 @@ class Tx_MvcExtjs_MVC_Web_DirectRequestBuilder {
 	}
 	
 	/**
-	 * Resolved the name of the argument.
+	 * Resolves the name of the argument.
 	 * 
+	 * @param int $argumentPosition
+	 * @param array $actionParameters
 	 * @return string
 	 */
-	protected function resolveArgumentName($argumentPosition, $actionParameter) {
-		foreach ($actionParameter as $argumentName => $argumentConfiguration) {
+	protected function resolveArgumentName($argumentPosition, array $actionParameters) {
+		foreach ($actionParameters as $argumentName => $argumentConfiguration) {
 			if ($argumentPosition === $argumentConfiguration['position']) {
 				return $argumentName;
 			}
 		}
-		throw new Tx_Extbase_MVC_Exception_NoSuchArgument('Could not map a Ext.Direct argument to action. There is no argument expected for position ' . $argumentPosition,1277724391);
+		throw new Tx_Extbase_MVC_Exception_NoSuchArgument('Could not map a Ext.Direct argument to it\'s action. There is no argument expected for position ' . $argumentPosition,1277724391);
 	}
 
 

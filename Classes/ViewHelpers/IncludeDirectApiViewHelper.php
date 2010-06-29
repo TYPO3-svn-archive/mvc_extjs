@@ -55,9 +55,7 @@ class Tx_MvcExtjs_ViewHelpers_IncludeDirectApiViewHelper extends Tx_MvcExtjs_Vie
 	 */
 	public function initializeArguments() {
 		$this->frameworkConfiguration = Tx_Extbase_Dispatcher::getExtbaseFrameworkConfiguration();
-			// TODO: StorageKey is used for t3lib_pageSelect hash functions
-			// the indent there is limitted to 32 chars in DB
-		$this->directApiStorageKey = 'API_' . $this->frameworkConfiguration['pluginName'];
+		$this->directApiStorageKey = md5('Tx_MvcExtjs_ExtDirect_API_' . $this->frameworkConfiguration['pluginName']);;
 	}
 	
 	/**
