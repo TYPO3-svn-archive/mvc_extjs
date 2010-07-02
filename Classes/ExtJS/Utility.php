@@ -142,8 +142,8 @@ class Tx_MvcExtjs_ExtJS_Utility {
 	}
 
 	/**
-	 * creates a Tx_MvcExtjs_ExtJS_Array Object filled up with field configurations based on the given $class
-	 * EXPERIMENTAL
+	 * Creates a Tx_MvcExtjs_ExtJS_Array Object filled up with field configurations based on the given $class
+	 * DEPRECATED - use extbase reflection instead.
 	 * 
 	 * @param string $class the class u like to fetch the fieldsArray for
 	 * @param mixed $obj an instance of this class

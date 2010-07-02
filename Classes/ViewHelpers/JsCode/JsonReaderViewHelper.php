@@ -105,14 +105,15 @@ class Tx_MvcExtjs_ViewHelpers_JsCode_JsonReaderViewHelper extends Tx_MvcExtjs_Vi
 			// Build up and set the for the JS store variable
 		$varNameReader = $domainModel . 'JsonReader';
 		$this->reader->setName($varNameReader);
-		$fields = Tx_MvcExtjs_ExtJS_Utility::getFieldsArray($domainClassName);
+		//$fields = Tx_MvcExtjs_ExtJS_Utility::getFieldsArray($domainClassName);
+		$fields = $this->createFieldsArray($domainClassName);
 
 			// Read the given config parameters into the Extjs Config Object
 		$this->config->set('totalProperty', $totalProperty)
 					 ->set('successProperty', $successProperty)
 					 ->set('idProperty', $idProperty)
 					 ->set('root', $root)
-					 ->setRaw('fields', $fields);
+					 ->setRaw('fields', json_encode($fields));
 
 			// Apply the configuration again
 		$this->reader->setConfig($this->config);
@@ -121,6 +122,32 @@ class Tx_MvcExtjs_ViewHelpers_JsCode_JsonReaderViewHelper extends Tx_MvcExtjs_Vi
 			// Add the code and write it into the inline section in your HTML head
 		$this->jsCode->addSnippet($this->reader);
 		$this->injectJsCode();
+	}
+	
+	/**
+	 * 
+	 * @param string $className
+	 * @return array
+	 */
+	protected function createFieldsArray($className) {
+		$fields = array();
+		$classObject = t3lib_div::makeInstance($className);
+		$reflectionService = t3lib_div::makeInstance('Tx_Extbase_Reflection_Service');
+		$propertyNames = Tx_Extbase_Reflection_ObjectAccess::getAccessiblePropertyNames($classObject);
+		foreach ($propertyNames as $propertyName) {
+			t3lib_div::sysLog('propertyName: ' . $propertyName,'MvcExtjs',0);
+			$propertyType = $reflectionService->getPropertyTagValues($className, $propertyName, 'var');
+			if (isset($propertyType[0])) {
+				$propertyType = $propertyType[0];
+			} else {
+				throw new Tx_MvcExtjs_ExtJS_Exception('Unable to evalute propertyType for propery: ' . $propertyName . ' of class ' . $className,1278075964);
+			}
+			$fields[] = array(
+				'name' => $propertyName,
+				'type' => $propertyType
+			);
+		}
+		return $fields;
 	}
 
 }
