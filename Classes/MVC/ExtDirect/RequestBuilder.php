@@ -34,7 +34,7 @@
  *
  * @scope prototype
  */
-class Tx_MvcExtjs_MVC_Web_DirectRequestBuilder {
+class Tx_MvcExtjs_MVC_ExtDirect_RequestBuilder {
 
 	/**
 	 * This is a unique key for a plugin (not the extension key!)
@@ -142,7 +142,7 @@ class Tx_MvcExtjs_MVC_Web_DirectRequestBuilder {
 			$actionName = $this->defaultActionName;
 		}				
 		
-		$request = t3lib_div::makeInstance('Tx_MvcExtjs_MVC_Web_DirectRequest');
+		$request = t3lib_div::makeInstance('Tx_MvcExtjs_MVC_ExtDirect_Request');
 		$request->setPluginName($this->pluginName);
 		$request->setControllerExtensionName($this->extensionName);
 		$request->setControllerName($controllerName);
@@ -155,12 +155,11 @@ class Tx_MvcExtjs_MVC_Web_DirectRequestBuilder {
 
 		if (is_string($parameters['format']) && (strlen($parameters['format']))) {
 			$request->setFormat(filter_var($parameters['format'], FILTER_SANITIZE_STRING));
+			unset($parameters['format']);
 		}
 				
 		$actionParameter = $this->reflectionService->getMethodParameters($request->getControllerObjectName(),$request->getControllerActionName() . 'Action');
-		
-		t3lib_div::sysLog('actionParams: ' . print_r($actionParameter,true),'MvcExtjs',0);
-		t3lib_div::sysLog('given Params: ' . print_r($parameters,true),'MvcExtjs',0);
+
 			// many Ext.Direct requests don't specify a name for the arguments
 			// TODO: evaluate if they sometimes specify
 		foreach ($parameters as $argumentPosition => $incomingArgumentValue) {
@@ -195,6 +194,14 @@ class Tx_MvcExtjs_MVC_Web_DirectRequestBuilder {
 					unset($incomingArgumentValueDescription['data']['uid']);
 				}
 				//$argumentValueDescription = $incomingArgumentValueDescription['data'];
+				$argumentValueDescription = array();
+				foreach ($incomingArgumentValueDescription['data'] as $propertyName => $propertyValue) {
+					if ($propertyValue === NULL || (is_array($propertyValue) && count($propertyValue) === 0)) {
+						break;
+					} else {
+						$argumentValueDescription[$propertyName] = $propertyValue;
+					}
+				}
 				$argumentValueDescription['__identity'] = $uid;
 				return $argumentValueDescription;
 			}

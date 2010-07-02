@@ -27,6 +27,9 @@
 
 /**
  * A web specific response implementation
+ * 
+ * TODO: When extbase request handling is made dont extends Tx_Extbase_MVC_Web_Response
+ * but extend Tx_Extbase_MVC_Response
  *
  * @package Extbase
  * @subpackage MVC\Web
@@ -34,7 +37,7 @@
  * @scope prototype
  * @api
  */
-class Tx_MvcExtjs_MVC_Web_DirectResponse extends Tx_Extbase_MVC_Web_Response {
+class Tx_MvcExtjs_MVC_ExtDirect_Response extends Tx_Extbase_MVC_Web_Response {
 	
 	/**
 	 * @var int
@@ -56,7 +59,14 @@ class Tx_MvcExtjs_MVC_Web_DirectResponse extends Tx_Extbase_MVC_Web_Response {
 	 */
 	protected $type;
 	
-	public function __construct(Tx_MvcExtjs_MVC_Web_DirectRequest $request) {
+	/**
+	 * Default constructor.
+	 * Build up the response based on the request.
+	 * 
+	 * @param Tx_MvcExtjs_MVC_ExtDirect_Request $request
+	 * @return unknown_type
+	 */
+	public function __construct(Tx_MvcExtjs_MVC_ExtDirect_Request $request) {
 		$this->tid = $request->getTransactionId();
 		$this->controllerName = $request->getControllerName();
 		$this->controllerActionName = $request->getControllerActionName();
@@ -140,6 +150,8 @@ class Tx_MvcExtjs_MVC_Web_DirectResponse extends Tx_Extbase_MVC_Web_Response {
 	}
 	
 	/**
+	 * Returns the Ext.Direct response content.
+	 * 
 	 * @see typo3/sysext/extbase/Classes/MVC/Tx_Extbase_MVC_Response#getContent()
 	 */
 	public function getContent() {
@@ -149,6 +161,10 @@ class Tx_MvcExtjs_MVC_Web_DirectResponse extends Tx_Extbase_MVC_Web_Response {
 		$response['action'] = $this->controllerName;
 		$response['method'] = $this->controllerActionName;
 			// decode the encoded answers from the ViewHelpers...
+		$result = json_decode($this->content);
+		if ($result === NULL) {
+			throw new Tx_MvcExtjs_ExtJS_Exception('The action result (content) is no valid json string: ' . $this->content,1277980165);
+		}
 		$response['result'] = json_decode($this->content);
 		return json_encode($response);
 	}

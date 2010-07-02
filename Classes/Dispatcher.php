@@ -35,7 +35,7 @@
 class Tx_MvcExtjs_Dispatcher extends Tx_Extbase_Dispatcher {
 	
 	/**
-	 * @var Tx_MvcExtjs_MVC_Web_DirectRequestBuilder
+	 * @var Tx_MvcExtjs_MVC_ExtDirect_RequestBuilder
 	 */
 	protected $requestBuilder;
 	
@@ -85,9 +85,7 @@ class Tx_MvcExtjs_Dispatcher extends Tx_Extbase_Dispatcher {
 		//$normalDispatcher = t3lib_div::makeInstance('Tx_Extbase_Dispatcher');
 		//$normalDispatcher->initializeConfigurationManagerAndFrameworkConfiguration($configuration);
 		
-		t3lib_div::sysLog('dipatch Direct Request: ' . print_r($request,true),'MvcExtjs',0);
-		
-		$response = t3lib_div::makeInstance('Tx_MvcExtjs_MVC_Web_DirectResponse',$request);
+		$response = t3lib_div::makeInstance('Tx_MvcExtjs_MVC_ExtDirect_Response',$request);
 
 		$this->timeTrackPull();
 		$this->timeTrackPush('MvcExtjs dispatches Ext.Direct request.','');
@@ -120,7 +118,7 @@ class Tx_MvcExtjs_Dispatcher extends Tx_Extbase_Dispatcher {
 		
 		$this->initializeConfigurationManagerAndFrameworkConfiguration($configuration);
 		
-		$this->requestBuilder = t3lib_div::makeInstance('Tx_MvcExtjs_MVC_Web_DirectRequestBuilder');
+		$this->requestBuilder = t3lib_div::makeInstance('Tx_MvcExtjs_MVC_ExtDirect_RequestBuilder');
 		$this->requestBuilder->initialize(self::$extbaseFrameworkConfiguration);
 		
 		$directService = t3lib_div::makeInstance('Tx_MvcExtjs_ExtJS_DirectApi');

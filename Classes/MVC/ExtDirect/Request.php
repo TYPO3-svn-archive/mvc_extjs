@@ -28,6 +28,9 @@
 /**
  * Represents a Ext.Direct request.
  *
+ *
+ * TODO: When extbase request handling is made dont extends Tx_Extbase_MVC_Web_Request
+ * but extend Tx_Extbase_MVC_Request
  * @package MvcExtjs
  * @subpackage MVC\Web
  * @version $ID:$
@@ -35,7 +38,7 @@
  * @scope prototype
  * @api
  */
-class Tx_MvcExtjs_MVC_Web_DirectRequest extends Tx_Extbase_MVC_Web_Request {
+class Tx_MvcExtjs_MVC_ExtDirect_Request extends Tx_Extbase_MVC_Web_Request {
 	
 	/**
 	 * @var int The transaction id.
