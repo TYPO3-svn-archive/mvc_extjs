@@ -160,12 +160,16 @@ class Tx_MvcExtjs_MVC_ExtDirect_RequestBuilder {
 				
 		$actionParameter = $this->reflectionService->getMethodParameters($request->getControllerObjectName(),$request->getControllerActionName() . 'Action');
 
-			// many Ext.Direct requests don't specify a name for the arguments
-			// TODO: evaluate if they sometimes specify
-		foreach ($parameters as $argumentPosition => $incomingArgumentValue) {
-			$argumentName = $this->resolveArgumentName($argumentPosition,$actionParameter);
-			$argumentValue = $this->transformArgumentValue($incomingArgumentValue,$actionParameter[$argumentName]);
-			$request->setArgument($argumentName, $argumentValue);
+			// many Ext.Direct requests don't specify a name for the arguments - they have to match by position
+			// if we call a remote action ourself in JavaScript we can specify the name. TEST! FAILED!
+		if (is_array($parameters)) {
+			foreach ($parameters as $argumentPosition => $incomingArgumentValue) {
+				$argumentName = $this->resolveArgumentName($argumentPosition,$actionParameter);
+				t3lib_div::sysLog('argumentName: ' . print_r($argumentName,true),'MvcExtjs',0);
+				$argumentValue = $this->transformArgumentValue($incomingArgumentValue,$actionParameter[$argumentName]);
+				t3lib_div::sysLog('argumentValue: ' . print_r($argumentValue,true),'MvcExtjs',0);
+				$request->setArgument($argumentName, $argumentValue);
+			}
 		}
 		return $request;
 	}
@@ -173,8 +177,6 @@ class Tx_MvcExtjs_MVC_ExtDirect_RequestBuilder {
 	/**
 	 * Transforms the incoming arguments from the Ext.Direct request into
 	 * the argument syntax that is used by fluid and extbase.
-	 * 
-	 * TODO: reconstruction of modified objects
 	 * 
 	 * @param mixed $incomingArgumentValueDescription
 	 * @param array $actionParameterDescription

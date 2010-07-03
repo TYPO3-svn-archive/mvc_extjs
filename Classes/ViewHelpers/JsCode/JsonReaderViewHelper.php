@@ -135,9 +135,9 @@ class Tx_MvcExtjs_ViewHelpers_JsCode_JsonReaderViewHelper extends Tx_MvcExtjs_Vi
 		$reflectionService = t3lib_div::makeInstance('Tx_Extbase_Reflection_Service');
 		$propertyNames = Tx_Extbase_Reflection_ObjectAccess::getAccessiblePropertyNames($classObject);
 		foreach ($propertyNames as $propertyName) {
-			t3lib_div::sysLog('propertyName: ' . $propertyName,'MvcExtjs',0);
 			$propertyType = $reflectionService->getPropertyTagValues($className, $propertyName, 'var');
 			if (isset($propertyType[0])) {
+				$propertyType = explode(' ',$propertyType[0]);
 				$propertyType = $propertyType[0];
 			} else {
 				throw new Tx_MvcExtjs_ExtJS_Exception('Unable to evalute propertyType for propery: ' . $propertyName . ' of class ' . $className,1278075964);

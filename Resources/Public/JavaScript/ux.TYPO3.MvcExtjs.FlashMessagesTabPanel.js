@@ -9,15 +9,13 @@ Ext.ux.TYPO3.MvcExtjs.FlashMessagesTabPanel = function(){
 	var tabPabel;
 	
 	var addMessages = function(msgs) {
-		flushMessages();
+		flush();
 		newMessages.addAll(msgs);
 		newMessages.each(function(message,index,length) {
-			iconCls = Ext.ux.TDGi.iconMgr.getT3Icon(message.type+'.png'),
 			tmpTab = new Ext.Panel({
 				title: message.type,
 				tstamp: message.tstamp,
 				id: message.message + '-' + message.tstamp,
-				iconCls: iconCls,
 				html: message.message,
 				closable: true
 			});
@@ -28,7 +26,7 @@ Ext.ux.TYPO3.MvcExtjs.FlashMessagesTabPanel = function(){
 	 * Makes all currently new Messages become old.
 	 * The tabs are removed and the message object move from newMessages to oldMessages
 	 */
-	var flushMessages = function(message) {
+	var flush = function(message) {
 		newMessages.each(function(message,index,length) {
 			panelToRemove = tabPanel.findById(message.message + '-' + message.tstamp);
 			if (panelToRemove) tabPanel.remove(panelToRemove);
@@ -45,12 +43,6 @@ Ext.ux.TYPO3.MvcExtjs.FlashMessagesTabPanel = function(){
 		tabConfig = Ext.apply({
 			region: 'north',
 			height: 120,
-			tabHeight: 10,
-			plugins: [ new Ext.ux.TabScrollerMenu({
-	    		maxText  : 30,
-	    		pageSize : 10,
-	    		menuPrefixText: 'Tab'
-	    	})],
 	    	listeners: {
 				add: function(tabPanel, addedComponent, index) {
 					tabPanel.activate(addedComponent);
@@ -60,9 +52,8 @@ Ext.ux.TYPO3.MvcExtjs.FlashMessagesTabPanel = function(){
 		tmpTabs = new Ext.TabPanel(tabConfig);
 		tmpTabs.add({
 			xtype: 'panel',
-			title: 'Nachrichten',
-			iconCls: Ext.ux.TDGi.iconMgr.getT3Icon('notice.png'),
-			html: 'FlashMessage Anzeige ...',
+			title: 'FlashMessages',
+			html: 'FlashMessages will be opened in new tab, if there are any sent by a controller.',
 			closable: false
 		});
 		return tmpTabs;
@@ -73,6 +64,7 @@ Ext.ux.TYPO3.MvcExtjs.FlashMessagesTabPanel = function(){
 		newMessages = new Ext.util.MixedCollection();
 		tabPanel = createTabPanel(config);
 		Ext.ux.TYPO3.MvcExtjs.DirectFlashMessageDispatcher.on('new',addMessages);
+		
 	};
 	
     return Ext.apply(new Ext.util.Observable, {

@@ -59,7 +59,9 @@ class Tx_MvcExtjs_ViewHelpers_Json_StoreReadResponseViewHelper extends Tx_Fluid_
 		}
 
 		$responseArray['data'] = $dataArray;
-
+		
+		t3lib_div::sysLog('storeReadResponse: ' . print_r($responseArray,true), 'MvcExtjs', 0);
+		
 		return json_encode($responseArray);
 	}
 
