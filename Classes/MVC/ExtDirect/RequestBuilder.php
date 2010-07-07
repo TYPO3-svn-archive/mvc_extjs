@@ -128,7 +128,7 @@ class Tx_MvcExtjs_MVC_ExtDirect_RequestBuilder {
 		$actionName = str_replace('Action','',$requestData['method']);
 		$parameters = $requestData['data'];
 		$tid = $requestData['tid'];
-		
+			
 		if (is_string($controllerName) && array_key_exists($controllerName, $this->allowedControllerActions)) {
 			$controllerName = filter_var($controllerName, FILTER_SANITIZE_STRING);
 			$allowedActions = $this->allowedControllerActions[$controllerName];
@@ -157,7 +157,7 @@ class Tx_MvcExtjs_MVC_ExtDirect_RequestBuilder {
 			$request->setFormat(filter_var($parameters['format'], FILTER_SANITIZE_STRING));
 			unset($parameters['format']);
 		}
-				
+		
 		$actionParameter = $this->reflectionService->getMethodParameters($request->getControllerObjectName(),$request->getControllerActionName() . 'Action');
 
 			// many Ext.Direct requests don't specify a name for the arguments - they have to match by position
@@ -165,9 +165,7 @@ class Tx_MvcExtjs_MVC_ExtDirect_RequestBuilder {
 		if (is_array($parameters)) {
 			foreach ($parameters as $argumentPosition => $incomingArgumentValue) {
 				$argumentName = $this->resolveArgumentName($argumentPosition,$actionParameter);
-				t3lib_div::sysLog('argumentName: ' . print_r($argumentName,true),'MvcExtjs',0);
 				$argumentValue = $this->transformArgumentValue($incomingArgumentValue,$actionParameter[$argumentName]);
-				t3lib_div::sysLog('argumentValue: ' . print_r($argumentValue,true),'MvcExtjs',0);
 				$request->setArgument($argumentName, $argumentValue);
 			}
 		}
@@ -191,20 +189,24 @@ class Tx_MvcExtjs_MVC_ExtDirect_RequestBuilder {
 				if (isset($incomingArgumentValueDescription['uid'])) {
 					$uid = (int) $incomingArgumentValueDescription['uid'];
 					unset($incomingArgumentValueDescription['data']['uid']);
-				} else {
+				} else if (isset($incomingArgumentValueDescription['data']['uid'])) {
 					$uid = $incomingArgumentValueDescription['data']['uid'];
 					unset($incomingArgumentValueDescription['data']['uid']);
+				} else {
+					$uid = FALSE;
 				}
 				//$argumentValueDescription = $incomingArgumentValueDescription['data'];
 				$argumentValueDescription = array();
 				foreach ($incomingArgumentValueDescription['data'] as $propertyName => $propertyValue) {
 					if ($propertyValue === NULL || (is_array($propertyValue) && count($propertyValue) === 0)) {
-						break;
+						continue;
 					} else {
 						$argumentValueDescription[$propertyName] = $propertyValue;
 					}
 				}
-				$argumentValueDescription['__identity'] = $uid;
+				if ($uid !== FALSE) {
+					$argumentValueDescription['__identity'] = $uid;
+				}
 				return $argumentValueDescription;
 			}
 		} else {

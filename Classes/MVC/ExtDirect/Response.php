@@ -68,8 +68,8 @@ class Tx_MvcExtjs_MVC_ExtDirect_Response extends Tx_Extbase_MVC_Web_Response {
 	 */
 	public function __construct(Tx_MvcExtjs_MVC_ExtDirect_Request $request) {
 		$this->tid = $request->getTransactionId();
-		$this->controllerName = $request->getControllerName();
-		$this->controllerActionName = $request->getControllerActionName();
+		$this->controllerName = $request->getControllerName() . 'Controller';
+		$this->controllerActionName = $request->getControllerActionName() . 'Action';
 		$this->type = $request->getType();
 	}
 	

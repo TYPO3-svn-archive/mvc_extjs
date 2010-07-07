@@ -17,6 +17,7 @@ Ext.ux.TYPO3.MvcExtjs.FlashMessagesTabPanel = function(){
 				tstamp: message.tstamp,
 				id: message.message + '-' + message.tstamp,
 				html: message.message,
+				iconCls: 't3-icon-' + message.type, // TODO: receive a icon class that works
 				closable: true
 			});
 			tabPanel.add(tmpTab);

@@ -40,11 +40,11 @@ class Tx_MvcExtjs_ExtJS_Utility {
 	 * @param array $objects
 	 * @return array
 	 */
-	public static function encodeArrayForJSON(array $objects) {
+	public static function encodeArrayForJSON(array $objects, $lazy = FALSE) {
 		$arr = array();
 
 		foreach ($objects as $object) {
-			$arr[] = self::encodeObjectForJSON($object);
+			$arr[] = self::encodeObjectForJSON($object,array(),$lazy);
 		}
 
 		return $arr;
@@ -54,35 +54,43 @@ class Tx_MvcExtjs_ExtJS_Utility {
 	 * Encodes an object to be used by JSON later on.
 	 *
 	 * @param mixed $object
+	 * @param array $columns
+	 * @param boolean $lazy
 	 * @return array
 	 */
-	public static function encodeObjectForJSON($object) {
+	public static function encodeObjectForJSON($object, array $columns = array(),$lazy = FALSE) {
 		if ($object instanceof DateTime) {
-			return $object->format('r');
-		} elseif (!($object instanceof Tx_Extbase_DomainObject_AbstractEntity)) {
-			return $object;
-		}
+			return $object->format('U');
+		} else if (!($object instanceof Tx_Extbase_DomainObject_AbstractEntity)) {
+            return $object;
+        }
 
-		$arr = array();
+        $arr = array();
 
-		$rc = new ReflectionClass(get_class($object));
-		$properties = $rc->getProperties();
+        $properties = Tx_Extbase_Reflection_ObjectAccess::getAccessibleProperties($object);
 
-		foreach ($properties as $property) {
-			$propertyGetterName = 'get' . ucfirst($property->name);
-
-			if (method_exists($object, $propertyGetterName)) {
-				$value = call_user_func(array($object, $propertyGetterName));
-				if (is_array($value)) {
-					$value = self::encodeArrayForJSON($value);
-				} elseif (is_object($value)) {
-					$value = self::encodeObjectForJSON($value);
-				}
-				$arr[$property->name] = $value;
-			}
-		}
-
-		return $arr;
+        foreach ($properties as $name => $value) {
+            if (count($columns) > 0 && !in_array($property->name, $columns)) {
+                // Current property should not be returned
+                continue;
+            }
+        	if ($value instanceof Tx_Extbase_Persistence_LazyObjectStorage) {
+            	$valueArray = $value->toArray();
+            	if ($lazy === TRUE) {
+            		$value = array();
+            	} else {
+            		$value = self::encodeArrayForJSON($valueArray, TRUE);
+            	}
+            } else if ($value instanceof Tx_Extbase_Persistence_ObjectStorage) {
+            	$valueArray = $value->toArray();
+            	$value = self::encodeArrayForJSON($valueArray, TRUE);
+            }
+        	if (($value instanceof Tx_Extbase_DomainObject_AbstractEntity || $value instanceof DateTime)) {
+         		$value = self::encodeObjectForJSON($value, $columns, TRUE);
+        	}
+            $arr[$name] = $value;
+        }
+        return $arr;
 	}
 
 	/**

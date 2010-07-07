@@ -75,6 +75,9 @@ class Tx_MvcExtjs_ViewHelpers_Json_ArrayViewHelper extends Tx_Fluid_Core_ViewHel
 			if ($childNode instanceof Tx_Fluid_Core_Parser_SyntaxTree_ViewHelperNode) {
 				$childNode->setRenderingContext($this->renderingContext);
 				$jsonData = $childNode->evaluate();
+				if ($jsonData === '') {
+					continue;
+				}
 				$data = json_decode($jsonData,true);
 				if ($data === NULL) {
 					throw new Tx_MvcExtjs_ExtJS_Exception('The ' . $childNode->getViewHelperClassName() . ' nested inside the Json/ArrayViewHelper returned invalid json: ' . $jsonData,1277980165);

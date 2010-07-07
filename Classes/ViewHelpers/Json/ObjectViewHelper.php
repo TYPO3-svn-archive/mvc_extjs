@@ -66,12 +66,16 @@ class Tx_MvcExtjs_ViewHelpers_Json_ObjectViewHelper extends Tx_Fluid_Core_ViewHe
 	 * Renders flashMessages into the response.
 	 *
 	 * @param object $ref
-	 * @return string rendered Flash Messages, if there are any in json format.
+	 * @return string
 	 * @author Dennis Ahrens <dennis.ahrens@fh-hannover.de>
 	 */
-	public function render($ref) {
-		$responseArray = Tx_Extbase_Reflection_ObjectAccess::getAccessibleProperties($ref);
-		foreach ($this->childNodes as $childNode) {
+	public function render($ref, array $columns = array()) {
+		$responseArray = array();
+		$objectArray = Tx_MvcExtjs_ExtJS_Utility::encodeObjectForJSON($ref, $columns);
+		
+		$responseArray = array_merge($responseArray,$objectArray);
+		// TODO: merging objects responded from other ViewHelpers.
+		/*foreach ($this->childNodes as $childNode) {
 			if ($childNode instanceof Tx_Fluid_Core_Parser_SyntaxTree_ViewHelperNode) {
 				$childNode->setRenderingContext($this->renderingContext);
 				$jsonData = $childNode->evaluate();
@@ -79,11 +83,11 @@ class Tx_MvcExtjs_ViewHelpers_Json_ObjectViewHelper extends Tx_Fluid_Core_ViewHe
 				if ($data === NULL) {
 					throw new Tx_MvcExtjs_ExtJS_Exception('The ' . $childNode->getViewHelperClassName() . ' nested inside the Json/ArrayViewHelper returned invalid json: ' . $jsonData,1277980165);
 				}
-				// TODO: merging objects responded from other ViewHelpers.
 				$responseArray[] = $data;
+				t3lib_div::sysLog('data: ' . print_r($data,true),'MvcExtjs',0);
 			}
-		}
-		
+		}*/
+		t3lib_div::sysLog('responseArray: ' . print_r($responseArray,true),'MvcExtjs',0);
 		return json_encode($responseArray);
 	}
 }

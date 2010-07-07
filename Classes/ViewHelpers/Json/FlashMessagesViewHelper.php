@@ -43,6 +43,7 @@ class Tx_MvcExtjs_ViewHelpers_Json_FlashMessagesViewHelper extends Tx_Fluid_Core
 	 */
 	public function render() {
 		$flashMessages = $this->controllerContext->getFlashMessageContainer()->getAllAndFlush();
+		$responseAarray = '{}';
 		if (is_array($flashMessages) && count($flashMessages) > 0) {
 			$responseArray['flashMessages'] = array();
 			foreach ($flashMessages as $flashMessage) {
@@ -63,6 +64,7 @@ class Tx_MvcExtjs_ViewHelpers_Json_FlashMessagesViewHelper extends Tx_Fluid_Core
 				}
 			}
 		}
+		
 		return json_encode($responseArray);
 	}
 }

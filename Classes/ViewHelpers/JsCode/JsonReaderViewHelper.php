@@ -126,6 +126,7 @@ class Tx_MvcExtjs_ViewHelpers_JsCode_JsonReaderViewHelper extends Tx_MvcExtjs_Vi
 	
 	/**
 	 * 
+	 * 
 	 * @param string $className
 	 * @return array
 	 */
@@ -141,6 +142,9 @@ class Tx_MvcExtjs_ViewHelpers_JsCode_JsonReaderViewHelper extends Tx_MvcExtjs_Vi
 				$propertyType = $propertyType[0];
 			} else {
 				throw new Tx_MvcExtjs_ExtJS_Exception('Unable to evalute propertyType for propery: ' . $propertyName . ' of class ' . $className,1278075964);
+			}
+			if (substr($propertyType, 0,36) === 'Tx_Extbase_Persistence_ObjectStorage') {
+				$propertyType = 'array';
 			}
 			$fields[] = array(
 				'name' => $propertyName,

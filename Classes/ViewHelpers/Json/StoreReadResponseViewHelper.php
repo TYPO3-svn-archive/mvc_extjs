@@ -55,43 +55,13 @@ class Tx_MvcExtjs_ViewHelpers_Json_StoreReadResponseViewHelper extends Tx_Fluid_
 		$dataArray = array();
 
 		foreach ($data as $object) {
-			$dataArray[] = $this->buildPropertyArray($object, $columns);
+			$dataArray[] = Tx_MvcExtjs_ExtJS_Utility::encodeObjectForJSON($object, $columns);
 		}
 
 		$responseArray['data'] = $dataArray;
-		
-		t3lib_div::sysLog('storeReadResponse: ' . print_r($responseArray,true), 'MvcExtjs', 0);
-		
+		t3lib_div::sysLog('SRR responseArray: ' . print_r($responseArray,true),'MvcExtjs',0);
 		return json_encode($responseArray);
 	}
-
-	/**
-	 * Builds the property array based on a given object.
-	 * Overload this function in your EXT ViewHelpers to get the answer you want to have.
-	 * This is neccessary, if you have objects, that have relations to other objects f.e.
-	 * 
-	 * @param mixed $object
-	 * @param array $columns
-	 * @return array
-	 */
-	public function buildPropertyArray($object = NULL, array $columns = array()) {
-        if (!($object instanceof Tx_Extbase_DomainObject_AbstractEntity)) {
-            return $object;
-        }
-
-        $arr = array();
-
-        $properties = Tx_Extbase_Reflection_ObjectAccess::getAccessibleProperties($object);
-
-        foreach ($properties as $name => $value) {
-            if (count($columns) > 0 && !in_array($property->name, $columns)) {
-                // Current property should not be returned
-                continue;
-            }
-            $arr[$name] = $value;
-        }
-        return $arr;
-    }
 
 }
 ?>

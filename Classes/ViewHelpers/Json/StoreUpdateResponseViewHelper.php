@@ -44,7 +44,7 @@ class Tx_MvcExtjs_ViewHelpers_Json_StoreUpdateResponseViewHelper extends Tx_Flui
 	 * @param boolean $success
 	 * @return string
 	 */
-	public function render(array $data = NULL, $object = NULL, array $objects = array(), $message = 'default message', $success = TRUE) {
+	public function render(array $data = NULL, $object = NULL, array $objects = array(), $message = 'default message', $success = TRUE, array $columns = array()) {
 		$responseArray = array();
 		$responseArray['message'] = $message;
 		$responseArray['total'] = count($objects);
@@ -56,11 +56,11 @@ class Tx_MvcExtjs_ViewHelpers_Json_StoreUpdateResponseViewHelper extends Tx_Flui
 		if (is_array($data)) {
 			$responseArray['data'] = $data;
 		} else if ($object !== NULL) {
-			$responseArray['data'] = Tx_Extbase_Reflection_ObjectAccess::getAccessibleProperties($object);
+			$responseArray['data'] = Tx_MvcExtjs_ExtJS_Utility::encodeObjectForJSON($object, $columns);
 		} else {
 			$responseArray['data'] = array();
 			foreach ($objects as $object) {
-				$responseArray['data'][] = Tx_Extbase_Reflection_ObjectAccess::getAccessibleProperties($object);
+				$responseArray['data'][] = Tx_MvcExtjs_ExtJS_Utility::encodeObjectForJSON($object, $columns);
 			}
 		}
 

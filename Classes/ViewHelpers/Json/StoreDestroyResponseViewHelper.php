@@ -36,6 +36,7 @@ class Tx_MvcExtjs_ViewHelpers_Json_StoreDestroyResponseViewHelper extends Tx_Flu
 
 	/**
 	 * Renders a JSON response for a ExtJS CRUD store destroy request.
+	 * TODO: the ViewHelpers name is to specific.
 	 * 
 	 * @param string $message
 	 * @param boolean $success
