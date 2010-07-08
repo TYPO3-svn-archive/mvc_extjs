@@ -195,7 +195,6 @@ class Tx_MvcExtjs_MVC_ExtDirect_RequestBuilder {
 				} else {
 					$uid = FALSE;
 				}
-				//$argumentValueDescription = $incomingArgumentValueDescription['data'];
 				$argumentValueDescription = array();
 				foreach ($incomingArgumentValueDescription['data'] as $propertyName => $propertyValue) {
 					if ($propertyValue === NULL || (is_array($propertyValue) && count($propertyValue) === 0)) {
