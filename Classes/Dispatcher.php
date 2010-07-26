@@ -158,7 +158,7 @@ class Tx_MvcExtjs_Dispatcher extends Tx_Extbase_Dispatcher {
 			$response->sendHeaders();
 			exit;
 		}
-
+		$response->sendHeaders();
 		if (count($response->getAdditionalHeaderData()) > 0) {
 			$GLOBALS['TSFE']->additionalHeaderData[$request->getControllerExtensionName()] = implode("\n", $response->getAdditionalHeaderData());
 		}
