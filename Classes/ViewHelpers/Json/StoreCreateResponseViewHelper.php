@@ -37,26 +37,35 @@ class Tx_MvcExtjs_ViewHelpers_Json_StoreCreateResponseViewHelper extends Tx_Flui
 	/**
 	 * Renders a JSON response for a ExtJS CRUD store create request.
 	 * 
-	 * @param array $data Contains the data of the objects that were created
+	 * @param array $data DEPRECATED use $object or $objects instead!
+	 * @param object $object
+	 * @param array $objects
 	 * @param string $message Sets a message for extjs - quicktips or something like that may use it DEFAULT: 'create successful'
 	 * @param boolean $success Tells extjs that the call was successful or not
 	 * @param array columns Defines a set of properties related to $data, that should be include. If $columns is empty (DEFAULT) all properties are included.
 	 * @return string
 	 */
-	public function render(array $data = array(), $message = 'create successful', $success = TRUE, array $columns = array()) {
+	public function render(array $data = array(), $object = NULL, array $objects = array(), $message = 'create successful', $success = TRUE, array $columns = array()) {
 		$this->columns = $columns;
 		$responseArray = array();
 		$responseArray['message'] = $message;
 		$responseArray['total'] = 1;
 		$responseArray['success'] = $success;
 
-		$dataArray = array();
-
-		foreach ($data as $object) {
-			$dataArray[] = Tx_MvcExtjs_ExtJS_Utility::encodeObjectForJSON($object, $columns);
-		}	
-
-		$responseArray['data'] = $dataArray;
+			// while $data is still available, check that it is not used together with $object or $objects
+		if ($data !== NULL && ($object !== NULL || $objects !== NULL)) {
+			throw new Tx_MvcExtjs_ExtJS_Exception('$data should not be used together with $object or $objects',1277981799);
+		}
+		if (is_array($data)) {
+			$responseArray['data'] = $data;
+		} else if ($object !== NULL) {
+			$responseArray['data'] = Tx_MvcExtjs_ExtJS_Utility::encodeObjectForJSON($object, $columns);
+		} else {
+			$responseArray['data'] = array();
+			foreach ($objects as $object) {
+				$responseArray['data'][] = Tx_MvcExtjs_ExtJS_Utility::encodeObjectForJSON($object, $columns);
+			}
+		}
 
 		return json_encode($responseArray);
 	}
