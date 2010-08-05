@@ -45,7 +45,7 @@ class Tx_MvcExtjs_ViewHelpers_Json_StoreCreateResponseViewHelper extends Tx_Flui
 	 * @param array columns Defines a set of properties related to $data, that should be include. If $columns is empty (DEFAULT) all properties are included.
 	 * @return string
 	 */
-	public function render(array $data = array(), $object = NULL, array $objects = array(), $message = 'create successful', $success = TRUE, array $columns = array()) {
+	public function render(array $data = NULL, $object = NULL, array $objects = array(), $message = 'create successful', $success = TRUE, array $columns = array()) {
 		$this->columns = $columns;
 		$responseArray = array();
 		$responseArray['message'] = $message;
