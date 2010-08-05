@@ -42,7 +42,7 @@ class Tx_MvcExtjs_ViewHelpers_Json_StoreReadResponseViewHelper extends Tx_Fluid_
 	 * @param array $data Contains the data that should be be outputted
 	 * @param string $message Sets a message for extjs - quicktips or something like that may use it DEFAULT: 'default message'
 	 * @param boolean $success Tells extjs that the call was successful or not
-	 * @param array columns Defines a set of properties related to $data, that should be include. If $columns is empty (DEFAULT) all properties are included.
+	 * @param array $columns Defines a set of properties related to $data, that should be include. If $columns is empty (DEFAULT) all properties are included.
 	 * @return string
 	 */
 	public function render(array $data = array(), $message = 'default message', $success = TRUE, array $columns = array()) {

@@ -165,7 +165,7 @@ class Tx_MvcExtjs_MVC_ExtDirect_Response extends Tx_Extbase_MVC_Web_Response {
 		if ($result === NULL) {
 			throw new Tx_MvcExtjs_ExtJS_Exception('The action result (content) is no valid json string: ' . $this->content,1277980165);
 		}
-		$response['result'] = json_decode($this->content);
+		$response['result'] = $result;
 		return json_encode($response);
 	}
 	

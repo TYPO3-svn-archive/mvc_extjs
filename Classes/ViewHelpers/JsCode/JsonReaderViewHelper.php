@@ -135,21 +135,20 @@ class Tx_MvcExtjs_ViewHelpers_JsCode_JsonReaderViewHelper extends Tx_MvcExtjs_Vi
 		$classObject = t3lib_div::makeInstance($className);
 		$reflectionService = t3lib_div::makeInstance('Tx_Extbase_Reflection_Service');
 		$propertyNames = Tx_Extbase_Reflection_ObjectAccess::getAccessiblePropertyNames($classObject);
+		$i = 0;
 		foreach ($propertyNames as $propertyName) {
-			$propertyType = $reflectionService->getPropertyTagValues($className, $propertyName, 'var');
-			if (isset($propertyType[0])) {
-				$propertyType = explode(' ',$propertyType[0]);
-				$propertyType = $propertyType[0];
-			} else {
-				throw new Tx_MvcExtjs_ExtJS_Exception('Unable to evalute propertyType for propery: ' . $propertyName . ' of class ' . $className,1278075964);
-			}
-			if (substr($propertyType, 0,36) === 'Tx_Extbase_Persistence_ObjectStorage') {
-				$propertyType = 'array';
-			}
-			$fields[] = array(
+			$fields[$i] = array(
 				'name' => $propertyName,
-				'type' => $propertyType
 			);
+			$propertyType = $reflectionService->getPropertyTagValues($className, $propertyName, 'var');
+			$propertyType = explode(' ',$propertyType[0]);
+			if ($propertyType[0] !== '') {
+				$fields[$i]['type'] = $propertyType[0];
+			}
+			if (substr($propertyType[0], 0,36) === 'Tx_Extbase_Persistence_ObjectStorage') {
+				$fields[$i]['type'] = 'array';
+			}
+			$i++;
 		}
 		return $fields;
 	}
