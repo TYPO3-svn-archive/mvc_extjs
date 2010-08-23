@@ -28,7 +28,7 @@
 /**
  * A web specific response implementation
  * 
- * TODO: When extbase request handling is made dont extends Tx_Extbase_MVC_Web_Response
+ * TODO: When extbase request handling is made dont extend Tx_Extbase_MVC_Web_Response
  * but extend Tx_Extbase_MVC_Response
  *
  * @package Extbase
@@ -167,7 +167,9 @@ class Tx_MvcExtjs_MVC_ExtDirect_Response extends Tx_Extbase_MVC_Web_Response {
 		}
 		$response['result'] = $result;
 		return json_encode($response);
+	
 	}
+	
 	
 	
 	

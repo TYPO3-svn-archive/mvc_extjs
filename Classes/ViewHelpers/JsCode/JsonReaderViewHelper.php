@@ -148,6 +148,10 @@ class Tx_MvcExtjs_ViewHelpers_JsCode_JsonReaderViewHelper extends Tx_MvcExtjs_Vi
 			if (substr($propertyType[0], 0,36) === 'Tx_Extbase_Persistence_ObjectStorage') {
 				$fields[$i]['type'] = 'array';
 			}
+			if ($propertyType[0] === 'DateTime'){
+				 $fields[$i]['type'] = 'date';
+				 $fields[$i]['dateFormat'] = 'c';
+			}
 			$i++;
 		}
 		return $fields;

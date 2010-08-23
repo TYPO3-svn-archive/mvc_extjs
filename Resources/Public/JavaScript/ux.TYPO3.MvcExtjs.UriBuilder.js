@@ -20,6 +20,7 @@ Ext.ux.TYPO3.MvcExtjs.UriBuilder = function() {
 	var initialize = function(extensionName,piName) {
 		pluginName = piName;
 		parameterPrefix = 'tx_' + (extensionName+'').toLowerCase() + '_' + (pluginName+'').toLowerCase();
+		initialized = true;
 	}
 	
 	var createExtbaseUrl = function(parameters) {

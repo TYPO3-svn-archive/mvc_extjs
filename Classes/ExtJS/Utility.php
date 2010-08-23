@@ -40,11 +40,11 @@ class Tx_MvcExtjs_ExtJS_Utility {
 	 * @param array $objects
 	 * @return array
 	 */
-	public static function encodeArrayForJSON(array $objects, $lazy = FALSE) {
+	public static function encodeArrayForJSON(array $objects, array $columns = array(), $lazy = FALSE) {
 		$arr = array();
 
 		foreach ($objects as $object) {
-			$arr[] = self::encodeObjectForJSON($object,array(),$lazy);
+			$arr[] = self::encodeObjectForJSON($object,$columns,$lazy);
 		}
 
 		return $arr;
@@ -59,8 +59,9 @@ class Tx_MvcExtjs_ExtJS_Utility {
 	 * @return array
 	 */
 	public static function encodeObjectForJSON($object, array $columns = array(),$lazy = FALSE) {
+		$columns = self::parseColumnArray($columns);
 		if ($object instanceof DateTime) {
-			return $object->format('U');
+			return $object->format('c');
 		} else if (!($object instanceof Tx_Extbase_DomainObject_AbstractEntity)) {
             return $object;
         }
@@ -68,29 +69,53 @@ class Tx_MvcExtjs_ExtJS_Utility {
         $arr = array();
 
         $properties = Tx_Extbase_Reflection_ObjectAccess::getAccessibleProperties($object);
-
         foreach ($properties as $name => $value) {
-            if (count($columns) > 0 && !in_array($property->name, $columns)) {
+            if (count($columns) > 0 && !isset($columns[$name])) {
                 // Current property should not be returned
-                continue;
+            	continue;
+            } else if (is_array($columns[$name])) {
+            	$childColumns = $columns[$name];
+            } else {
+            	$childColumns = array('uid');
             }
         	if ($value instanceof Tx_Extbase_Persistence_LazyObjectStorage) {
             	$valueArray = $value->toArray();
             	if ($lazy === TRUE) {
             		$value = array();
             	} else {
-            		$value = self::encodeArrayForJSON($valueArray, TRUE);
+            		$value = self::encodeArrayForJSON($valueArray, $childColumns, TRUE);
             	}
             } else if ($value instanceof Tx_Extbase_Persistence_ObjectStorage) {
             	$valueArray = $value->toArray();
-            	$value = self::encodeArrayForJSON($valueArray, TRUE);
+            	$value = self::encodeArrayForJSON($valueArray, $childColumns, TRUE);
             }
         	if (($value instanceof Tx_Extbase_DomainObject_AbstractEntity || $value instanceof DateTime)) {
-         		$value = self::encodeObjectForJSON($value, $columns, TRUE);
+         		$value = self::encodeObjectForJSON($value, $childColumns, TRUE);
         	}
             $arr[$name] = $value;
         }
         return $arr;
+	}
+	
+	/**
+	 * 
+	 * @param array $columns
+	 * @return array
+	 */
+	private static function parseColumnArray(array $columns = array()) {
+		$childColumns = array();
+		foreach ($columns as $column) {
+			$columnArray = t3lib_div::trimExplode('.',$column);
+			$columnName = $columnArray[0];
+			if (count($columnArray) > 1) {
+				unset($columnArray[0]);
+				$columnData = implode('.',$columnArray);
+				$childColumns[$columnName][] = $columnData;
+			} else if (count($columnArray) === 1){
+				$childColumns[$columnName] = TRUE;
+			}
+		}
+		return $childColumns;
 	}
 
 	/**

@@ -192,6 +192,8 @@ class Tx_MvcExtjs_MVC_ExtDirect_RequestBuilder {
 				} else if (isset($incomingArgumentValueDescription['data']['uid'])) {
 					$uid = $incomingArgumentValueDescription['data']['uid'];
 					unset($incomingArgumentValueDescription['data']['uid']);
+				} else if (!is_array($incomingArgumentValueDescription['data'])) {
+					$uid = (int) $incomingArgumentValueDescription['data'];
 				} else {
 					$uid = FALSE;
 				}
@@ -201,6 +203,12 @@ class Tx_MvcExtjs_MVC_ExtDirect_RequestBuilder {
 						continue;
 					} else if(is_array($propertyValue) && $propertyValue['uid']) {
 						$argumentValueDescription[$propertyName]['__identity'] = $propertyValue['uid'];
+					} else if(is_array($propertyValue) && !$propertyValue['uid']) {
+						foreach ($propertyValue as $propertyValueChild) {
+							if ($propertyValueChild['uid']) {
+								$argumentValueDescription[$propertyName][]['__identity'] = $propertyValueChild['uid'];
+							}
+						}	
 					} else {
 						$argumentValueDescription[$propertyName] = $propertyValue;
 					}

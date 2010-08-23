@@ -59,7 +59,7 @@ class Tx_MvcExtjs_ViewHelpers_Be_ModuleContainerViewHelper extends Tx_MvcExtjs_V
 	 * @param string  $pageTitle title tag of the module. Not required by default, as BE modules are shown in a frame
 	 * @param boolean $enableJumpToUrl If TRUE, includes "jumpTpUrl" javascript function required by ActionMenu. Defaults to TRUE
 	 * @param boolean $enableClickMenu If TRUE, loads clickmenu.js required by BE context menus. Defaults to TRUE
-	 * @param boolean $loadPrototype specifies whether to load prototype library. Defaults to TRUE
+	 * @param boolean $loadPrototype specifies whether to load prototype library. Defaults to FALSE
 	 * @param boolean $loadScriptaculous specifies whether to load scriptaculous libraries. Defaults to FALSE
 	 * @param string  $scriptaculousModule additionales modules for scriptaculous
 	 * @param boolean $loadExtJs specifies whether to load ExtJS library. Defaults to FALSE

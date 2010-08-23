@@ -1,4 +1,4 @@
-Ext.override( Ext.ux.form.MultiSelect, {
+Ext.override(Ext.ux.form.MultiSelect, {
 	onRender: function(ct, position){
     	Ext.ux.form.MultiSelect.superclass.onRender.call(this, ct, position);
 
@@ -14,10 +14,10 @@ Ext.override( Ext.ux.form.MultiSelect, {
     	});
     	fs.body.addClass('ux-mselect');
 
-    	this.view = new Ext.ListView({
+    	this.view = new Ext.list.ListView({
     		multiSelect: true,
     		store: this.store,
-    		columns: [{ header: 'Value', width: 1, dataIndex: this.displayField }],
+    		columns: [{ header: 'Value', width: 1, dataIndex: this.displayField, tpl: this.tpl}],
     		hideHeaders: true
     	});
 
