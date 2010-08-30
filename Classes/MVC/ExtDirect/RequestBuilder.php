@@ -166,6 +166,8 @@ class Tx_MvcExtjs_MVC_ExtDirect_RequestBuilder {
 			foreach ($parameters as $argumentPosition => $incomingArgumentValue) {
 				$argumentName = $this->resolveArgumentName($argumentPosition,$actionParameter);
 				$argumentValue = $this->transformArgumentValue($incomingArgumentValue,$actionParameter[$argumentName]);
+//				t3lib_div::sysLog('$argumentName: '.print_r($argumentName,true),'MVC_ExtJs',0);
+//				t3lib_div::sysLog('$argumentValue: '.print_r($argumentValue,true),'MVC_ExtJs',0);
 				$request->setArgument($argumentName, $argumentValue);
 			}
 		}
@@ -186,19 +188,26 @@ class Tx_MvcExtjs_MVC_ExtDirect_RequestBuilder {
 				return $incomingArgumentValueDescription;
 			}
 			if ($actionParameterDescription['type'] === 'object' || $actionParameterDescription['class'] !== '') {
-				if (isset($incomingArgumentValueDescription['uid'])) {
-					$uid = (int) $incomingArgumentValueDescription['uid'];
-					unset($incomingArgumentValueDescription['data']['uid']);
-				} else if (isset($incomingArgumentValueDescription['data']['uid'])) {
-					$uid = $incomingArgumentValueDescription['data']['uid'];
-					unset($incomingArgumentValueDescription['data']['uid']);
-				} else if (!is_array($incomingArgumentValueDescription['data'])) {
-					$uid = (int) $incomingArgumentValueDescription['data'];
+					// REFACTOR THIS! we handle store requests special here, by asking for data....
+					// first:  eval if the object data is nested in data or not.
+				$propertyIterationArray = array();
+				if (isset($incomingArgumentValueDescription['data'])) {
+					$propertyIterationArray = $incomingArgumentValueDescription['data'];
+				} else {
+					$propertyIterationArray = $incomingArgumentValueDescription;
+				}
+					// second: eval if a uid is given.
+				if (isset($propertyIterationArray['uid'])) {
+					$uid = (int) $propertyIterationArray['uid'];
+					unset($propertyIterationArray['uid']);
+				} else if(!is_array($propertyIterationArray)) {
+					$uid = (int) $propertyIterationArray;
+					$propertyIterationArray = array();
 				} else {
 					$uid = FALSE;
 				}
 				$argumentValueDescription = array();
-				foreach ($incomingArgumentValueDescription['data'] as $propertyName => $propertyValue) {
+				foreach ($propertyIterationArray as $propertyName => $propertyValue) {
 					if ($propertyValue === NULL || (is_array($propertyValue) && count($propertyValue) === 0)) {
 						continue;
 					} else if(is_array($propertyValue) && $propertyValue['uid']) {
@@ -218,6 +227,7 @@ class Tx_MvcExtjs_MVC_ExtDirect_RequestBuilder {
 					$argumentValueDescription['__identity'] = $uid;
 				}
 				return $argumentValueDescription;
+				
 			}
 		} else {
 			return $incomingArgumentValueDescription;

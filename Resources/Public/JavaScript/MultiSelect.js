@@ -1,11 +1,10 @@
-/*!
+/*
  * Ext JS Library 3.1.0
  * Copyright(c) 2006-2009 Ext JS, LLC
  * licensing@extjs.com
  * http://www.extjs.com/license
  */
 Ext.ns('Ext.ux.form');
-
 /**
  * @class Ext.ux.form.MultiSelect
  * @extends Ext.form.Field
