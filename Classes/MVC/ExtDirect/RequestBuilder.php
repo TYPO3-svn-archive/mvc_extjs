@@ -166,8 +166,8 @@ class Tx_MvcExtjs_MVC_ExtDirect_RequestBuilder {
 			foreach ($parameters as $argumentPosition => $incomingArgumentValue) {
 				$argumentName = $this->resolveArgumentName($argumentPosition,$actionParameter);
 				$argumentValue = $this->transformArgumentValue($incomingArgumentValue,$actionParameter[$argumentName]);
-//				t3lib_div::sysLog('$argumentName: '.print_r($argumentName,true),'MVC_ExtJs',0);
-//				t3lib_div::sysLog('$argumentValue: '.print_r($argumentValue,true),'MVC_ExtJs',0);
+				//t3lib_div::sysLog('$argumentName: '.print_r($argumentName,true),'MVC_ExtJs',0);
+				//t3lib_div::sysLog('$argumentValue: '.print_r($argumentValue,true),'MVC_ExtJs',0);
 				$request->setArgument($argumentName, $argumentValue);
 			}
 		}
@@ -183,6 +183,7 @@ class Tx_MvcExtjs_MVC_ExtDirect_RequestBuilder {
 	 * @return mixed
 	 */
 	protected function transformArgumentValue($incomingArgumentValueDescription, $actionParameterDescription) {
+		T3lib_div::sysLog('$incomingArgumentValueDescription'.print_r($incomingArgumentValueDescription,true),'MVC_ExtJs');
 		if (is_array($incomingArgumentValueDescription)) {
 			if ($actionParameterDescription['type'] === 'array') {
 				return $incomingArgumentValueDescription;
@@ -208,15 +209,22 @@ class Tx_MvcExtjs_MVC_ExtDirect_RequestBuilder {
 				}
 				$argumentValueDescription = array();
 				foreach ($propertyIterationArray as $propertyName => $propertyValue) {
-					if ($propertyValue === NULL || (is_array($propertyValue) && count($propertyValue) === 0)) {
+					if ($propertyValue === NULL) {
 						continue;
 					} else if(is_array($propertyValue) && $propertyValue['uid']) {
 						$argumentValueDescription[$propertyName]['__identity'] = $propertyValue['uid'];
-					} else if(is_array($propertyValue) && !$propertyValue['uid']) {
+					} else if(is_array($propertyValue) && !$propertyValue['uid'] && count($propertyValue) > 0) {
 						foreach ($propertyValue as $propertyValueChild) {
+								// we have a relation that has to be removed...
+								// there is some bug when clearing this completely
+							$hackedShitArray = array();
 							if ($propertyValueChild['uid']) {
-								$argumentValueDescription[$propertyName][]['__identity'] = $propertyValueChild['uid'];
+								$hackedShitArray['__identity'] = $propertyValueChild['uid'];
 							}
+							if ($propertyValueChild['deleted']) {
+								$hackedShitArray['deleted'] = $propertyValueChild['deleted'];
+							}
+							$argumentValueDescription[$propertyName][] = $hackedShitArray;
 						}	
 					} else {
 						$argumentValueDescription[$propertyName] = $propertyValue;
@@ -226,6 +234,7 @@ class Tx_MvcExtjs_MVC_ExtDirect_RequestBuilder {
 				if ($uid !== FALSE) {
 					$argumentValueDescription['__identity'] = $uid;
 				}
+				T3lib_div::sysLog('$argumentValueDescription'.print_r($argumentValueDescription,true),'MVC_ExtJs');
 				return $argumentValueDescription;
 				
 			}
@@ -249,7 +258,6 @@ class Tx_MvcExtjs_MVC_ExtDirect_RequestBuilder {
 		}
 		throw new Tx_Extbase_MVC_Exception_NoSuchArgument('Could not map a Ext.Direct argument to it\'s action. There is no argument expected for position ' . $argumentPosition,1277724391);
 	}
-
 
 }
 ?>
