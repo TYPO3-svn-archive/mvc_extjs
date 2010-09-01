@@ -183,7 +183,6 @@ class Tx_MvcExtjs_MVC_ExtDirect_RequestBuilder {
 	 * @return mixed
 	 */
 	protected function transformArgumentValue($incomingArgumentValueDescription, $actionParameterDescription) {
-		T3lib_div::sysLog('$incomingArgumentValueDescription'.print_r($incomingArgumentValueDescription,true),'MVC_ExtJs');
 		if (is_array($incomingArgumentValueDescription)) {
 			if ($actionParameterDescription['type'] === 'array') {
 				return $incomingArgumentValueDescription;
@@ -234,7 +233,6 @@ class Tx_MvcExtjs_MVC_ExtDirect_RequestBuilder {
 				if ($uid !== FALSE) {
 					$argumentValueDescription['__identity'] = $uid;
 				}
-				T3lib_div::sysLog('$argumentValueDescription'.print_r($argumentValueDescription,true),'MVC_ExtJs');
 				return $argumentValueDescription;
 				
 			}
