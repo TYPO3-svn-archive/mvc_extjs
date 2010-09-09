@@ -55,10 +55,9 @@ class Tx_MvcExtjs_ExtJS_Utility {
 	 *
 	 * @param mixed $object
 	 * @param array $columns
-	 * @param boolean $lazy
 	 * @return array
 	 */
-	public static function encodeObjectForJSON($object, array $columns = array(),$lazy = FALSE) {
+	public static function encodeObjectForJSON($object, array $columns = array()) {
 		$columns = self::parseColumnArray($columns);
 		if ($object instanceof DateTime) {
 			return $object->format('c');
@@ -78,19 +77,12 @@ class Tx_MvcExtjs_ExtJS_Utility {
             } else {
             	$childColumns = array('uid');
             }
-        	if ($value instanceof Tx_Extbase_Persistence_LazyObjectStorage) {
-            	$valueArray = $value->toArray();
-            	if ($lazy === TRUE) {
-            		$value = array();
-            	} else {
-            		$value = self::encodeArrayForJSON($valueArray, $childColumns, TRUE);
-            	}
-            } else if ($value instanceof Tx_Extbase_Persistence_ObjectStorage) {
-            	$valueArray = $value->toArray();
-            	$value = self::encodeArrayForJSON($valueArray, $childColumns, TRUE);
-            }
-        	if (($value instanceof Tx_Extbase_DomainObject_AbstractEntity || $value instanceof DateTime)) {
+        	if ($value instanceof Tx_Extbase_Persistence_ObjectStorage || $value instanceof Tx_Extbase_Persistence_LazyObjectStorage) {
+            	$value = self::encodeArrayForJSON($value->toArray(), $childColumns, TRUE);
+            } else if (($value instanceof Tx_Extbase_DomainObject_AbstractEntity || $value instanceof DateTime)) {
          		$value = self::encodeObjectForJSON($value, $childColumns, TRUE);
+        	} else if ($value instanceof Tx_Extbase_Persistence_LazyLoadingProxy) {
+        		$value = self::encodeObjectForJSON($value->_loadRealInstance(), $childColumns, TRUE);
         	}
             $arr[$name] = $value;
         }
