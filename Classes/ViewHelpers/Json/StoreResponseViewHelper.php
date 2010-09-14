@@ -42,9 +42,10 @@ class Tx_MvcExtjs_ViewHelpers_Json_StoreResponseViewHelper extends Tx_Fluid_Core
 	 * @param string $message Sets a message for extjs - quicktips or something like that may use it DEFAULT: 'create successful'
 	 * @param boolean $success Tells extjs that the call was successful or not
 	 * @param array columns Defines a set of properties related to $data, that should be include. If $columns is empty (DEFAULT) all properties are included.
+	 * @param int $total
 	 * @return string
 	 */
-	public function render($object = NULL, array $objects = NULL, $message = 'create successful', $success = TRUE, array $columns = array()) {
+	public function render($object = NULL, array $objects = NULL, $message = 'create successful', $success = TRUE, array $columns = array(), $total = NULL) {
 		$responseArray = array();
 		$responseArray['message'] = $message;
 		$responseArray['success'] = $success;
@@ -61,6 +62,10 @@ class Tx_MvcExtjs_ViewHelpers_Json_StoreResponseViewHelper extends Tx_Fluid_Core
 			}
 		} else { 
 			$responseArray['data'] = array();
+		}
+		
+		if ($total !== NULL) {
+			$responseArray['total'] = $total;
 		}
 
 		return json_encode($responseArray);
