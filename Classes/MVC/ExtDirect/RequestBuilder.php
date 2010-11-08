@@ -159,16 +159,16 @@ class Tx_MvcExtjs_MVC_ExtDirect_RequestBuilder {
 		}
 		
 		$actionParameter = $this->reflectionService->getMethodParameters($request->getControllerObjectName(),$request->getControllerActionName() . 'Action');
-
-			// many Ext.Direct requests don't specify a name for the arguments - they have to match by position
-			// if we call a remote action ourself in JavaScript we can specify the name. TEST! FAILED!
+		
 		if (is_array($parameters)) {
 			foreach ($parameters as $argumentPosition => $incomingArgumentValue) {
 				$argumentName = $this->resolveArgumentName($argumentPosition,$actionParameter);
-				$argumentValue = $this->transformArgumentValue($incomingArgumentValue,$actionParameter[$argumentName]);
+				try {
+					$argumentValue = $this->transformArgumentValue($incomingArgumentValue,$actionParameter[$argumentName]);
+					$request->setArgument($argumentName, $argumentValue);
+				} catch (Tx_MvcExtjs_ExtJS_Exception $e) {}
 				//t3lib_div::sysLog('$argumentName: '.print_r($argumentName,true),'MVC_ExtJs',0);
 				//t3lib_div::sysLog('$argumentValue: '.print_r($argumentValue,true),'MVC_ExtJs',0);
-				$request->setArgument($argumentName, $argumentValue);
 			}
 		}
 		return $request;
@@ -196,6 +196,7 @@ class Tx_MvcExtjs_MVC_ExtDirect_RequestBuilder {
 				} else {
 					$propertyIterationArray = $incomingArgumentValueDescription;
 				}
+				if (count($propertyIterationArray) === 0) throw new Tx_MvcExtjs_ExtJS_Exception('we want to map an not existing argument', 1288187158); 
 					// second: eval if a uid is given.
 				if (isset($propertyIterationArray['uid'])) {
 					$uid = (int) $propertyIterationArray['uid'];
