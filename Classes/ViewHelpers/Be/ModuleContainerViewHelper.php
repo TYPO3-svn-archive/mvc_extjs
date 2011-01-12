@@ -133,8 +133,6 @@ class Tx_MvcExtjs_ViewHelpers_Be_ModuleContainerViewHelper extends Tx_MvcExtjs_V
 		
 		if ($compressJs === TRUE) {
 			$this->pageRenderer->enableCompressJavaScript();
-				// if compressJs is set, we have to tell the concaneting service to compress its code, too
-			tx_MvcExtjs_PageRenderer_Service::$compress = TRUE;
 		}
 		if ($compressCss === TRUE) {
 			$this->pageRenderer->enableCompressCss();

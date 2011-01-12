@@ -41,21 +41,16 @@
 class Tx_MvcExtjs_ViewHelpers_IncludeDirectApiViewHelper extends Tx_MvcExtjs_ViewHelpers_AbstractViewHelper {
 	
 	/**
-	 * @var Tx_MvcExtjs_ExtJS_DirectApi
+	 * @var Tx_MvcExtjs_ExtDirect_Api
 	 */
-	protected $directService;
-	
-	/**
-	 * @var array
-	 */
-	protected $frameworkConfiguration;
+	protected $apiService;
 	
 	/**
 	 * @see Classes/Core/ViewHelper/Tx_Fluid_Core_ViewHelper_AbstractViewHelper#initializeArguments()
 	 */
 	public function initializeArguments() {
-		$this->frameworkConfiguration = Tx_Extbase_Dispatcher::getExtbaseFrameworkConfiguration();
-		$this->directService = t3lib_div::makeInstance('Tx_MvcExtjs_ExtJS_DirectApi');
+		$objectManager = t3lib_div::makeInstance('Tx_Extbase_Object_ObjectManager');
+		$this->apiService = $objectManager->create('Tx_MvcExtjs_ExtDirect_Api');
 	}
 	
 	/**
@@ -65,7 +60,7 @@ class Tx_MvcExtjs_ViewHelpers_IncludeDirectApiViewHelper extends Tx_MvcExtjs_Vie
 	 * 
 	 * @param string $name The name for the javascript variable.
 	 * @param string $namespace The namespace the variable is placed.
-	 * @param string $routeUrl You can specify a URL that acts a router. Default is mvc_extjs's DirectDispatcher
+	 * @param string $routeUrl You can specify a URL that acts as router.
 	 * @param boolean $cache
 	 * 
 	 * @return void
@@ -77,10 +72,11 @@ class Tx_MvcExtjs_ViewHelpers_IncludeDirectApiViewHelper extends Tx_MvcExtjs_Vie
 						   ) {
 		
 		if ($routeUrl === NULL) {
-			$routeUrl = $this->controllerContext->getUriBuilder()->reset()->build();
+			$routeUrl = $this->controllerContext->getUriBuilder()->reset()->build() . '&Tx_MvcExtjs_ExtDirectRequest=1';
 		}
 		
-		$api = $this->directService->getApi($routeUrl,$namespace,$cache);
+		$api = $this->apiService->getApi($routeUrl,$namespace,$cache);
+		
 			// prepare output variable
 		$jsCode = '';
 		$descriptor = $namespace . '.' . $name;

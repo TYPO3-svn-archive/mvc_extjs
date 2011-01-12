@@ -30,7 +30,7 @@
  * @author      Dennis Ahrens <dennis.ahrens@fh-hannover.de>
  * @version     SVN: $Id$
  */
-class Tx_MvcExtjs_ExtJS_DirectApi {
+class Tx_MvcExtjs_ExtDirect_Api {
 
 	/**
 	 * @var Tx_Extbase_Reflection_Service
@@ -43,14 +43,34 @@ class Tx_MvcExtjs_ExtJS_DirectApi {
 	protected $frameworkConfiguration;
 	
 	/**
+	 * @var Tx_Extbase_Configuration_ConfigurationManagerInterface
+	 */
+	protected $configurationManager;
+	
+	/**
 	 * @var string
 	 */
 	protected $cacheStorageKey;
 	
-	public function __construct() {
-		$this->reflectionService = t3lib_div::makeInstance('Tx_Extbase_Reflection_Service');
-		$this->frameworkConfiguration = Tx_MvcExtjs_Dispatcher::getExtbaseFrameworkConfiguration();
+	/**
+	 * 
+	 * @param Tx_Extbase_Configuration_ConfigurationManagerInterface $configurationManager
+	 * @return void
+	 */
+	public function injectConfigurationManager(Tx_Extbase_Configuration_ConfigurationManagerInterface $configurationManager) {
+		$this->configurationManager = $configurationManager;
+		$this->frameworkConfiguration = $this->configurationManager->getConfiguration(Tx_Extbase_Configuration_ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK);
 		$this->cacheStorageKey = 'Tx_MvcExtjs_ExtDirect_API_' . $this->frameworkConfiguration['pluginName'];
+	}
+	
+	/**
+	 * Injects the reflection service
+	 *
+	 * @param Tx_Extbase_Reflection_Service $reflectionService
+	 * @return void
+	 */
+	public function injectReflectionService(Tx_Extbase_Reflection_Service $reflectionService) {
+		$this->reflectionService = $reflectionService;
 	}
 	
 	/**
@@ -65,7 +85,6 @@ class Tx_MvcExtjs_ExtJS_DirectApi {
 	public function getApi($routeUrl = '', $namespace = 'Ext.ux.TYPO3.app', $readFromCache = TRUE, $writeToCache = TRUE) {
 		$cacheHash = md5($this->cacheStorageKey . serialize($this->frameworkConfiguration['switchableControllerActions']));
 		$cachedApi = ($readFromCache) ? t3lib_pageSelect::getHash($cacheHash) : FALSE;
-		
 		if ($cachedApi) {
 			$api = unserialize(t3lib_pageSelect::getHash($cacheHash));
 		} else {
@@ -86,24 +105,20 @@ class Tx_MvcExtjs_ExtJS_DirectApi {
 	 * @return array
 	 */
 	protected function createApi($routeUrl,$namespace) {
-		$reflectionService = t3lib_div::makeInstance('Tx_Extbase_Reflection_Service');
-		
 		$api = array();
 		$api['url'] = $routeUrl;
 		$api['type'] = 'remoting';
 		$api['namespace'] = $namespace;
 		$api['actions'] = array();
-		
-		foreach ($this->frameworkConfiguration['switchableControllerActions'] as $allowedControllerActions) {
-			$controllerName = $allowedControllerActions['controller'];
+
+		foreach ($this->frameworkConfiguration['controllerConfiguration'] as $controllerName => $allowedControllerActions) {
 			$unstrippedControllerName = $controllerName . 'Controller';
 			$controllerObjectName = 'Tx_' . $this->frameworkConfiguration['extensionName'] . '_Controller_' . $unstrippedControllerName;
-			$actions = t3lib_div::trimExplode(',',$allowedControllerActions['actions']);
 			$controllerActions = array();
-			foreach ($actions as $actionName) {
+			foreach ($allowedControllerActions['actions'] as $actionName) {
 				$unstrippedActionName = $actionName . 'Action';
 				try  {
-					$actionParameters = $reflectionService->getMethodParameters($controllerObjectName,$unstrippedActionName);
+					$actionParameters = $this->reflectionService->getMethodParameters($controllerObjectName,$unstrippedActionName);
 					$controllerActions[] = array(
 						'len' => count($actionParameters),
 						'name' => $unstrippedActionName

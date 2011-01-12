@@ -1,7 +1,8 @@
 <?php
+declare(ENCODING = 'utf-8');
 
 /*                                                                        *
- * This script belongs to the FLOW3 package "Fluid".                      *
+ * This script belongs to the FLOW3 package "ExtJS".                      *
  *                                                                        *
  * It is free software; you can redistribute it and/or modify it under    *
  * the terms of the GNU Lesser General Public License as published by the *
@@ -21,51 +22,49 @@
  *                                                                        */
 
 /**
- * View helper which renders the flash messages (if there are any) as an json
- * array into the Ext.Direct answer.
- * 
- * Use the JavaScript class Ext.ux.TYPO3.MvcExtjs.DirectFlashMessageDispatcher
- * to fetch the messages inside your JavaScript code.
+ * A transparent view that extends JsonView and passes on the prepared array
+ * to the Ext Direct response.
  *
- *
- * @version $Id$
- * @package MvcExtjs
- * @subpackage ViewHelpers/Json
  * @license http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License, version 3 or later
+ * @scope prototype
  */
-class Tx_MvcExtjs_ViewHelpers_Json_FlashMessagesViewHelper extends Tx_Fluid_Core_ViewHelper_AbstractViewHelper {
-
+class Tx_MvcExtjs_ExtDirect_View extends Tx_MvcExtjs_MVC_View_JsonView {
+	
 	/**
-	 * Renders flashMessages into the response.
+	 * Renders the Ext Direct view by delegating to the JsonView
+	 * for rendering a serializable array.
 	 *
-	 * @return string rendered Flash Messages, if there are any in json format.
-	 * @author Dennis Ahrens <dennis.ahrens@fh-hannover.de>
+	 * @return string An empty string
+	 * @author Christopher Hlubek <hlubek@networkteam.com>
 	 */
 	public function render() {
-		$flashMessages = $this->controllerContext->getFlashMessageContainer()->getAllAndFlush();
-		if (is_array($flashMessages) && count($flashMessages) > 0) {
-			$responseArray['flashMessages'] = array();
-			foreach ($flashMessages as $flashMessage) {
-				if ($flashMessage instanceof Tx_Extbase_MVC_Controller_FlashMessage) {
-					$flashMessageArray = array(
-						'message' => $flashMessage->getMessage(),
-						'type' => $flashMessage->getType(),
-						'tstamp' => $flashMessage->getTime()->format('U')
-					);
-					$responseArray['flashMessages'][] = $flashMessageArray;
-				} else {
-					$flashMessageArray = array(
-						'message' => $flashMessage,
-						'type' => 'notice',
-						'tstamp' => time()
-					);
-					$responseArray['flashMessages'][] = $flashMessageArray;
+		$result = $this->renderArray();
+		$this->controllerContext->getResponse()->setResult($result);
+		$this->controllerContext->getResponse()->setSuccess(TRUE);
+	}
+
+	/**
+	 * Assigns errors to the view and converts them to a format that Ext JS
+	 * understands.
+	 *
+	 * @param array $errors Errors e.g. from mapping results
+	 * @author Christopher Hlubek <hlubek@networkteam.com>
+	 */
+	public function assignErrors(array $errors) {
+		$result = array();
+		foreach ($errors as $argumentName => $argumentError) {
+			foreach ($argumentError->getErrors() as $propertyName => $propertyError) {
+				$message = '';
+				foreach ($propertyError->getErrors() as $error) {
+					$message .= $error->getMessage();
 				}
+				$result[$propertyName] = $message;
 			}
 		}
-		
-		return json_encode($responseArray);
+		$this->assign('value', array(
+			'errors' => $result,
+			'success' => FALSE
+		));
 	}
 }
-
 ?>

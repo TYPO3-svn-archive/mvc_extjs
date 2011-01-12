@@ -1,6 +1,8 @@
 <?php
+declare(ENCODING = 'utf-8');
+
 /*                                                                        *
- * This script belongs to the FLOW3 package "Fluid".                      *
+ * This script belongs to the FLOW3 package "ExtJS".                      *
  *                                                                        *
  * It is free software; you can redistribute it and/or modify it under    *
  * the terms of the GNU Lesser General Public License as published by the *
@@ -20,33 +22,64 @@
  *                                                                        */
 
 /**
- * View helper which return input as it is
+ * A Ext Direct specific response implementation with raw content for json encodable results
  *
- * = Examples =
- *
- * <f:null>{anyString}</f:null>
- *
- *
- * @package     TYPO3
- * @subpackage  tx_mvcextjs
- * @author Steffen Kamper <info@sk-typo3.de>
- * @license     http://www.gnu.org/copyleft/gpl.html
- * @version     SVN: $Id: 
- * 
+ * @license http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License, version 3 or later
+ * @scope prototype
  */
-class Tx_MvcExtjs_ViewHelpers_NullViewHelper extends Tx_Fluid_Core_ViewHelper_AbstractViewHelper {
-
-	protected $objectAccessorPostProcessorEnabled = FALSE;
+class Tx_MvcExtjs_ExtDirect_TransactionResponse extends Tx_Extbase_MVC_Web_Response {
 
 	/**
-	 * Render without processing
+	 * The Ext Direct result that will be JSON encoded
 	 *
-	 * @param string $content the output
-	 * @return string 
+	 * @var mixed
 	 */
-	public function render($content = '') {
-		$this->renderChildren();
-		return $content; 
+	protected $result;
+
+	/**
+	 * The Ext Direct success code. Defaults to TRUE.
+	 *
+	 * @var boolean
+	 */
+	protected $success = TRUE;
+
+	/**
+	 * Setter for the transaction result.
+	 *
+	 * @param mixed $result The result of the called action
+	 * @return void
+	 */
+	public function setResult($result) {
+		$this->result = $result;
+	}
+
+	/**
+	 * Sette for success.
+	 *
+	 * @param boolean $success The success of the called action
+	 * @return void
+	 */
+	public function setSuccess($success) {
+		$this->success = $success;
+	}
+
+
+	/**
+	 * Returns the result of the transaction.
+	 *
+	 * @return mixed The result
+	 */
+	public function getResult() {
+		return $this->result;
+	}
+
+	/**
+	 * Returns the state (success/fail) of the transaction.
+	 *
+	 * @return boolean The success
+	 */
+	public function getSuccess() {
+		return $this->success;
 	}
 }
 ?>
