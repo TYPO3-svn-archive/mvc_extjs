@@ -38,7 +38,7 @@
  * @license     http://www.gnu.org/copyleft/gpl.html
  * @version     SVN: $Id: IncludeInlineJsFromFileViewHelper.php 30242 2010-02-20 14:32:48Z xperseguers $
  */
-class Tx_MvcExtjs_ViewHelpers_IncludeDirectApiViewHelper extends Tx_MvcExtjs_ViewHelpers_AbstractViewHelper {
+class Tx_MvcExtjs_ViewHelpers_ExtDirectProviderViewHelper extends Tx_MvcExtjs_ViewHelpers_AbstractViewHelper {
 	
 	/**
 	 * @var Tx_MvcExtjs_ExtDirect_Api
@@ -50,7 +50,7 @@ class Tx_MvcExtjs_ViewHelpers_IncludeDirectApiViewHelper extends Tx_MvcExtjs_Vie
 	 */
 	public function initializeArguments() {
 		$objectManager = t3lib_div::makeInstance('Tx_Extbase_Object_ObjectManager');
-		$this->apiService = $objectManager->create('Tx_MvcExtjs_ExtDirect_Api');
+		$this->apiService = $objectManager->create('Tx_MvcExtjs_MVC_ExtDirect_Api');
 	}
 	
 	/**

@@ -26,7 +26,7 @@ declare(ENCODING = 'utf-8');
  *
  * @license http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License, version 3 or later
  */
-class Tx_MvcExtjs_ExtDirect_RequestBuilder implements t3lib_Singleton {
+class Tx_MvcExtjs_MVC_ExtDirect_RequestBuilder implements t3lib_Singleton {
 
 	/**
 	 * @inject
@@ -94,7 +94,7 @@ class Tx_MvcExtjs_ExtDirect_RequestBuilder implements t3lib_Singleton {
 		
 		if (!is_array($transactionDatas)) $transactionDatas = array($transactionDatas);
 		
-		$request = $this->objectManager->create('Tx_MvcExtjs_ExtDirect_Request');
+		$request = $this->objectManager->create('Tx_MvcExtjs_MVC_ExtDirect_Request');
 		foreach ($transactionDatas as $transactionData) {
 			$request->createAndAddTransaction(
 				$transactionData->action,

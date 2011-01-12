@@ -22,49 +22,11 @@ declare(ENCODING = 'utf-8');
  *                                                                        */
 
 /**
- * A transparent view that extends JsonView and passes on the prepared array
- * to the Ext Direct response.
+ * An exception for an invalid Ext Direct request
  *
  * @license http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License, version 3 or later
- * @scope prototype
  */
-class Tx_MvcExtjs_ExtDirect_View extends Tx_MvcExtjs_MVC_View_JsonView {
-	
-	/**
-	 * Renders the Ext Direct view by delegating to the JsonView
-	 * for rendering a serializable array.
-	 *
-	 * @return string An empty string
-	 * @author Christopher Hlubek <hlubek@networkteam.com>
-	 */
-	public function render() {
-		$result = $this->renderArray();
-		$this->controllerContext->getResponse()->setResult($result);
-		$this->controllerContext->getResponse()->setSuccess(TRUE);
-	}
+class Tx_MvcExtjs_MVC_ExtDirect_Exception_InvalidExtDirectRequestException extends Tx_Extbase_Exception {
 
-	/**
-	 * Assigns errors to the view and converts them to a format that Ext JS
-	 * understands.
-	 *
-	 * @param array $errors Errors e.g. from mapping results
-	 * @author Christopher Hlubek <hlubek@networkteam.com>
-	 */
-	public function assignErrors(array $errors) {
-		$result = array();
-		foreach ($errors as $argumentName => $argumentError) {
-			foreach ($argumentError->getErrors() as $propertyName => $propertyError) {
-				$message = '';
-				foreach ($propertyError->getErrors() as $error) {
-					$message .= $error->getMessage();
-				}
-				$result[$propertyName] = $message;
-			}
-		}
-		$this->assign('value', array(
-			'errors' => $result,
-			'success' => FALSE
-		));
-	}
 }
 ?>

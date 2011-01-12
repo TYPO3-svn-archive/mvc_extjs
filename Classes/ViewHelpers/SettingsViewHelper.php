@@ -27,7 +27,7 @@
  * = Examples =
  *
  * <mvcextjs:be.moduleContainer pageTitle="foo" enableJumpToUrl="false" enableClickMenu="false" loadPrototype="false" loadScriptaculous="false" scriptaculousModule="someModule,someOtherModule" loadExtJs="true" loadExtJsTheme="false" extJsAdapter="jQuery" enableExtJsDebug="true" addCssFile="{f:uri.resource(path:'styles/backend.css')}" addJsFile="{f:uri.resource('scripts/main.js')}">
- * 	<mvcextjs:jsCode:Settings settings="{settings} />
+ * 	<mvcextjs:settings settings="{settings} />
  * </mvcextjs:be.moduleContainer>
  *
  * @category    ViewHelpers
@@ -37,28 +37,20 @@
  * @license     http://www.gnu.org/copyleft/gpl.html
  * @version     SVN: $Id: ColumnDefinitionViewHelper.php 30482 2010-02-25 14:58:49Z deaddivinity $
  */
-class Tx_MvcExtjs_ViewHelpers_JsCode_SettingsViewHelper extends Tx_MvcExtjs_ViewHelpers_JsCode_AbstractJavaScriptCodeViewHelper {
-
-	/**
-	 * The variable as js object that represents the returned settings variable
-	 * 
-	 * @var Tx_MvcExtjs_CodeGeneration_JavaScript_Variable
-	 */
-	protected $settingsVariable;
+class Tx_MvcExtjs_ViewHelpers_SettingsViewHelper extends Tx_MvcExtjs_ViewHelpers_AbstractViewHelper {
 
 	/**
 	 * Renders the JS code that makes a global settings variable available for the namespace of the module/plugin.
 	 * 
 	 * @param string $name is used as variable name
 	 * @param array $settings a array containing settings for js
+	 * @param string $namespace
 	 * @return void
 	 */
-	public function render($name = 'Settings', array $settings = array()) {
-		$this->settingsVariable = t3lib_div::makeInstance('Tx_MvcExtjs_CodeGeneration_JavaScript_Variable',
-														  $this->extJsNamespace . '.' . $name,
-														  t3lib_div::makeInstance('Tx_MvcExtjs_CodeGeneration_JavaScript_Snippet',json_encode($settings)));
-		$this->jsCode->addSnippet($this->settingsVariable); 
-		$this->injectJsCode();
+	public function render($name = 'Settings', array $settings = array(), $namespace='Ext.ux.TYPO3.app') {
+		$jsCode = 'Ext.ns(\'' . $namespace . '\');' . "\n"; 
+		$jsCode .= $namespace . '.' . $name . '=' . json_encode($settings);
+		$this->pageRenderer->addJsInlineCode('Written by ' . get_class($this) . ' at ' . microtime(),$jsCode);
 	}
 
 }

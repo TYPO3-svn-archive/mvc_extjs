@@ -26,7 +26,7 @@ declare(ENCODING = 'utf-8');
  *
  * @license http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License, version 3 or later
  */
-class Tx_MvcExtjs_ExtDirect_RequestHandler implements Tx_Extbase_MVC_RequestHandlerInterface {
+class Tx_MvcExtjs_MVC_ExtDirect_RequestHandler implements Tx_Extbase_MVC_RequestHandlerInterface {
 
 	/**
 	 * @var Tx_Extbase_Object_ObjectManagerInterface
@@ -44,7 +44,7 @@ class Tx_MvcExtjs_ExtDirect_RequestHandler implements Tx_Extbase_MVC_RequestHand
 	protected $flashMessages;
 
 	/**
-	 * @var Tx_MvcExtjs_ExtDirect_RequestBuilder
+	 * @var Tx_MvcExtjs_MVC_ExtDirect_RequestBuilder
 	 */
 	protected $requestBuilder;
 
@@ -59,13 +59,13 @@ class Tx_MvcExtjs_ExtDirect_RequestHandler implements Tx_Extbase_MVC_RequestHand
 	 *
 	 * @param Tx_Extbase_Object_ObjectManagerInterface $objectManager A reference to the object factory
 	 * @param Tx_Extbase_MVC_Dispatcher $dispatcher The request dispatcher
-	 * @param Tx_MvcExtjs_ExtDirect_RequestBuilder $requestBuilder
+	 * @param Tx_MvcExtjs_MVC_ExtDirect_RequestBuilder $requestBuilder
 	 * @author Robert Lemke <robert@typo3.org>
 	 */
 	public function __construct(
 			Tx_Extbase_Object_ObjectManagerInterface $objectManager,
 			Tx_Extbase_MVC_Dispatcher $dispatcher,
-			Tx_MvcExtjs_ExtDirect_RequestBuilder $requestBuilder) {
+			Tx_MvcExtjs_MVC_ExtDirect_RequestBuilder $requestBuilder) {
 		$this->objectManager = $objectManager;
 		$this->dispatcher = $dispatcher;
 		$this->requestBuilder = $requestBuilder;
@@ -96,10 +96,10 @@ class Tx_MvcExtjs_ExtDirect_RequestHandler implements Tx_Extbase_MVC_RequestHand
 	}
 
 	/**
-	 * @param Tx_MvcExtjs_ExtDirect_RequestBuilder $requestBuilder
+	 * @param Tx_MvcExtjs_MVC_ExtDirect_RequestBuilder $requestBuilder
 	 * @return void
 	 */
-	public function injectRequestBuilder(Tx_MvcExtjs_ExtDirect_RequestBuilder $requestBuilder) {
+	public function injectRequestBuilder(Tx_MvcExtjs_MVC_ExtDirect_RequestBuilder $requestBuilder) {
 		$this->requestBuilder = $requestBuilder;
 	}
 
@@ -170,7 +170,7 @@ class Tx_MvcExtjs_ExtDirect_RequestHandler implements Tx_Extbase_MVC_RequestHand
 	 * @return void
 	 * @author Robert Lemke <robert@typo3.org>
 	 */
-	protected function sendResponse(array $results, Tx_MvcExtjs_ExtDirect_Request $extDirectRequest) {
+	protected function sendResponse(array $results, Tx_MvcExtjs_MVC_ExtDirect_Request $extDirectRequest) {
 		$response = json_encode(count($results) === 1 ? $results[0] : $results);
 		if ($extDirectRequest->isFormPost() && $extDirectRequest->isFileUpload()) {
 			header('Content-Type: text/html');

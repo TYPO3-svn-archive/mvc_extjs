@@ -30,7 +30,7 @@
  * @author      Dennis Ahrens <dennis.ahrens@fh-hannover.de>
  * @version     SVN: $Id$
  */
-class Tx_MvcExtjs_ExtDirect_Api {
+class Tx_MvcExtjs_MVC_ExtDirect_Api {
 
 	/**
 	 * @var Tx_Extbase_Reflection_Service
@@ -83,7 +83,7 @@ class Tx_MvcExtjs_ExtDirect_Api {
 	 * @return array
 	 */
 	public function getApi($routeUrl = '', $namespace = 'Ext.ux.TYPO3.app', $readFromCache = TRUE, $writeToCache = TRUE) {
-		$cacheHash = md5($this->cacheStorageKey . serialize($this->frameworkConfiguration['switchableControllerActions']));
+		$cacheHash = md5($this->cacheStorageKey . serialize($this->frameworkConfiguration['controllerConfiguration']));
 		$cachedApi = ($readFromCache) ? t3lib_pageSelect::getHash($cacheHash) : FALSE;
 		if ($cachedApi) {
 			$api = unserialize(t3lib_pageSelect::getHash($cacheHash));
