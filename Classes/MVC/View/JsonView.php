@@ -208,10 +208,18 @@ class Tx_MvcExtjs_MVC_View_JsonView extends Tx_Extbase_MVC_View_AbstractView {
 	 * @param mixed $configuration Configuration for transforming the given object or NULL
 	 * @return array Object structure as an aray
 	 * @author Christopher Hlubek <hlubek@networkteam.com>
+	 * @author Dennis Ahrens <dennis.ahrens@fh-hannover.de>
 	 */
 	protected function transformObject($object, $configuration) {
+			// hand over DateTime as ISO formatted string
+		if ($object instanceof DateTime) {
+			return $object->format('c');
+		}
+			// load LayzyLoadingProxy instances
+		if ($object instanceof Tx_Extbase_Persistence_LazyLoadingProxy) {
+			$object = $object->_loadRealInstance();
+		}
 		$propertyNames = Tx_Extbase_Reflection_ObjectAccess::getGettablePropertyNames($object);
-
 		$propertiesToRender = array();
 		foreach ($propertyNames as $propertyName) {
 			if (isset($configuration['_only']) && is_array($configuration['_only']) && !in_array($propertyName, $configuration['_only'])) continue;
@@ -223,6 +231,7 @@ class Tx_MvcExtjs_MVC_View_JsonView extends Tx_Extbase_MVC_View_AbstractView {
 				$propertiesToRender[$propertyName] = $propertyValue;
 			} elseif (isset($configuration['_descend']) && array_key_exists($propertyName, $configuration['_descend'])) {
 				$propertiesToRender[$propertyName] = $this->transformValue($propertyValue, $configuration['_descend'][$propertyName]);
+			} else {
 			}
 		}
 		if (isset($configuration['_exposeObjectIdentifier']) && $configuration['_exposeObjectIdentifier'] === TRUE) {
