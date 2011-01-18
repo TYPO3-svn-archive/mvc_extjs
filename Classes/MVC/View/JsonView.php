@@ -235,7 +235,7 @@ class Tx_MvcExtjs_MVC_View_JsonView extends Tx_Extbase_MVC_View_AbstractView {
 			}
 		}
 		if (isset($configuration['_exposeObjectIdentifier']) && $configuration['_exposeObjectIdentifier'] === TRUE) {
-			$propertiesToRender['__identity'] = $this->persistenceManager->getIdentifierByObject($object);
+			$propertiesToRender['__identity'] = $this->persistenceManager->getBackend()->getIdentityMap()->getIdentifierByObject($object);
 		}
 		return $propertiesToRender;
 	}

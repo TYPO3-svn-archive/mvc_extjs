@@ -39,8 +39,10 @@ class Tx_MvcExtjs_MVC_Controller_ExtDirectActionController extends Tx_Extbase_MV
 	 * @return void
 	 */
 	public function initializeView() {
-		$this->view = $this->objectManager->create('Tx_MvcExtjs_MVC_View_ExtDirectView');
-		$this->view->setControllerContext($this->controllerContext);
+		if ($this->request->getFormat() === 'extdirect') {
+			$this->view = $this->objectManager->create('Tx_MvcExtjs_MVC_View_ExtDirectView');
+			$this->view->setControllerContext($this->controllerContext);
+		}
 	}
 	
 }
