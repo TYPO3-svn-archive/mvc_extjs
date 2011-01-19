@@ -138,7 +138,7 @@ class Tx_MvcExtjs_MVC_ExtDirect_RequestHandler implements Tx_Extbase_MVC_Request
 				);
 			}
 		}
-		$this->sendResponse($results, $extDirectRequest);
+		return $this->sendResponse($results, $extDirectRequest);
 	}
 
 	/**
@@ -166,19 +166,21 @@ class Tx_MvcExtjs_MVC_ExtDirect_RequestHandler implements Tx_Extbase_MVC_Request
 	 * Sends the response
 	 *
 	 * @param array $results The collected results from the transaction requests
-	 * @param \F3\ExtJS\ExtDirect\Request $extDirectRequest
+	 * @param Tx_MvcExtjs_MVC_ExtDirect_Request $extDirectRequest
 	 * @return void
 	 * @author Robert Lemke <robert@typo3.org>
 	 */
 	protected function sendResponse(array $results, Tx_MvcExtjs_MVC_ExtDirect_Request $extDirectRequest) {
-		$response = json_encode(count($results) === 1 ? $results[0] : $results);
+		$response = $this->objectManager->create('Tx_Extbase_MVC_Web_Response');
+		$jsonResponse = json_encode(count($results) === 1 ? $results[0] : $results);
 		if ($extDirectRequest->isFormPost() && $extDirectRequest->isFileUpload()) {
-			header('Content-Type: text/html');
-			echo '<html><body><textarea>' . $response . '</textarea></body></html>';
+			$response->setHeader('Content-Type', 'text/html');
+			$response->setContent('<html><body><textarea>' . $jsonResponse . '</textarea></body></html>');
 		} else {
-			header('Content-Type: text/javascript');
-			echo $response;
+			$response->setHeader('Content-Type', 'text/javascript');
+			$response->setContent($jsonResponse);
 		}
+		return $response;
 	}
 }
 ?>
