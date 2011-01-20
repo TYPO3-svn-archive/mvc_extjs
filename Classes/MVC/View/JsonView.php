@@ -143,7 +143,9 @@ class Tx_MvcExtjs_MVC_View_JsonView extends Tx_Extbase_MVC_View_AbstractView {
 	 * @api
 	 */
 	public function render() {
-		$this->controllerContext->getResponse()->setHeader('Content-Type', 'application/json');
+			// extjs file upload forms can handle application/json
+			// the RequestHandlers take care of the ContentType
+		//$this->controllerContext->getResponse()->setHeader('Content-Type', 'application/json');
 		$propertiesToRender = $this->renderArray();
 		return json_encode($propertiesToRender);
 	}
@@ -235,7 +237,9 @@ class Tx_MvcExtjs_MVC_View_JsonView extends Tx_Extbase_MVC_View_AbstractView {
 			}
 		}
 		if (isset($configuration['_exposeObjectIdentifier']) && $configuration['_exposeObjectIdentifier'] === TRUE) {
-			$propertiesToRender['__identity'] = $this->persistenceManager->getBackend()->getIdentityMap()->getIdentifierByObject($object);
+				// we don't use the IdentityMap like its done in FLOW3 because there are some cases objects are not registered there.
+				// TODO: rethink this solution - it is really quick and dirty...
+			$propertiesToRender['__identity'] = $object->getUid();
 		}
 		return $propertiesToRender;
 	}
