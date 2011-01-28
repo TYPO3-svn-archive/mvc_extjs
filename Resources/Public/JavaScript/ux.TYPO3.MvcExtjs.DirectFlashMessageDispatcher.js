@@ -18,10 +18,10 @@ Ext.ux.TYPO3.MvcExtjs.DirectFlashMessageDispatcher = function(){
 	directFlashMessages.addEvents('new');
 	
 	var initialize = function() {
-        Ext.Direct.on('event',fetchMessagesAndFire);
+        Ext.Direct.on('event',fetchRemoteMessages);
 	};
 	
-	var fetchMessagesAndFire = function(event, provider) {
+	var fetchRemoteMessages = function(event, provider) {
 		if (event.result && event.result.flashMessages) {
 			flashMessages = event.result.flashMessages;
 			delete event.result.flashMessages;
@@ -30,6 +30,12 @@ Ext.ux.TYPO3.MvcExtjs.DirectFlashMessageDispatcher = function(){
 	};
 	
     return Ext.apply(directFlashMessages, {
-    	initialize: initialize
+    	initialize: initialize,
+    	addMessage: function(message) {
+    		this.fireEvent('new',[message]);
+    	},
+    	addMessages: function(messages) {
+    		this.fireEvent('new',messages);
+    	}
     });
 }();
