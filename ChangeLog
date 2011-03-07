@@ -1,3 +1,7 @@
+2011-03-07  Dennis Ahrens  <dennis.ahrens@fh-hannover.de>
+
+	* Backported ExtJS Package from FLOW3 using extbase 1.3.0
+
 2010-02-20  Xavier Perseguers  <typo3@perseguers.ch>
 
 	* Backported code back from trunk
