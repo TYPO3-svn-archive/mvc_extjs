@@ -133,7 +133,9 @@ class Tx_MvcExtjs_ExtJS_Controller_ActionController extends Tx_Extbase_MVC_Contr
 	 */
 	private function initializeBackendAction() {
 			// Prepare the view
-		$this->masterView = t3lib_div::makeInstance('Tx_Fluid_View_TemplateView');
+		/** @var $objectManager Tx_Extbase_Object_ObjectManager */
+		$objectManager = t3lib_div::makeInstance('Tx_Extbase_Object_ObjectManager');
+		$this->masterView = $objectManager->create('Tx_Fluid_View_TemplateView');
 		$controllerContext = $this->buildControllerContext();
 		$this->masterView->setControllerContext($controllerContext);
 		$this->masterView->setTemplatePathAndFilename(t3lib_extMgm::extPath('mvc_extjs') . 'Resources/Private/Templates/module.html');

@@ -3,7 +3,7 @@
 ########################################################################
 # Extension Manager/Repository config file for ext: "mvc_extjs"
 #
-# Auto generated 17-10-2009 14:48
+# Auto generated 24-11-2011 16:34
 #
 # Manual updates:
 # Only the data in the array - anything else is removed by next write.
@@ -29,13 +29,13 @@ $EM_CONF[$_EXTKEY] = array(
 	'clearCacheOnLoad' => 0,
 	'lockType' => '',
 	'author_company' => '',
-	'version' => '0.2.0',
+	'version' => '0.3.0',
 	'constraints' => array(
 		'depends' => array(
 			'php' => '5.3.0-',
-			'typo3' => '4.5.0-',
-			'extbase' => '1.3.0',
-			'fluid' => '1.3.0',
+			'typo3' => '4.6.0-4.6.99',
+			'extbase' => '1.4.0-1.4.99',
+			'fluid' => '1.4.0-1.4.99',
 		),
 		'conflicts' => array(
 		),
