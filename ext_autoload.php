@@ -4,7 +4,6 @@
 
 $extensionClassesPath = t3lib_extMgm::extPath('mvc_extjs') . 'Classes/';
 return array(
-	'tx_mvcextjs_dispatcher' => $extensionClassesPath . 'Dispatcher.php',
 	'tx_mvcextjs_mvc_extdirect_request' => $extensionClassesPath . 'MVC/ExtDirect/Request.php',
 	'tx_mvcextjs_mvc_extdirect_requestbuilder' => $extensionClassesPath . 'MVC/ExtDirect/RequestBuilder.php',
 	'tx_mvcextjs_mvc_extdirect_response' => $extensionClassesPath . 'MVC/ExtDirect/Response.php',
