@@ -1,5 +1,6 @@
-2012-04-26	Dennis Ahrens	<dennis.ahrens@fh-hannover.de>
+2012-04-26  Dennis Ahrens  <dennis.ahrens@fh-hannover.de>
 
+	* [TASK] Raise version to 0.2.1
 	* Corrected wrong classes, that break with the automatic injection of extbase 4.7 (thanks to Adrien Crivelli)
 
 2011-03-18  Xavier Perseguers  <typo3@perseguers.ch>
